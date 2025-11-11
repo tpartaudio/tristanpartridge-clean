@@ -126,16 +126,16 @@
       Handles mobile nav bar padding, backdrop, and positioning. 
       Adjust padding or blur here for nav appearance. */
       .nav-container {
-        padding: 1.8rem 1.5rem; /* Increased vertical padding to fit logo */
+        padding: 2.2rem 1.5rem; /* Bigger menu bar (increased vertical padding) */
         backdrop-filter: blur(20px) saturate(150%);
       }
       .logo-container {
         left: 1.5rem;
-        top: 1.2rem; /* Adjusted to center in taller nav */
+        top: 1.5rem; /* Centered in bigger nav */
       }
       #logo {
-        height: 60px; /* Smaller size */
-        transform: translateY(0); /* No negative translateY */
+        height: 50px; /* Smaller logo */
+        transform: translateY(0); /* No stick out */
       }
       #logo:hover { transform: scale(1.05); }
 
@@ -145,7 +145,7 @@
       Adjust gap or width for size. */
       #hamburger {
         right: 1.5rem;
-        top: 2.2rem; /* Positioned in upper right, aligned with taller nav */
+        top: 2.5rem; /* Adjusted for bigger nav, upper right */
         padding: 0.5rem;
         width: 44px;
         height: 44px;
@@ -155,9 +155,9 @@
         gap: 6px;
       }
       #hamburger span {
-        height: 4px; /* Thicker lines */
-        width: 32px; /* Visible width */
-        background-color: #000; /* Explicit black */
+        height: 4px;
+        width: 32px;
+        background-color: #000;
         transition: all 0.3s ease;
       }
 
@@ -189,7 +189,7 @@
       /* --- MAIN CONTENT SECTION --- 
       Sets padding for the main area to avoid overlap with nav. 
       Adjust pt (padding-top) if nav height changes. */
-      main { padding-top: 5.5rem; /* Adjusted for taller nav */ }
+      main { padding-top: 6rem; /* Adjusted for bigger nav */ }
 
       /* --- GRID SECTION --- 
       Defines the project grid for mobile: single column. 
@@ -214,11 +214,12 @@
         box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       }
       .project-thumb:active {
-        transform: none !important; /* Removed zoom/scale on tap */
-        box-shadow: 0 12px 30px rgba(0,0,0,0.15); /* No change on tap */
+        transform: none !important; /* No zoom/animation on tap or hold */
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15); /* Static shadow */
       }
       .project-thumb img {
         border-radius: 20px;
+        transition: none; /* No animation on img */
       }
 
       /* --- FOOTER SECTION --- 
@@ -321,10 +322,12 @@
           div.className = "project-thumb opacity-0 translate-y-16";
           div.innerHTML = `<img src="images/${p.thumb}" alt="${p.title}" loading="lazy">`;
 
-          // Mobile tap handling to prevent accidental clicks during scroll
+          // Mobile tap handling to prevent accidental clicks during scroll or hold
           let touchStartY = 0;
+          let touchStartTime = 0;
           div.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
             div.classList.add('active');
           });
           div.addEventListener('touchmove', (e) => {
@@ -336,7 +339,8 @@
           });
           div.addEventListener('touchend', (e) => {
             const touchEndY = e.changedTouches[0].clientY;
-            if (Math.abs(touchEndY - touchStartY) <= 20) {
+            const touchDuration = Date.now() - touchStartTime;
+            if (Math.abs(touchEndY - touchStartY) <= 20 && touchDuration < 300) { // Short tap only, no hold
               setTimeout(() => {
                 sessionStorage.setItem('scrollPosition', window.scrollY);
                 window.location.href = p.video;
