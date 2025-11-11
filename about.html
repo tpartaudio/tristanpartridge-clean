@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - Tristan Partridge</title>
+  <meta name="description" content="About Tristan Partridge - Music & Sound Design">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <style>
+    :root { --logo-height: 85px; }
+    body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background:#ffffff; color:#111; transition: all .6s; }
+    .dark { background:#000; color:#fff; }
+    .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); padding: 1.5rem 2rem; }
+    .dark .nav-container { background: rgba(0,0,0,0.85); }
+    .nav-container.hidden { transform: translateY(-100%); }
+    .logo-container { position: absolute; left: 2rem; top: 1.5rem; }
+    #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(-18px); }
+    #logo:hover { transform: scale(1.08) translateY(-18px); }
+    .nav-links { position: relative; display: flex; gap: 40px; margin-left: auto; }
+    .nav-link { font-weight: 600; padding: 8px 0; z-index:2; position: relative; }
+    .underline { position: absolute; bottom: 4px; left: 0; height: 2px; background: #000; }
+    .dark .underline { background:#fff; }
+    .about-content { max-width: 1300px; margin:0 auto; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2rem; }
+    .about-statement { text-align:right; font-weight:700; font-size:1.9rem; line-height:1.25; letter-spacing:-0.03em; opacity:0.95; max-width:720px; margin-left:auto; padding-right:2rem; }
+    .about-header { display:flex; align-items:flex-end; justify-content:flex-start; gap:5rem; width:100%; margin-top:-3rem; margin-left:3.2rem; }
+    .about-photo { width:190px; height:260px; border-radius:32px; object-fit:cover; box-shadow:0 20px 40px rgba(0,0,0,0.15); flex-shrink:0; }
+    .about-intro { font-size:1.35rem; line-height:1.55; letter-spacing:-0.02em; opacity:0.92; font-weight:500; max-width:540px; margin-bottom:0.8rem; }
+    @media (min-width:768px){ .about-statement{font-size:2.1rem;} .about-intro{font-size:1.75rem;} }
+    .tags-container { display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:flex-start; margin-top:1rem; margin-left:3.2rem; }
+    .tag-box { border:1.5px solid rgba(0,0,0,0.12); border-radius:20px; padding:0.7rem 1.4rem; background: rgba(255,255,255,0.5); backdrop-filter: blur(6px); font-size:0.95rem; font-weight:600; letter-spacing:0.02em; opacity:0; transform: translateY(20px); }
+    .dark .tag-box { border-color: rgba(255,255,255,0.18); background: rgba(0,0,0,0.35); }
+  </style>
+</head>
+<body class="light min-h-screen flex flex-col">
+  <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-start justify-between">
+    <div class="logo-container"><img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'"></div>
+    <div class="hidden md:flex nav-links text-lg font-medium">
+      <a href="index.html" class="nav-link" data-page="works">Works</a>
+      <a href="about.html" class="nav-link active" data-page="about">About</a>
+      <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
+      <div class="underline" id="underline"></div>
+    </div>
+    <button id="hamburger" class="md:hidden space-y-2 z-50">
+      <span class="block w-8 h-1 bg-black dark:bg-white"></span>
+      <span class="block w-8 h-1 bg-black dark:bg-white"></span>
+      <span class="block w-8 h-1 bg-black dark:bg-white"></span>
+    </button>
+  </nav>
+  <nav id="mobile-menu" class="fixed inset-0 bg-white dark:bg-black hidden flex-col items-center justify-center gap-12 text-4xl z-40">
+    <a href="index.html">Works</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <main class="flex-1 flex items-center justify-center">
+    <section class="about-content">
+      <div class="about-statement">Original music and Sound Design<br>for film, video, and beyond.</div>
+      <div class="about-header">
+        <img src="tristan-picture.jpg" alt="Tristan Partridge" class="about-photo">
+        <p class="about-intro">I’m a composer and Sound Designer, committed to enhancing immersive and visual projects with professional quality audio.</p>
+      </div>
+      <div class="tags-container">
+        <div class="tag-box">Commercials</div>
+        <div class="tag-box">UI/X</div>
+        <div class="tag-box">Audio Branding</div>
+        <div class="tag-box">Interactive gameplay</div>
+        <div class="tag-box">Live performances and art installations</div>
+      </div>
+    </section>
+  </main>
+  <footer class="py-16 px-6 text-center">
+    <div class="flex justify-center gap-12">
+      <a href="https://www.instagram.com/tristanpartridge/" target="_blank"><img id="insta-logo" src="insta logo.png" alt="Instagram" class="w-11 h-11 hover:scale-110 transition"></a>
+      <a href="https://www.behance.net/tristanpartrid1" target="_blank"><img id="behance-logo" src="behance logo.png" alt="Behance" class="w-11 h-11 hover:scale-110 transition"></a>
+    </div>
+  </footer>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const sound = new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'], volume:0.3 });
+
+    fetch('config.json').then(r=>r.json()).then(cfg=>{
+      const logoEl=document.getElementById('logo');
+      const instaEl=document.getElementById('insta-logo');
+      const behanceEl=document.getElementById('behance-logo');
+      if(logoEl&&cfg.logo) logoEl.src=cfg.logo;
+      if(instaEl&&cfg.instagram_logo) instaEl.src=cfg.instagram_logo;
+      if(behanceEl&&cfg.behance_logo) behanceEl.src=cfg.behance_logo;
+    }).catch(()=>{});
+
+    // --------- NAVBAR UNDERLINE ANIMATION (from works) ---------
+    const underline = document.getElementById('underline');
+    const links = document.querySelectorAll('.nav-link');
+
+    let currentTarget = document.querySelector('[data-page="about"]') || links[0];
+    links.forEach(l=>l.classList.remove('active'));
+    if(currentTarget) currentTarget.classList.add('active');
+
+    function setUnderlineInstant(target){
+      if(!target||!underline)return;
+      underline.style.transform='none';
+      underline.style.transition='none';
+      const linkRect=target.getBoundingClientRect();
+      const containerRect=target.parentElement.getBoundingClientRect();
+      underline.style.left=(linkRect.left-containerRect.left)+'px';
+      underline.style.width=linkRect.width+'px';
+      void underline.offsetHeight;
+      underline.style.transition='';
+    }
+
+    function moveUnderline(target, animate=true){
+      if(!target||!underline)return;
+      gsap.set(underline,{clearProps:"transform,x,xPercent"});
+      const linkRect=target.getBoundingClientRect();
+      const containerRect=target.parentElement.getBoundingClientRect();
+      const leftPx=linkRect.left-containerRect.left;
+      const widthPx=linkRect.width;
+      if(!animate){
+        underline.style.left=leftPx+'px';
+        underline.style.width=widthPx+'px';
+      }else{
+        gsap.to(underline,{
+          left:leftPx+'px',
+          width:widthPx,
+          duration:0.28,
+          ease:"power2.out",
+          overwrite:"auto"
+        });
+      }
+    }
+
+    window.addEventListener('load',()=>{
+      setUnderlineInstant(currentTarget);
+      gsap.fromTo(underline,
+        {scaleX:0.98, transformOrigin:"center center"},
+        {scaleX:1, duration:0.05, ease:"elastic.out(1,0.5)", repeat:0, onComplete:()=>{gsap.set(underline,{clearProps:"transform, scaleX"});}
+      });
+    });
+
+    links.forEach(link=>{
+      link.addEventListener('mouseenter',()=>moveUnderline(link,true));
+      link.addEventListener('mouseleave',()=>moveUnderline(currentTarget,true));
+      link.addEventListener('click',()=>{
+        links.forEach(l=>l.classList.remove('active'));
+        link.classList.add('active');
+        currentTarget=link;
+        setUnderlineInstant(currentTarget);
+        sound.play();
+      });
+    });
+
+    window.addEventListener('resize',()=>{
+      clearTimeout(window._navResizeTimer);
+      window._navResizeTimer=setTimeout(()=>{setUnderlineInstant(currentTarget);},80);
+    });
+
+    // MOBILE MENU
+    document.getElementById("hamburger").addEventListener("click",()=>{
+      document.getElementById("mobile-menu").classList.toggle("hidden");
+      sound.play();
+    });
+
+    // Tags animation
+    gsap.fromTo('.tag-box',{opacity:0,y:30},{opacity:1,y:0,duration:0.9,stagger:0.1,ease:"power3.out",delay:0.8});
+  </script>
+</div>
+<!-- Bottom-left copyright – 100% INVISIBLE on load, appears ONLY at bottom -->
+<div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0 !important; visibility:hidden;">
+  © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
+</div>
+
+<script>
+  (function () {
+    const el = document.getElementById('bottom-copyright');
+    let shown = false;
+
+    const check = () => {
+      const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
+      if (nearBottom && !shown) {
+        shown = true;
+        el.style.visibility = 'visible';
+        gsap.to(el, { opacity: 1, duration: 0.8, ease: "power2.out" });
+      } else if (!nearBottom && shown) {
+        shown = false;
+        gsap.to(el, {
+          opacity: 0,
+          duration: 0.1,
+          ease: "power2.in",
+          onComplete: () => el.style.visibility = 'hidden'
+        });
+      }
+    };
+
+    // Run on every scroll
+    window.addEventListener('scroll', check);
+    // Run once after everything is painted
+    window.addEventListener('load', check);
+    // Extra safety for fast browsers
+    requestAnimationFrame(check);
+  })();
+</script>
+</body>
+</html>

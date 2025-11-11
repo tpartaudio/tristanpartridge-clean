@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><script src="https://unpkg.com/@vercel/blob@0.22.0/dist/index.browser.js"></script></head>
+<body>
+<script>
+const token = 'vSBYdfX91pZUE30tIF4KM0HO'; // ← PASTE YOUR TOKEN HERE
+
+async function start() {
+  alert('Select the "vertical-videos" folder first');
+  const dir1 = await window.showDirectoryPicker();
+  for (const entry of dir1.values()) {
+    if (entry.kind === 'file' && (entry.name.endsWith('.mp4') || entry.name.endsWith('.mov'))) {
+      const file = await entry.getFile();
+      const { url } = await put(`${entry.name}`, file, { access: 'public', token });
+      console.log(`${entry.name} → ${url}`);
+    }
+  }
+  alert('Now select "horizontal-videos" folder');
+  const dir2 = await window.showDirectoryPicker();
+  for (const entry of dir2.values()) {
+    if (entry.kind === 'file' && (entry.name.endsWith('.mp4') || entry.name.endsWith('.mov'))) {
+      const file = await entry.getFile();
+      const { url } = await put(`https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/${entry.name}`, file, { access: 'public', token });
+      console.log(`${entry.name} → ${url}`);
+    }
+  }
+  alert('ALL DONE – check browser console (F12) for URLs');
+}
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>L'Entropiste - Tristan Partridge</title>
+  <style>
+    :root {
+      --title: "Dorian's Spleen";
+      --credit-by: by;
+      --credit-name: L’Entropiste;
+    }
+
+    body { 
+      margin: 0; 
+      background: rgba(255,255,255,0.96);
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      min-height: 100vh; 
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+    }
+    .dark body { background: rgba(0,0,0,0.96); }
+
+    .page-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6rem;
+      max-width: 98vw;
+      padding-left: 6vw;
+      padding-right: 6vw;
+      height: 100vh;
+    }
+
+    .video-title {
+      color: #000;
+      line-height: 1.2;
+      opacity: 0.95;
+      margin: 0;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+
+    .video-title .title {
+      font-weight: 700;
+      font-size: 2.4rem;
+      letter-spacing: -0.03em;
+    }
+    .video-title .dash {
+      display: block;
+      margin: 0.9rem 0;
+      font-size: 1.3rem;
+      opacity: 0.5;
+      font-weight: 300;
+    }
+    .video-title .credit {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    .video-title .credit strong {
+      font-weight: 700;
+    }
+
+    .dark .video-title,
+    .dark .video-title .dash,
+    .dark .video-title .credit { color: #fff; }
+
+    .video-container {
+      position: relative;
+      width: 380px;
+      max-width: 90vw;
+      aspect-ratio: 9 / 16;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .control-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 52px;
+      height: 52px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .control-btn.show {
+      opacity: 1;
+      pointer-events: all;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .control-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #000;
+    }
+
+    .control-btn:hover {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: none;
+      border: none;
+      font-size: 2.5rem;
+      cursor: pointer;
+      color: #000;
+      z-index: 20;
+      transition: transform 0.2s ease;
+    }
+
+    .dark .close-btn { color: #fff; }
+
+    .close-btn:hover {
+      transform: scale(1.2);
+    }
+
+    @media (max-width: 1100px) {
+      .page-wrapper { 
+        flex-direction: column; 
+        gap: 3rem; 
+        padding: 5vw; 
+        align-items: center;
+        height: auto;
+      }
+      .video-title { 
+        order: 1; 
+        text-align: center; 
+        max-width: 90vw; 
+        height: auto;
+      }
+      .video-container { order: 2; }
+    }
+  </style>
+</head>
+<body class="light">
+  <div class="page-wrapper">
+    <div class="video-title">
+      <div class="title" id="title-el"></div>
+      <div class="dash">-</div>
+      <div class="credit" id="credit-el"></div>
+    </div>
+
+    <div class="video-container" id="video-container-1">
+      <video id="video-el-1" src="https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/dorians-spleen-part1.mov" preload="metadata" playsinline></video>
+      <div class="control-btn" id="control-btn-1">
+        <svg id="play-icon-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pause-icon-1" viewBox="0 0 24 24" style="display:none;"><path d="M14,19H18V5H14M6,19H10V5H6V19Z"/></svg>
+      </div>
+    </div>
+
+    <div class="video-container" id="video-container-2">
+      <video id="video-el-2" src="https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/dorians-spleen-part2.mov" preload="metadata" playsinline></video>
+      <div class="control-btn" id="control-btn-2">
+        <svg id="play-icon-2" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pause-icon-2" viewBox="0 0 24 24" style="display:none;"><path d="M14,19H18V5H14M6,19H10V5H6V19Z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <button class="close-btn" onclick="history.back()">×</button>
+
+  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0 !important; visibility:hidden;">
+    © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
+  </div>
+
+  <script>
+    // TITLE
+    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+
+    // CREDIT — CLEAN, BOLD NAME, NO SLASHES, NO QUOTES
+    const byText = getComputedStyle(document.documentElement).getPropertyValue('--credit-by').trim();
+    const nameText = getComputedStyle(document.documentElement).getPropertyValue('--credit-name').trim();
+    document.getElementById('credit-el').innerHTML = `${byText} <strong>${nameText}</strong>`;
+
+    document.title = "L'Entropiste - Tristan Partridge";
+
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+
+    // VIDEOS — ONE AT A TIME
+    const video1 = document.getElementById('video-el-1');
+    const video2 = document.getElementById('video-el-2');
+    const btn1 = document.getElementById('control-btn-1');
+    const btn2 = document.getElementById('control-btn-2');
+    const play1 = document.getElementById('play-icon-1');
+    const pause1 = document.getElementById('pause-icon-1');
+    const play2 = document.getElementById('play-icon-2');
+    const pause2 = document.getElementById('pause-icon-2');
+    const cont1 = document.getElementById('video-container-1');
+    const cont2 = document.getElementById('video-container-2');
+
+    let hide1, hide2;
+
+    const pauseOther = (currentVideo) => {
+      if (currentVideo === video1 && !video2.paused) {
+        video2.pause();
+        play2.style.display = 'block';
+        pause2.style.display = 'none';
+        btn2.classList.add('show');
+        clearTimeout(hide2);
+        hide2 = setTimeout(() => btn2.classList.remove('show'), 3000);
+      } else if (currentVideo === video2 && !video1.paused) {
+        video1.pause();
+        play1.style.display = 'block';
+        pause1.style.display = 'none';
+        btn1.classList.add('show');
+        clearTimeout(hide1);
+        hide1 = setTimeout(() => btn1.classList.remove('show'), 3000);
+      }
+    };
+
+    const initVideo = (video, btn, play, pause, cont, otherVideo) => {
+      video.pause();
+      play.style.display = 'block';
+      pause.style.display = 'none';
+      btn.classList.add('show');
+
+      cont.addEventListener('click', () => {
+        clearTimeout(window[`hide_${video.id}`]);
+        if (video.paused) {
+          pauseOther(video);
+          video.play();
+          play.style.display = 'none';
+          pause.style.display = 'block';
+          window[`hide_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 1800);
+        } else {
+          video.pause();
+          pause.style.display = 'none';
+          play.style.display = 'block';
+          window[`hide_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 3000);
+        }
+      });
+
+      cont.addEventListener('mouseenter', () => {
+        clearTimeout(window[`hide_${video.id}`]);
+        btn.classList.add('show');
+        window[`hide_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 1200);
+      });
+
+      cont.addEventListener('mouseleave', () => {
+        if (!video.paused) {
+          window[`hide_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 300);
+        }
+      });
+    };
+
+    initVideo(video1, btn1, play1, pause1, cont1, video2);
+    initVideo(video2, btn2, play2, pause2, cont2, video1);
+
+    // COPYRIGHT FADE
+    const copyright = document.getElementById('bottom-copyright');
+    let shown = false;
+    const check = () => {
+      const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
+      if (nearBottom && !shown) {
+        shown = true;
+        copyright.style.visibility = 'visible';
+        gsap.to(copyright, { opacity: 1, duration: 0.8, ease: "power2.out" });
+      } else if (!nearBottom && shown) {
+        shown = false;
+        gsap.to(copyright, {
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.in",
+          onComplete: () => copyright.style.visibility = 'hidden'
+        });
+      }
+    };
+    window.addEventListener('scroll', check);
+    window.addEventListener('resize', check);
+    window.addEventListener('load', check);
+    requestAnimationFrame(check);
+  </script>
+</body>
+</html>

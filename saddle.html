@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title> - Tristan Partridge</title>
+  <style>
+    :root {
+      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/saddle.mov; /* Path to your video file */
+      --title: "Saddle";
+      --credit: Visual by Julius Works;
+    }
+
+    body { 
+      margin: 0; 
+      background: rgba(255,255,255,0.96);
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      min-height: 100vh; 
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+    }
+    .dark body { background: rgba(0,0,0,0.96); }
+
+    .page-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 7.5rem;
+      max-width: 95vw;
+      padding-left: 8vw;
+      padding-right: 15vw;
+    }
+
+    .video-container {
+      position: relative;
+      width: 420px;
+      max-width: 90vw;
+      aspect-ratio: 9 / 16;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+      cursor: pointer;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .control-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 52px;
+      height: 52px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .control-btn.show {
+      opacity: 1;
+      pointer-events: all;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .control-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #000;
+    }
+
+    .control-btn:hover {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: none;
+      border: none;
+      font-size: 2.5rem;
+      cursor: pointer;
+      color: #000;
+      z-index: 20;
+      transition: transform 0.2s ease;
+    }
+
+    .dark .close-btn { color: #fff; }
+
+    .close-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .video-title {
+      color: #000;
+      line-height: 1.2;
+      opacity: 0.95;
+      margin: 0;
+      text-align: center;
+      max-width: 360px;
+    }
+    .video-title .title {
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: -0.03em;
+    }
+    .video-title .dash {
+      display: block;
+      margin: 0.9rem 0;
+      font-size: 1.3rem;
+      opacity: 0.5;
+      font-weight: 300;
+    }
+    .video-title .credit {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    .video-title .credit strong {
+      font-weight: 700;
+    }
+
+    .dark .video-title,
+    .dark .video-title .dash,
+    .dark .video-title .credit { color: #fff; }
+  </style>
+</head>
+<body class="light">
+  <div class="page-wrapper">
+    <div class="video-title">
+      <div class="title" id="title-el"></div>
+      <div class="dash">-</div>
+      <div class="credit" id="credit-el"></div>
+    </div>
+
+    <div class="video-container" id="video-container">
+      <video id="video-el" src="" preload="metadata" playsinline type="video/mp4" autoplay></video>
+      
+      <div class="control-btn" id="control-btn">
+        <svg id="play-icon" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;">
+          <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <button class="close-btn" onclick="history.back()">×</button>
+
+  <script>
+    // TITLE + CREDIT
+    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+
+    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+    const creditEl = document.getElementById('credit-el');
+
+    if (creditText.toLowerCase().includes('by')) {
+      const parts = creditText.split(/by/i);
+      creditEl.innerHTML = (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
+    } else {
+      creditEl.textContent = creditText;
+    }
+
+    // VIDEO
+    const videoEl = document.getElementById('video-el');
+    videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+
+    // Removed buggy line that tried to access nonexistent <a>
+    // videoEl.nextElementSibling.querySelector('a').href = videoEl.src;
+
+    document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
+
+    const video = videoEl;
+    const btn = document.getElementById('control-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const container = document.getElementById('video-container');
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    let hideTimeout;
+
+    // No autoplay — start paused, show play button
+    video.pause();
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    btn.classList.add('show');
+
+    container.addEventListener('click', () => {
+      clearTimeout(hideTimeout);
+
+      if (video.paused) {
+        video.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        hideTimeout = setTimeout(() => btn.classList.remove('show'), 1800);
+      } else {
+        video.pause();
+        pauseIcon.style.display = 'none';
+        playIcon.style.display = 'block';
+        hideTimeout = setTimeout(() => btn.classList.remove('show'), 3000);
+      }
+    });
+
+    container.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      btn.classList.add('show');
+      hideTimeout = setTimeout(() => btn.classList.remove('show'), 1200);
+    });
+
+    container.addEventListener('mouseleave', () => {
+      if (!video.paused) {
+        hideTimeout = setTimeout(() => btn.classList.remove('show'), 300);
+      }
+    });
+  </script>
+</body>
+</html>

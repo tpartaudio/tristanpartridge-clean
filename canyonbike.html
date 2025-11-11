@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title> - Tristan Partridge</title>
+  <style>
+    :root {
+      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/canyonbike.mp4; /* Path to your video file */
+      --title: "Canyon Bike";
+      --credit: Visual by EverythingMoves;
+      --video-width: 900px; /* Adjust this value to change the video frame size */
+      --detailed-credit: "Credits:\\n\\nTEMPR for @Canyon\\n\\nDirected and Designed by: \\n@__everythingmoves\\nCanyon CD: @ultc\\nProducer: @itsdanielanotdaniel\\nDoP: @williamevans\\nCGI: @charlie__jeffries & \\n@sai1ey for @__everythingmoves\\nEditor: @andredenervaux\\nPhotography: @roofowler\\nGrade: @hansquires\\nSound Design: @tristanpartridge\\nBike SFX: @willberridgesound\\nCyclist: @joeholt1011\\nProd assist / Mechanic: @whytelife";
+      --credits-font-size: 0.7rem; /* Adjust this value to change the detailed credits font size */
+    }
+    body {
+      margin: 0;
+      background: rgba(255,255,255,0.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      overflow: auto;
+      backdrop-filter: blur(4px);
+    }
+    .dark body { background: rgba(0,0,0,0.96); }
+    .page-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 7.5rem;
+      max-width: 95vw;
+      padding-left: 8vw;
+      padding-right: 15vw;
+    }
+    .video-container {
+      position: relative;
+      width: var(--video-width);
+      max-width: 90vw;
+      aspect-ratio: 16 / 9;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+      cursor: pointer;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+    .control-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 52px;
+      height: 52px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .control-btn.show {
+      opacity: 1;
+      pointer-events: all;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .control-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #000;
+    }
+    .control-btn:hover {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+    .close-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: none;
+      border: none;
+      font-size: 2.5rem;
+      cursor: pointer;
+      color: #000;
+      z-index: 20;
+      transition: transform 0.2s ease;
+    }
+    .dark .close-btn { color: #fff; }
+    .close-btn:hover {
+      transform: scale(1.2);
+    }
+    .video-title {
+      color: #000;
+      line-height: 1.2;
+      opacity: 0.95;
+      margin: 0;
+      text-align: center;
+      max-width: 360px;
+    }
+    .video-title .title {
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: -0.03em;
+    }
+    .video-title .dash {
+      display: block;
+      margin: 0.9rem 0;
+      font-size: 1.3rem;
+      opacity: 0.5;
+      font-weight: 300;
+    }
+    .video-title .credit {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    .video-title .credit strong {
+      font-weight: 700;
+    }
+    .credits-widget {
+      margin-top: 1.5rem;
+    }
+    .credits-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: #000;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s ease;
+    }
+    .credits-toggle:hover {
+      color: #555;
+      animation: wiggle 0.6s infinite ease-in-out;
+    }
+    .dark .credits-toggle {
+      color: #fff;
+    }
+    .dark .credits-toggle:hover {
+      color: #ccc;
+    }
+    .credits-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      transition: transform 0.3s ease;
+    }
+    @keyframes wiggle {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(3px); }
+      100% { transform: translateY(0); }
+    }
+    .detailed-credits {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      font-size: var(--credits-font-size);
+      font-weight: 400;
+      opacity: 0.9;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+      white-space: pre-line;
+      text-align: center;
+    }
+    .detailed-credits.show {
+      max-height: 1000px;
+    }
+    .dark .video-title,
+    .dark .video-title .dash,
+    .dark .video-title .credit,
+    .dark .detailed-credits { color: #fff; }
+    @media (max-width: 1024px) {
+      .page-wrapper {
+        flex-direction: column;
+        gap: 3rem;
+        padding: 5vw;
+      }
+      .video-title {
+        order: 2;
+        max-width: 90vw;
+      }
+      .video-container {
+        order: 1;
+        width: 90vw;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body class="light">
+  <div class="page-wrapper">
+    <div class="video-title">
+      <div class="title" id="title-el"></div>
+      <div class="dash">-</div>
+      <div class="credit" id="credit-el"></div>
+      <div class="credits-widget">
+        <button class="credits-toggle">Credits
+          <svg viewBox="0 0 24 24">
+            <path d="M7 10l5 5 5-5z"/>
+          </svg>
+        </button>
+        <div class="detailed-credits" id="detailed-credits-el"></div>
+      </div>
+    </div>
+    <div class="video-container" id="video-container">
+      <video id="video-el" src="" preload="metadata" playsinline type="video/mp4"></video>
+      <div class="control-btn" id="control-btn">
+        <svg id="play-icon" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;">
+          <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <button class="close-btn" onclick="history.back()">×</button>
+  <script>
+    // TITLE + CREDIT
+    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+    const creditEl = document.getElementById('credit-el');
+    if (creditText.toLowerCase().includes('by')) {
+      const parts = creditText.split(/by/i);
+      creditEl.innerHTML = (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
+    } else {
+      creditEl.textContent = creditText;
+    }
+    // DETAILED CREDITS
+    const detailedText = getComputedStyle(document.documentElement).getPropertyValue('--detailed-credit').trim();
+    const detailedEl = document.getElementById('detailed-credits-el');
+    detailedEl.textContent = detailedText.replace(/\\n/g, '\n');
+    // VIDEO
+    const videoEl = document.getElementById('video-el');
+    videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+    // Removed buggy line that tried to access nonexistent <a>
+    // videoEl.nextElementSibling.querySelector('a').href = videoEl.src;
+    document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
+    const video = videoEl;
+    const btn = document.getElementById('control-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const container = document.getElementById('video-container');
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+    video.pause();
+    btn.classList.add('show');
+    let hideTimeout;
+    container.addEventListener('click', () => {
+      clearTimeout(hideTimeout);
+      if (video.paused) {
+        video.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        hideTimeout = setTimeout(() => btn.classList.remove('show'), 1800);
+      } else {
+        video.pause();
+        pauseIcon.style.display = 'none';
+        playIcon.style.display = 'block';
+        hideTimeout = setTimeout(() => btn.classList.remove('show'), 3000);
+      }
+    });
+    container.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      btn.classList.add('show');
+      hideTimeout = setTimeout(() => btn.classList.remove('show'), 1200);
+    });
+    container.addEventListener('mouseleave', () => {
+      if (!video.paused) {
+        hideTimeout = setTimeout(() => btn.classList.remove('show'), 300);
+      }
+    });
+    // CREDITS TOGGLE
+    const toggle = document.querySelector('.credits-toggle');
+    const credits = document.getElementById('detailed-credits-el');
+    const arrow = toggle.querySelector('svg');
+    toggle.addEventListener('click', () => {
+      credits.classList.toggle('show');
+      if (credits.classList.contains('show')) {
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    });
+  </script>
+</body>
+</html>

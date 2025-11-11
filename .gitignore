@@ -1,0 +1,14 @@
+# macOS system files
+.DS_Store
+
+# VS Code settings
+.vscode/
+
+# Video files
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Node folder if you ever use npm
+node_modules/
