@@ -153,14 +153,15 @@
         flex-direction: column;
         justify-content: center;
         gap: 6px;
-        opacity: 1; /* Ensure visibility */
+        opacity: 1 !important; /* Force visibility */
+        visibility: visible !important; /* Force visibility */
       }
       #hamburger span {
         height: 4px;
         width: 32px;
-        background-color: #000;
+        background-color: #000 !important; /* Force black */
         transition: all 0.3s ease;
-        opacity: 1; /* Ensure lines visible */
+        opacity: 1 !important; /* Force lines visible */
       }
 
       /* --- MOBILE MENU SECTION --- 
@@ -206,23 +207,24 @@
       /* --- PROJECT THUMB SECTION --- 
       Styles individual project thumbnails. 
       Aspect-ratio 4/5. 
-      Reduced size: max-width 90%, centered with auto margin. 
+      Reduced size: max-width 80%, centered with auto margin. 
       Adjust border-radius or shadow for visual tweaks. */
       .project-thumb {
-        max-width: 90%;
+        max-width: 80%; /* Smaller images */
         margin: 0 auto;
         aspect-ratio: 4/5;
         border-radius: 20px;
         box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-        transition: none; /* No animation */
+        transition: none !important; /* No animation */
       }
-      .project-thumb:active {
+      .project-thumb:active, .project-thumb.active {
         transform: none !important; /* No change on tap or hold */
-        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15) !important;
       }
       .project-thumb img {
         border-radius: 20px;
-        transition: none; /* No animation on img */
+        transition: none !important; /* No animation on img */
+        transform: none !important; /* Static scale */
       }
 
       /* --- FOOTER SECTION --- 
