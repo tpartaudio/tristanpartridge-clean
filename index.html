@@ -506,6 +506,23 @@
         gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
         sound.play();
         // let default anchor navigation happen
+        // CLOSE MOBILE MENU BY TAPPING ANYWHERE OUTSIDE THE MENU LINKS
+mobileMenu.addEventListener("click", (e) => {
+  // If user clicks on the background, not on a link → close menu
+  if (e.target === mobileMenu) {
+    mobileMenu.classList.add("hidden");
+    mobileMenu.setAttribute("aria-hidden", "true");
+    hamburger.classList.remove("active");
+    hamburger.setAttribute("aria-expanded", "false");
+    lockBody(false);
+
+    // Reset hamburger animation
+    gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+    gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+    gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+  }
+});
+
       }
     });
 
