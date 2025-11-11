@@ -17,18 +17,8 @@
       --logo-height: 85px;
     }
 
-    /* ---------- Base / Desktop (unchanged intent) ---------- */
-    body {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background: #fff;
-      color: #111;
-      transition: all 0.6s;
-      font-size: 16px; /* Prevent iOS zoom issues */
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overscroll-behavior-y: contain;
-    }
-
+    /* ========================= NAVBAR STYLES ========================= */
+    /* All styles that affect the nav are grouped here so you can copy them */
     .nav-container {
       backdrop-filter: blur(60px) saturate(180%);
       background: rgba(255, 255, 255, 0.85);
@@ -75,6 +65,65 @@
       height: 2px;
       background: #000;
       transition: all .22s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Hamburger + mobile menu */
+    #hamburger {
+      position: absolute; /* Hides with nav-container */
+      right: 2rem;
+      top: 1.8rem; /* Aligned for visibility */
+      z-index: 60;
+      background: transparent;
+      border: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #hamburger[aria-expanded="true"] span:first-child {
+      transform-origin: center;
+    }
+
+    #hamburger span {
+      height: 4px;
+      width: 32px;
+      background-color: #000;
+      transition: all 0.3s ease;
+      display: block;
+      border-radius: 2px;
+    }
+
+    #mobile-menu {
+      transition: opacity 0.4s cubic-bezier(.22,1,.36,1), visibility 0.4s;
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+    }
+
+    #mobile-menu.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #mobile-menu:not(.hidden) {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* ========================= END NAVBAR STYLES ========================= */
+
+    /* ---------- Base / Desktop (unchanged intent) ---------- */
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #111;
+      transition: all 0.6s;
+      font-size: 16px; /* Prevent iOS zoom issues */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior-y: contain;
     }
 
     .works-container {
@@ -125,51 +174,6 @@
     .project-thumb.active {
       transform: translateY(-6px) scale(1.02);
       box-shadow: 0 30px 60px rgba(0,0,0,0.25);
-    }
-
-    /* === FIX HAMBURGER GLITCH === */
-    #hamburger {
-      position: absolute; /* Hides with nav-container */
-      right: 2rem;
-      top: 1.8rem; /* Aligned for visibility */
-      z-index: 60;
-      background: transparent;
-      border: none;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #hamburger[aria-expanded="true"] span:first-child {
-      transform-origin: center;
-    }
-
-    #hamburger span {
-      height: 4px;
-      width: 32px;
-      background-color: #000;
-      transition: all 0.3s ease;
-      display: block;
-      border-radius: 2px;
-    }
-
-    #mobile-menu {
-      transition: opacity 0.4s cubic-bezier(.22,1,.36,1), visibility 0.4s;
-      position: fixed;
-      inset: 0;
-      z-index: 55;
-    }
-
-    #mobile-menu.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    #mobile-menu:not(.hidden) {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
     }
 
     /* ---------- MOBILE ONLY (≤767px) ---------- */
@@ -302,33 +306,38 @@
 </head>
 
 <body class="min-h-screen flex flex-col">
-  <!-- NAVBAR -->
-  <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-center justify-between">
-    <div class="logo-container">
-      <img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'">
-    </div>
 
-    <div class="hidden md:flex nav-links text-lg font-medium" aria-label="Primary">
-      <a href="index.html" class="nav-link active" data-page="works">Works</a>
-      <a href="about.html" class="nav-link" data-page="about">About</a>
-      <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
-      <div class="underline" id="underline"></div>
-    </div>
+  <!-- ========================= SITE NAVBAR (COPY/PASTE THIS SECTION) ========================= -->
+  <section id="site-navbar">
+    <!-- NAVBAR -->
+    <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-center justify-between">
+      <div class="logo-container">
+        <img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'">
+      </div>
 
-    <!-- Hamburger (mobile) -->
-    <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
-      <span class="block"></span>
-      <span class="block"></span>
-      <span class="block"></span>
-    </button>
-  </nav>
+      <div class="hidden md:flex nav-links text-lg font-medium" aria-label="Primary">
+        <a href="index.html" class="nav-link active" data-page="works">Works</a>
+        <a href="about.html" class="nav-link" data-page="about">About</a>
+        <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
+        <div class="underline" id="underline"></div>
+      </div>
 
-  <!-- MOBILE MENU -->
-  <nav id="mobile-menu" class="hidden" aria-hidden="true" role="navigation">
-    <a href="index.html">Works</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </nav>
+      <!-- Hamburger (mobile) -->
+      <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+        <span class="block"></span>
+        <span class="block"></span>
+        <span class="block"></span>
+      </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <nav id="mobile-menu" class="hidden" aria-hidden="true" role="navigation">
+      <a href="index.html">Works</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </section>
+  <!-- ========================= END SITE NAVBAR ========================= -->
 
   <!-- CONTENT -->
   <main class="flex-1 pt-40">
@@ -349,8 +358,9 @@
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
-  <script>
+  <!-- ========================= NAVBAR JAVASCRIPT (COPY/PASTE THIS TOO IF NEEDED) ========================= -->
+  <script id="navbar-script">
+    // NAVBAR behaviour grouped in one place.
     gsap.registerPlugin(ScrollTrigger);
 
     const sound = new Howl({
@@ -358,9 +368,7 @@
       volume: 0.3
     });
 
-    // -----------------------------
-    // LOAD CONFIG + ASSETS
-    // -----------------------------
+    // Load minimal config used by navbar (logo + social icons)
     fetch("config.json")
       .then(r => r.json())
       .then(cfg => {
@@ -369,6 +377,167 @@
         if (cfg.behance_logo) document.getElementById("behance-logo").src = cfg.behance_logo;
       }).catch(()=>{/* silent fail if missing */});
 
+    // NAVBAR UNDERLINE ANIMATION
+    const underline = document.getElementById('underline');
+    const links = document.querySelectorAll('.nav-link');
+    let currentTarget = document.querySelector('[data-page="works"]') || links[0];
+    links.forEach(l => l.classList.remove('active'));
+    if (currentTarget) currentTarget.classList.add('active');
+
+    function setUnderlineInstant(target) {
+      if (!target || !underline) return;
+      underline.style.transform = 'none';
+      underline.style.transition = 'none';
+      const linkRect = target.getBoundingClientRect();
+      const containerRect = target.parentElement.getBoundingClientRect();
+      underline.style.left = (linkRect.left - containerRect.left) + 'px';
+      underline.style.width = linkRect.width + 'px';
+      void underline.offsetHeight;
+      underline.style.transition = '';
+    }
+
+    function moveUnderline(target, animate = true) {
+      if (!target || !underline) return;
+      gsap.set(underline, { clearProps: "transform, x, xPercent" });
+      const linkRect = target.getBoundingClientRect();
+      const containerRect = target.parentElement.getBoundingClientRect();
+      const leftPx = linkRect.left - containerRect.left;
+      const widthPx = linkRect.width;
+      if (!animate) {
+        underline.style.left = leftPx + 'px';
+        underline.style.width = widthPx + 'px';
+      } else {
+        gsap.to(underline, {
+          left: leftPx + 'px',
+          width: widthPx,
+          duration: 0.02,
+          ease: "power2.out",
+          overwrite: "auto"
+        });
+      }
+    }
+
+    window.addEventListener('load', () => {
+      setUnderlineInstant(currentTarget);
+      if (underline) {
+        gsap.fromTo(underline,
+          { scaleX: 0.98, transformOrigin: "center center" },
+          {
+            scaleX: 1,
+            duration: 0.05,
+            ease: "elastic.out(1, 0.5)",
+            onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
+          }
+        );
+      }
+    });
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => moveUnderline(link, true));
+      link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
+      link.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        links.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        currentTarget = link;
+        setUnderlineInstant(currentTarget);
+        sound.play();
+        // navigate
+        window.location.href = link.getAttribute('href');
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      clearTimeout(window._navResizeTimer);
+      window._navResizeTimer = setTimeout(() => setUnderlineInstant(currentTarget), 80);
+    });
+
+    // MOBILE MENU + HAMBURGER
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    function lockBody(locked) {
+      if (locked) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      }
+    }
+
+    hamburger.addEventListener("click", () => {
+      const isHidden = mobileMenu.classList.contains("hidden");
+      if (isHidden) {
+        mobileMenu.classList.remove("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        hamburger.setAttribute('aria-expanded', 'true');
+        lockBody(true);
+      } else {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+      }
+
+      // sound + animate hamburger → cross
+      sound.play();
+      hamburger.classList.toggle("active");
+      if (hamburger.classList.contains("active")) {
+        gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
+      } else {
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
+      }
+    });
+
+    mobileMenu.addEventListener("click", (e) => {
+      if (e.target.tagName === "A") {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.classList.remove("active");
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+        sound.play();
+        // let default anchor navigation happen
+      }
+    });
+
+    // Close mobile menu on escape
+    window.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.classList.remove("active");
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+      }
+    });
+
+    // NAVBAR HIDE/SHOW ON SCROLL
+    let lastY = 0;
+    const nav = document.querySelector(".nav-container");
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      const d = y - lastY;
+      if (d > 8 && y > 100) {
+        gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
+      } else if (d < -8) {
+        gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
+      }
+      lastY = y;
+    });
+  </script>
+  <!-- ========================= END NAVBAR SCRIPT ========================= -->
+
+  <!-- ========================= PROJECTS + OTHER SCRIPTS (UNCHANGED) ========================= -->
+  <script>
     // -----------------------------
     // LOAD PROJECTS + SMOOTH ANIMATION
     // -----------------------------
@@ -446,170 +615,6 @@
           );
         }
       }).catch(()=>{/* silent if no works.json during dev */});
-
-    // -----------------------------
-    // NAVBAR UNDERLINE ANIMATION
-    // -----------------------------
-    const underline = document.getElementById('underline');
-    const links = document.querySelectorAll('.nav-link');
-    let currentTarget = document.querySelector('[data-page="works"]') || links[0];
-    links.forEach(l => l.classList.remove('active'));
-    if (currentTarget) currentTarget.classList.add('active');
-
-    function setUnderlineInstant(target) {
-      if (!target || !underline) return;
-      underline.style.transform = 'none';
-      underline.style.transition = 'none';
-      const linkRect = target.getBoundingClientRect();
-      const containerRect = target.parentElement.getBoundingClientRect();
-      underline.style.left = (linkRect.left - containerRect.left) + 'px';
-      underline.style.width = linkRect.width + 'px';
-      void underline.offsetHeight;
-      underline.style.transition = '';
-    }
-
-    function moveUnderline(target, animate = true) {
-      if (!target || !underline) return;
-      gsap.set(underline, { clearProps: "transform, x, xPercent" });
-      const linkRect = target.getBoundingClientRect();
-      const containerRect = target.parentElement.getBoundingClientRect();
-      const leftPx = linkRect.left - containerRect.left;
-      const widthPx = linkRect.width;
-      if (!animate) {
-        underline.style.left = leftPx + 'px';
-        underline.style.width = widthPx + 'px';
-      } else {
-        gsap.to(underline, {
-          left: leftPx + 'px',
-          width: widthPx,
-          duration: 0.02,
-          ease: "power2.out",
-          overwrite: "auto"
-        });
-      }
-    }
-
-    window.addEventListener('load', () => {
-      setUnderlineInstant(currentTarget);
-      if (underline) {
-        gsap.fromTo(underline,
-          { scaleX: 0.98, transformOrigin: "center center" },
-          {
-            scaleX: 1,
-            duration: 0.05,
-            ease: "elastic.out(1, 0.5)",
-            onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
-          }
-        );
-      }
-    });
-
-    links.forEach(link => {
-      link.addEventListener('mouseenter', () => moveUnderline(link, true));
-      link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
-      link.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        currentTarget = link;
-        setUnderlineInstant(currentTarget);
-        sound.play();
-        // navigate
-        window.location.href = link.getAttribute('href');
-      });
-    });
-
-    window.addEventListener('resize', () => {
-      clearTimeout(window._navResizeTimer);
-      window._navResizeTimer = setTimeout(() => setUnderlineInstant(currentTarget), 80);
-    });
-
-    // -----------------------------
-    // MOBILE MENU + HAMBURGER FIX
-    // -----------------------------
-    const hamburger = document.getElementById("hamburger");
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    function lockBody(locked) {
-      if (locked) {
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-        document.documentElement.style.overflow = '';
-      }
-    }
-
-    hamburger.addEventListener("click", () => {
-      const isHidden = mobileMenu.classList.contains("hidden");
-      if (isHidden) {
-        mobileMenu.classList.remove("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'false');
-        hamburger.setAttribute('aria-expanded', 'true');
-        lockBody(true);
-      } else {
-        mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        hamburger.setAttribute('aria-expanded', 'false');
-        lockBody(false);
-      }
-
-      // sound + animate hamburger → cross
-      sound.play();
-      hamburger.classList.toggle("active");
-      if (hamburger.classList.contains("active")) {
-        gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
-        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
-        gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
-      } else {
-        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
-        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
-        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
-      }
-    });
-
-    mobileMenu.addEventListener("click", (e) => {
-      if (e.target.tagName === "A") {
-        mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        hamburger.classList.remove("active");
-        hamburger.setAttribute('aria-expanded', 'false');
-        lockBody(false);
-        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
-        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
-        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
-        sound.play();
-        // let default anchor navigation happen
-      }
-    });
-
-    // Close mobile menu on escape
-    window.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        hamburger.classList.remove("active");
-        hamburger.setAttribute('aria-expanded', 'false');
-        lockBody(false);
-      }
-    });
-
-    // -----------------------------
-    // NAVBAR HIDE/SHOW ON SCROLL
-    // -----------------------------
-    let lastY = 0;
-    const nav = document.querySelector(".nav-container");
-    window.addEventListener("scroll", () => {
-      const y = window.scrollY;
-      const d = y - lastY;
-      if (d > 8 && y > 100) {
-        gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
-      } else if (d < -8) {
-        gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
-      }
-      lastY = y;
-    });
-
   </script>
 
   <!-- Bottom-left copyright (appears only when near bottom) -->
@@ -644,5 +649,6 @@
       requestAnimationFrame(check);
     })();
   </script>
+
 </body>
 </html>
