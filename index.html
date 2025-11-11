@@ -359,199 +359,197 @@
   </footer>
 
   <!-- ========================= NAVBAR JAVASCRIPT (COPY/PASTE THIS TOO IF NEEDED) ========================= -->
-  <script id="navbar-script">
-    // NAVBAR behaviour grouped in one place.
-    gsap.registerPlugin(ScrollTrigger);
+ <script id="navbar-script">
+  // NAVBAR behaviour grouped in one place.
+  gsap.registerPlugin(ScrollTrigger);
 
-    const sound = new Howl({
-      src: ["https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"],
-      volume: 0.3
-    });
+  const sound = new Howl({
+    src: ["https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"],
+    volume: 0.3
+  });
 
-    // Load minimal config used by navbar (logo + social icons)
-    fetch("config.json")
-      .then(r => r.json())
-      .then(cfg => {
-        if (cfg.logo) document.getElementById("logo").src = cfg.logo;
-        if (cfg.instagram_logo) document.getElementById("insta-logo").src = cfg.instagram_logo;
-        if (cfg.behance_logo) document.getElementById("behance-logo").src = cfg.behance_logo;
-      }).catch(()=>{/* silent fail if missing */});
+  // Load minimal config used by navbar (logo + social icons)
+  fetch("config.json")
+    .then(r => r.json())
+    .then(cfg => {
+      if (cfg.logo) document.getElementById("logo").src = cfg.logo;
+      if (cfg.instagram_logo) document.getElementById("insta-logo").src = cfg.instagram_logo;
+      if (cfg.behance_logo) document.getElementById("behance-logo").src = cfg.behance_logo;
+    }).catch(()=>{/* silent fail if missing */});
 
-    // NAVBAR UNDERLINE ANIMATION
-    const underline = document.getElementById('underline');
-    const links = document.querySelectorAll('.nav-link');
-    let currentTarget = document.querySelector('[data-page="works"]') || links[0];
-    links.forEach(l => l.classList.remove('active'));
-    if (currentTarget) currentTarget.classList.add('active');
+  // NAVBAR UNDERLINE ANIMATION
+  const underline = document.getElementById('underline');
+  const links = document.querySelectorAll('.nav-link');
+  let currentTarget = document.querySelector('[data-page="works"]') || links[0];
+  links.forEach(l => l.classList.remove('active'));
+  if (currentTarget) currentTarget.classList.add('active');
 
-    function setUnderlineInstant(target) {
-      if (!target || !underline) return;
-      underline.style.transform = 'none';
-      underline.style.transition = 'none';
-      const linkRect = target.getBoundingClientRect();
-      const containerRect = target.parentElement.getBoundingClientRect();
-      underline.style.left = (linkRect.left - containerRect.left) + 'px';
-      underline.style.width = linkRect.width + 'px';
-      void underline.offsetHeight;
-      underline.style.transition = '';
-    }
-
-    function moveUnderline(target, animate = true) {
-      if (!target || !underline) return;
-      gsap.set(underline, { clearProps: "transform, x, xPercent" });
-      const linkRect = target.getBoundingClientRect();
-      const containerRect = target.parentElement.getBoundingClientRect();
-      const leftPx = linkRect.left - containerRect.left;
-      const widthPx = linkRect.width;
-      if (!animate) {
-        underline.style.left = leftPx + 'px';
-        underline.style.width = widthPx + 'px';
-      } else {
-        gsap.to(underline, {
-          left: leftPx + 'px',
-          width: widthPx,
-          duration: 0.02,
-          ease: "power2.out",
-          overwrite: "auto"
-        });
-      }
-    }
-
-    window.addEventListener('load', () => {
-      setUnderlineInstant(currentTarget);
-      if (underline) {
-        gsap.fromTo(underline,
-          { scaleX: 0.98, transformOrigin: "center center" },
-          {
-            scaleX: 1,
-            duration: 0.05,
-            ease: "elastic.out(1, 0.5)",
-            onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
-          }
-        );
-      }
-    });
-
-    links.forEach(link => {
-      link.addEventListener('mouseenter', () => moveUnderline(link, true));
-      link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
-      link.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        currentTarget = link;
-        setUnderlineInstant(currentTarget);
-        sound.play();
-        // navigate
-        window.location.href = link.getAttribute('href');
-      });
-    });
-
-    window.addEventListener('resize', () => {
-      clearTimeout(window._navResizeTimer);
-      window._navResizeTimer = setTimeout(() => setUnderlineInstant(currentTarget), 80);
-    });
-
-    // MOBILE MENU + HAMBURGER
-    const hamburger = document.getElementById("hamburger");
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    function lockBody(locked) {
-      if (locked) {
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-        document.documentElement.style.overflow = '';
-      }
-    }
-
-    hamburger.addEventListener("click", () => {
-      const isHidden = mobileMenu.classList.contains("hidden");
-      if (isHidden) {
-        mobileMenu.classList.remove("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'false');
-        hamburger.setAttribute('aria-expanded', 'true');
-        lockBody(true);
-      } else {
-        mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        hamburger.setAttribute('aria-expanded', 'false');
-        lockBody(false);
-      }
-
-      // sound + animate hamburger → cross
-      sound.play();
-      hamburger.classList.toggle("active");
-      if (hamburger.classList.contains("active")) {
-        gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
-        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
-        gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
-      } else {
-        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
-        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
-        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
-      }
-    });
-
-    mobileMenu.addEventListener("click", (e) => {
-      if (e.target.tagName === "A") {
-        mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        hamburger.classList.remove("active");
-        hamburger.setAttribute('aria-expanded', 'false');
-        lockBody(false);
-        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
-        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
-        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
-        sound.play();
-        // let default anchor navigation happen
-        // CLOSE MOBILE MENU BY TAPPING ANYWHERE OUTSIDE THE MENU LINKS
-mobileMenu.addEventListener("click", (e) => {
-  // If user clicks on the background, not on a link → close menu
-  if (e.target === mobileMenu) {
-    mobileMenu.classList.add("hidden");
-    mobileMenu.setAttribute("aria-hidden", "true");
-    hamburger.classList.remove("active");
-    hamburger.setAttribute("aria-expanded", "false");
-    lockBody(false);
-
-    // Reset hamburger animation
-    gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
-    gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
-    gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+  function setUnderlineInstant(target) {
+    if (!target || !underline) return;
+    underline.style.transform = 'none';
+    underline.style.transition = 'none';
+    const linkRect = target.getBoundingClientRect();
+    const containerRect = target.parentElement.getBoundingClientRect();
+    underline.style.left = (linkRect.left - containerRect.left) + 'px';
+    underline.style.width = linkRect.width + 'px';
+    void underline.offsetHeight;
+    underline.style.transition = '';
   }
-});
 
-      }
-    });
+  function moveUnderline(target, animate = true) {
+    if (!target || !underline) return;
+    gsap.set(underline, { clearProps: "transform, x, xPercent" });
+    const linkRect = target.getBoundingClientRect();
+    const containerRect = target.parentElement.getBoundingClientRect();
+    const leftPx = linkRect.left - containerRect.left;
+    const widthPx = linkRect.width;
+    if (!animate) {
+      underline.style.left = leftPx + 'px';
+      underline.style.width = widthPx + 'px';
+    } else {
+      gsap.to(underline, {
+        left: leftPx + 'px',
+        width: widthPx,
+        duration: 0.02,
+        ease: "power2.out",
+        overwrite: "auto"
+      });
+    }
+  }
 
-    // Close mobile menu on escape
-    window.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        hamburger.classList.remove("active");
-        hamburger.setAttribute('aria-expanded', 'false');
-        lockBody(false);
-      }
-    });
+  window.addEventListener('load', () => {
+    setUnderlineInstant(currentTarget);
+    if (underline) {
+      gsap.fromTo(underline,
+        { scaleX: 0.98, transformOrigin: "center center" },
+        {
+          scaleX: 1,
+          duration: 0.05,
+          ease: "elastic.out(1, 0.5)",
+          onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
+        }
+      );
+    }
+  });
 
-    // NAVBAR HIDE/SHOW ON SCROLL
-    let lastY = 0;
-    const nav = document.querySelector(".nav-container");
-    window.addEventListener("scroll", () => {
-      const y = window.scrollY;
-      const d = y - lastY;
-      if (d > 8 && y > 100) {
-        gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
-      } else if (d < -8) {
-        gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
-      }
-      lastY = y;
+  links.forEach(link => {
+    link.addEventListener('mouseenter', () => moveUnderline(link, true));
+    link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
+    link.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      currentTarget = link;
+      setUnderlineInstant(currentTarget);
+      sound.play();
+      // navigate
+      window.location.href = link.getAttribute('href');
     });
-  </script>
-  <!-- ========================= END NAVBAR SCRIPT ========================= -->
+  });
+
+  window.addEventListener('resize', () => {
+    clearTimeout(window._navResizeTimer);
+    window._navResizeTimer = setTimeout(() => setUnderlineInstant(currentTarget), 80);
+  });
+
+  // MOBILE MENU + HAMBURGER
+  const hamburger = document.getElementById("hamburger");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  function lockBody(locked) {
+    if (locked) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+  }
+
+  hamburger.addEventListener("click", () => {
+    const isHidden = mobileMenu.classList.contains("hidden");
+    if (isHidden) {
+      mobileMenu.classList.remove("hidden");
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      hamburger.setAttribute('aria-expanded', 'true');
+      lockBody(true);
+    } else {
+      mobileMenu.classList.add("hidden");
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      hamburger.setAttribute('aria-expanded', 'false');
+      lockBody(false);
+    }
+
+    // sound + animate hamburger → cross
+    sound.play();
+    hamburger.classList.toggle("active");
+    if (hamburger.classList.contains("active")) {
+      gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
+      gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
+      gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
+    } else {
+      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
+      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
+      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
+    }
+  });
+
+  // ✅ FULL MOBILE MENU CLICK HANDLER WITH OUTSIDE-CLOSE
+  mobileMenu.addEventListener("click", (e) => {
+
+    // 1. User clicks on a link
+    if (e.target.tagName === "A") {
+      mobileMenu.classList.add("hidden");
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      hamburger.classList.remove("active");
+      hamburger.setAttribute('aria-expanded', 'false');
+      lockBody(false);
+      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+      sound.play();
+      return; // allow navigation
+    }
+
+    // ✅ 2. ADDED — user clicks the black background (outside the menu links)
+    if (e.target === mobileMenu) {
+      mobileMenu.classList.add("hidden");
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      hamburger.classList.remove("active");
+      hamburger.setAttribute('aria-expanded', 'false');
+      lockBody(false);
+      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+    }
+  });
+
+  // Close mobile menu on escape
+  window.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+      mobileMenu.classList.add("hidden");
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      hamburger.classList.remove("active");
+      hamburger.setAttribute('aria-expanded', 'false');
+      lockBody(false);
+    }
+  });
+
+  // NAVBAR HIDE/SHOW ON SCROLL
+  let lastY = 0;
+  const nav = document.querySelector(".nav-container");
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY;
+    const d = y - lastY;
+    if (d > 8 && y > 100) {
+      gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
+    } else if (d < -8) {
+      gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
+    }
+    lastY = y;
+  });
+</script>
+
 
   <!-- ========================= PROJECTS + OTHER SCRIPTS (UNCHANGED) ========================= -->
   <script>
