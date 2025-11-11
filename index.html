@@ -101,7 +101,7 @@
 
     /* === FIX HAMBURGER GLITCH === */
     #hamburger {
-      position: absolute; /* Changed from fixed to absolute so it hides with nav-container */
+      position: absolute; /* Hides with nav-container */
       right: 2rem;
       top: 2.2rem;
       z-index: 60;
@@ -131,17 +131,17 @@
       }
       .logo-container {
         left: 1.5rem;
-        top: 1rem;
+        top: 1.2rem; /* Brought up a bit */
       }
       #logo {
-        height: 70px;
-        transform: translateY(-14px);
+        height: 60px; /* Reduced size */
+        transform: translateY(-12px); /* Adjusted translateY for new size */
       }
-      #logo:hover { transform: scale(1.05) translateY(-14px); }
+      #logo:hover { transform: scale(1.05) translateY(-12px); }
 
       /* --- HAMBURGER SECTION --- 
       Controls the 3-line menu icon. 
-      Thickness increased: span height from 2px to 3px. 
+      Thickness: span height 3px. 
       Adjust gap or width for size. */
       #hamburger {
         right: 1.5rem;
@@ -152,10 +152,10 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 6px; /* Increased gap for thicker feel */
+        gap: 6px;
       }
       #hamburger span {
-        height: 3px; /* Thicker lines */
+        height: 3px;
         transition: all 0.3s ease;
       }
 
@@ -192,11 +192,13 @@
 
       /* --- PROJECT THUMB SECTION --- 
       Styles individual project thumbnails. 
-      Aspect-ratio set to 4/5 per request. 
+      Aspect-ratio 4/5. 
+      Reduced size: max-width 90%, centered with auto margin. 
       Adjust border-radius or shadow for visual tweaks. */
       .project-thumb {
-        max-width: 100%;
-        aspect-ratio: 4/5; /* Changed to 4:5 format */
+        max-width: 90%; /* Smaller images */
+        margin: 0 auto; /* Center */
+        aspect-ratio: 4/5;
         border-radius: 20px;
         box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       }
@@ -308,7 +310,7 @@
           div.className = "project-thumb opacity-0 translate-y-16";
           div.innerHTML = `<img src="images/${p.thumb}" alt="${p.title}" loading="lazy">`;
 
-          // Mobile tap handling to prevent accidental clicks during scroll
+          // Mobile tap handling to prevent accidental clicks during scroll (increased threshold)
           let touchStartY = 0;
           div.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
@@ -316,14 +318,14 @@
           });
           div.addEventListener('touchmove', (e) => {
             const touchMoveY = e.touches[0].clientY;
-            if (Math.abs(touchMoveY - touchStartY) > 10) { // Threshold for swipe vs tap
+            if (Math.abs(touchMoveY - touchStartY) > 20) { // Higher threshold for swipe detection
               div.classList.remove('active');
               e.preventDefault(); // Cancel if scrolling
             }
           });
           div.addEventListener('touchend', (e) => {
             const touchEndY = e.changedTouches[0].clientY;
-            if (Math.abs(touchEndY - touchStartY) <= 10) { // Only navigate if not a swipe
+            if (Math.abs(touchEndY - touchStartY) <= 20) { // Only navigate if short tap
               setTimeout(() => {
                 sessionStorage.setItem('scrollPosition', window.scrollY);
                 window.location.href = p.video;
