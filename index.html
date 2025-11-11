@@ -18,6 +18,7 @@
       background: #fff;
       color: #111;
       transition: all 0.6s;
+      font-size: 16px; /* Prevent iOS zoom issues */
     }
     .nav-container {
       backdrop-filter: blur(60px) saturate(180%);
@@ -62,19 +63,11 @@
       margin: 0 auto;
       padding: 0 1rem;
     }
-    /* === DESKTOP GRID (INCHANGÉ) === */
+    /* === DESKTOP GRID (UNCHANGED) === */
     .works-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 3rem;
-    }
-    /* === MOBILE GRID (TOTALEMENT REFAIT) === */
-    @media (max-width: 767px) {
-      .works-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-        padding: 0 1rem;
-      }
     }
     .project-thumb {
       width: 100%;
@@ -101,6 +94,10 @@
     .project-thumb:hover img {
       transform: scale(1.10);
     }
+    .project-thumb.active {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+    }
 
     /* === FIX HAMBURGER GLITCH === */
     #hamburger {
@@ -121,6 +118,97 @@
     #mobile-menu:not(.hidden) {
       opacity: 1;
       visibility: visible;
+    }
+
+    /* === MOBILE ONLY (≤767px) === */
+    @media (max-width: 767px) {
+      /* Nav */
+      .nav-container {
+        padding: 1rem 1.5rem;
+        backdrop-filter: blur(20px) saturate(150%);
+      }
+      .logo-container {
+        left: 1.5rem;
+        top: 1rem;
+      }
+      #logo {
+        height: 70px;
+        transform: translateY(-14px);
+      }
+      #logo:hover { transform: scale(1.05) translateY(-14px); }
+
+      /* Hamburger */
+      #hamburger {
+        right: 1.5rem;
+        top: 1.8rem;
+        padding: 0.5rem;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+      }
+      #hamburger span {
+        height: 2px;
+        transition: all 0.3s ease;
+      }
+
+      /* Mobile Menu */
+      #mobile-menu {
+        padding-top: 6rem;
+        gap: 3rem;
+        font-size: 2rem;
+        font-weight: 600;
+      }
+      #mobile-menu a {
+        transition: transform 0.2s ease;
+      }
+      #mobile-menu a:active {
+        transform: scale(0.95);
+      }
+
+      /* Main padding */
+      main { padding-top: 5rem; }
+
+      /* Grid */
+      .works-container { padding: 0 1rem; }
+      .works-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0;
+      }
+
+      /* Project Thumb */
+      .project-thumb {
+        max-width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      }
+      .project-thumb:active {
+        transform: translateY(-6px) scale(1.02) !important;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+      }
+      .project-thumb img {
+        border-radius: 20px;
+      }
+
+      /* Footer */
+      footer .flex {
+        gap: 3rem;
+      }
+      footer img {
+        width: 40px;
+        height: 40px;
+      }
+
+      /* Copyright */
+      #bottom-copyright {
+        left: 1rem;
+        bottom: 1rem;
+        font-size: 10px;
+      }
     }
   </style>
 </head>
@@ -205,6 +293,15 @@
             sessionStorage.setItem('scrollPosition', window.scrollY);
             window.location.href = p.video;
           };
+          // Mobile tap feedback
+          div.addEventListener('touchstart', () => div.classList.add('active'));
+          div.addEventListener('touchend', () => {
+            div.classList.remove('active');
+            setTimeout(() => {
+              sessionStorage.setItem('scrollPosition', window.scrollY);
+              window.location.href = p.video;
+            }, 120);
+          });
           grid.appendChild(div);
         });
 
@@ -330,7 +427,6 @@
       }
     });
 
-    // Fermer le menu si on clique dehors (optionnel mais propre)
     mobileMenu.addEventListener("click", (e) => {
       if (e.target.tagName === "A") {
         mobileMenu.classList.add("hidden");
@@ -338,6 +434,7 @@
         gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.3 });
         gsap.to(hamburger.children[1], { opacity: 1, duration: 0.3 });
         gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.3 });
+        sound.play();
       }
     });
 
