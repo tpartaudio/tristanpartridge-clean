@@ -32,6 +32,7 @@
     .page-wrapper {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 7.5rem;
       max-width: 95vw;
       padding-left: 8vw;
@@ -163,7 +164,51 @@
       }
 
       .video-title {
-        max-width: 70%; /* Full width title */
+        max-width: 80%; /* Match video width */
+        text-align: center;
+        transform: translateY(var(--title-shift));
+      }
+
+      .video-title .title {
+        font-size: 1.2rem; /* Slightly smaller for mobile */
+      }
+
+      .video-title .dash {
+        font-size: 1.1rem;
+      }
+
+      .video-title .credit {
+        font-size: 0.8rem;
+      }
+
+      .close-btn {
+        top: 1rem; /* Adjust position for mobile */
+        right: 1rem;
+        font-size: 2rem;
+      }
+
+      body {
+        overflow-y: auto; /* Allow scrolling if needed */
+      }
+    }
+    @media (max-width: 769px) {
+      .page-wrapper {
+        flex-direction: column; /* Stack title and video vertically */
+        gap: 1rem; /* Reduce gap for mobile */
+        padding: 2rem; /* Symmetric padding */
+        align-items: center; /* Center content */
+        justify-content: center;
+      }
+
+      .video-container {
+        width: 80%; /* Full width on mobile */
+        max-width: 100%; /* Ensure it fits screen */
+        aspect-ratio: 9 / 16; /* Maintain portrait ratio */
+        transform: translateY(var(--video-shift));
+      }
+
+      .video-title {
+        max-width: 80%; /* Match video width */
         text-align: center;
         transform: translateY(var(--title-shift));
       }
