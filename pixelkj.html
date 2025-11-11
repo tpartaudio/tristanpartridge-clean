@@ -9,6 +9,11 @@
       --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/pixelkj.mov; /* Path to your video file */
       --title: "KJ-PIXEL-01";
       --credit: Visual by Kevin Jaeger;
+
+      /* Vertical Adjustment Section (Mobile Only) - Adjust these for positioning on vertical axis in mobile view */
+      --title-shift: -70px; /* Shift for title and credits, e.g., 20px, -10%, 5vh */
+      --video-shift: -50px; /* Shift for video container, e.g., 20px, -10%, 5vh */
+      /* End Vertical Adjustment Section */
     }
 
     body { 
@@ -144,7 +149,7 @@
     @media (max-width: 768px) {
       .page-wrapper {
         flex-direction: column; /* Stack title and video vertically */
-        gap: 2rem; /* Reduce gap for mobile */
+        gap: 1rem; /* Reduce gap for mobile */
         padding: 1rem; /* Symmetric padding */
         align-items: center; /* Center content */
         justify-content: center;
@@ -154,11 +159,13 @@
         width: 80%; /* Full width on mobile */
         max-width: 100%; /* Ensure it fits screen */
         aspect-ratio: 9 / 16; /* Maintain portrait ratio */
+        transform: translateY(var(--video-shift));
       }
 
       .video-title {
         max-width: 70%; /* Full width title */
         text-align: center;
+        transform: translateY(var(--title-shift));
       }
 
       .video-title .title {
