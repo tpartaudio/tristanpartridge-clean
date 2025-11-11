@@ -72,9 +72,9 @@
 
   <!-- MOBILE MENU -->
   <nav id="mobile-menu" class="hidden flex-col items-center justify-center gap-12 text-4xl fixed inset-0 bg-white dark:bg-black z-55" aria-hidden="true" role="navigation">
-    <a href="index.html">Works</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
+    <a href="index.html" class="mobile-link">Works</a>
+    <a href="about.html" class="mobile-link">About</a>
+    <a href="contact.html" class="mobile-link">Contact</a>
   </nav>
 
   <!-- MAIN CONTENT -->
@@ -176,6 +176,8 @@
     // MOBILE MENU
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobile-menu");
+    const mobileLinks = document.querySelectorAll("#mobile-menu .mobile-link");
+
     function lockBody(locked){
       if(locked){ document.body.style.overflow='hidden'; document.documentElement.style.overflow='hidden'; }
       else { document.body.style.overflow=''; document.documentElement.style.overflow=''; }
@@ -184,11 +186,15 @@
     hamburger.addEventListener("click", ()=>{
       const isHidden = mobileMenu.classList.contains("hidden");
       if(isHidden){
-        mobileMenu.classList.remove("hidden"); mobileMenu.setAttribute('aria-hidden','false');
-        hamburger.setAttribute('aria-expanded','true'); lockBody(true);
+        mobileMenu.classList.remove("hidden"); 
+        mobileMenu.setAttribute('aria-hidden','false');
+        hamburger.setAttribute('aria-expanded','true'); 
+        lockBody(true);
       }else{
-        mobileMenu.classList.add("hidden"); mobileMenu.setAttribute('aria-hidden','true');
-        hamburger.setAttribute('aria-expanded','false'); lockBody(false);
+        mobileMenu.classList.add("hidden"); 
+        mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.setAttribute('aria-expanded','false'); 
+        lockBody(false);
       }
       sound.play();
       hamburger.classList.toggle("active");
@@ -203,22 +209,27 @@
       }
     });
 
-    mobileMenu.addEventListener("click", (e)=>{
-      if(e.target.tagName === "A"){
-        mobileMenu.classList.add("hidden"); mobileMenu.setAttribute('aria-hidden','true');
-        hamburger.classList.remove("active"); hamburger.setAttribute('aria-expanded','false');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', ()=>{
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.classList.remove("active");
+        hamburger.setAttribute('aria-expanded','false');
         lockBody(false);
         gsap.to(hamburger.children[0], {rotate:0, y:0, duration:0.2});
         gsap.to(hamburger.children[1], {opacity:1, duration:0.2});
         gsap.to(hamburger.children[2], {rotate:0, y:0, duration:0.2});
         sound.play();
-      }
+      });
     });
 
     window.addEventListener('keydown', (ev)=>{
       if(ev.key==='Escape' && !mobileMenu.classList.contains('hidden')){
-        mobileMenu.classList.add("hidden"); mobileMenu.setAttribute('aria-hidden','true');
-        hamburger.classList.remove("active"); hamburger.setAttribute('aria-expanded','false'); lockBody(false);
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.classList.remove("active");
+        hamburger.setAttribute('aria-expanded','false');
+        lockBody(false);
       }
     });
 
