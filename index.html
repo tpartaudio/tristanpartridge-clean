@@ -126,16 +126,16 @@
       Handles mobile nav bar padding, backdrop, and positioning. 
       Adjust padding or blur here for nav appearance. */
       .nav-container {
-        padding: 0.8rem 1.5rem; /* Reduced padding to contain logo better */
+        padding: 1.8rem 1.5rem; /* Increased vertical padding to fit logo */
         backdrop-filter: blur(20px) saturate(150%);
       }
       .logo-container {
         left: 1.5rem;
-        top: 0.8rem; /* Brought up */
+        top: 1.2rem; /* Adjusted to center in taller nav */
       }
       #logo {
         height: 60px; /* Smaller size */
-        transform: translateY(0); /* Removed negative translateY to prevent sticking out */
+        transform: translateY(0); /* No negative translateY */
       }
       #logo:hover { transform: scale(1.05); }
 
@@ -145,7 +145,7 @@
       Adjust gap or width for size. */
       #hamburger {
         right: 1.5rem;
-        top: 1.4rem; /* Aligned with smaller nav */
+        top: 2.2rem; /* Positioned in upper right, aligned with taller nav */
         padding: 0.5rem;
         width: 44px;
         height: 44px;
@@ -156,6 +156,8 @@
       }
       #hamburger span {
         height: 4px; /* Thicker lines */
+        width: 32px; /* Visible width */
+        background-color: #000; /* Explicit black */
         transition: all 0.3s ease;
       }
 
@@ -164,7 +166,7 @@
       Adjust font-size, gap, or padding-top for layout. */
       #mobile-menu {
         padding-top: 6rem;
-        gap: 2.5rem; /* Cleaner spacing */
+        gap: 2.5rem;
         font-size: 2rem;
         font-weight: 600;
       }
@@ -187,7 +189,7 @@
       /* --- MAIN CONTENT SECTION --- 
       Sets padding for the main area to avoid overlap with nav. 
       Adjust pt (padding-top) if nav height changes. */
-      main { padding-top: 4.5rem; /* Adjusted for smaller nav */ }
+      main { padding-top: 5.5rem; /* Adjusted for taller nav */ }
 
       /* --- GRID SECTION --- 
       Defines the project grid for mobile: single column. 
@@ -212,8 +214,8 @@
         box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       }
       .project-thumb:active {
-        transform: translateY(-6px) scale(1.02) !important;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+        transform: none !important; /* Removed zoom/scale on tap */
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15); /* No change on tap */
       }
       .project-thumb img {
         border-radius: 20px;
