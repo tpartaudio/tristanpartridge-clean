@@ -9,20 +9,26 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
   <style>
     :root { --logo-height: 85px; }
-    body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background:#fff; color:#111; transition: all .6s; }
+    body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; background:#fff; color:#111; transition: all .6s; font-size:16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overscroll-behavior-y: contain; }
     .dark { background:#000; color:#fff; }
-    .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(.22,1,.36,1); padding: 1.5rem 2rem; }
+
+    /* NAVBAR */
+    .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(.22,1,.36,1); padding: 1.5rem 2rem; display:flex; align-items:center; gap:1rem; position:fixed; top:0; left:0; right:0; z-index:50; }
     .dark .nav-container { background: rgba(0,0,0,0.85); }
-    .nav-container.hidden { transform: translateY(-100%); }
-    .logo-container { position: absolute; left: 2rem; top: 1.5rem; }
-    #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(-18px); }
-    #logo:hover { transform: scale(1.08) translateY(-18px); }
-    .nav-links { position: relative; display: flex; gap: 40px; margin-left: auto; }
-    .nav-link { font-weight: 600; padding: 8px 0; position: relative; z-index: 2; }
-    .underline { position: absolute; bottom: 4px; left: 0; height: 2px; background: #000; transition: all .22s cubic-bezier(.4,0,.2,1); }
+
+    .logo-container { position:absolute; left:2rem; top:1.5rem; z-index:55; }
+    #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(0); }
+    #logo:hover { transform: scale(1.08); }
+
+    .nav-links { position:relative; display:flex; gap:40px; margin-left:auto; }
+    .nav-link { font-weight:600; padding:8px 0; position:relative; z-index:2; }
+    .underline { position:absolute; bottom:4px; left:0; height:2px; background:#000; }
     .dark .underline { background:#fff; }
+
+    /* CONTACT CONTENT */
     .contact-content { max-width:900px; margin:0 auto; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2.2rem; text-align:center; }
     .invite-text { font-weight:700; font-size:1.8rem; line-height:1.4; opacity:0; transform:translateY(-30px); }
     .email-container { display:flex; align-items:center; justify-content:center; gap:1rem; font-size:1.65rem; font-weight:500; opacity:0; transform:translateY(20px); }
@@ -34,10 +40,25 @@
     .copy-btn:hover { opacity:1; transform:scale(1.1); }
     .copy-feedback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0; }
     .social-links { display:flex; gap:1.8rem; justify-content:center; opacity:0; transform:translateY(20px); }
+
+    /* MOBILE FIXES */
+    @media (max-width: 767px) {
+      .nav-container { padding:1.2rem 1rem; backdrop-filter: blur(20px) saturate(150%); height:64px; align-items:center; }
+      .logo-container { left:1.25rem; top:0.8rem; }
+      #logo { height:50px; transform: translateY(0); }
+      #logo:hover { transform: scale(1.05); }
+    }
+
+    /* 3-DOTTED MENU */
+    .three-dots-menu { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:6px; z-index:60; cursor:pointer; }
+    .three-dots-menu span { width:8px; height:8px; background:#111; border-radius:50%; display:block; }
+    .dark .three-dots-menu span { background:#fff; }
   </style>
 </head>
 <body class="light min-h-screen flex flex-col">
-  <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-start justify-between">
+
+  <!-- NAVBAR -->
+  <nav class="nav-container">
     <div class="logo-container"><img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'"></div>
     <div class="hidden md:flex nav-links text-lg font-medium">
       <a href="index.html" class="nav-link" data-page="works">Works</a>
@@ -45,17 +66,21 @@
       <a href="contact.html" class="nav-link active" data-page="contact">Contact</a>
       <div class="underline" id="underline"></div>
     </div>
-    <button id="hamburger" class="md:hidden space-y-2 z-50">
-      <span class="block w-8 h-1 bg-black dark:bg-white"></span>
-      <span class="block w-8 h-1 bg-black dark:bg-white"></span>
-      <span class="block w-8 h-1 bg-black dark:bg-white"></span>
+    <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
   </nav>
-  <nav id="mobile-menu" class="fixed inset-0 bg-white dark:bg-black hidden flex-col items-center justify-center gap-12 text-4xl z-40">
+
+  <!-- MOBILE MENU -->
+  <nav id="mobile-menu" class="hidden flex-col items-center justify-center gap-12 text-4xl fixed inset-0 bg-white dark:bg-black z-55" aria-hidden="true" role="navigation">
     <a href="index.html">Works</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
   </nav>
+
+  <!-- MAIN CONTENT -->
   <main class="flex-1 flex items-center justify-center">
     <section class="contact-content">
       <p class="invite-text">Feel free to get in touch for any projects or collaborations.</p>
@@ -79,17 +104,34 @@
       </div>
     </section>
   </main>
+
+  <!-- 3-DOTTED MENU -->
+  <div class="three-dots-menu" onclick="alert('Menu clicked!')">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0; visibility:hidden;">
+    © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
+  </div>
+
+  <!-- SCRIPTS -->
   <script>
     gsap.registerPlugin(ScrollTrigger);
     const sound = new Howl({ src:['https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'], volume:0.3 });
 
     fetch('config.json').then(r=>r.json()).then(cfg=>{
-      if(document.getElementById('logo')&&cfg.logo) document.getElementById('logo').src=cfg.logo;
-      if(document.getElementById('insta-logo')&&cfg.instagram_logo) document.getElementById('insta-logo').src=cfg.instagram_logo;
-      if(document.getElementById('behance-logo')&&cfg.behance_logo) document.getElementById('behance-logo').src=cfg.behance_logo;
+      const logoEl=document.getElementById('logo');
+      const instaEl=document.getElementById('insta-logo');
+      const behanceEl=document.getElementById('behance-logo');
+      if(logoEl&&cfg.logo) logoEl.src=cfg.logo;
+      if(instaEl&&cfg.instagram_logo) instaEl.src=cfg.instagram_logo;
+      if(behanceEl&&cfg.behance_logo) behanceEl.src=cfg.behance_logo;
     }).catch(()=>{});
 
-    // -------- NAVBAR UNDERLINE ANIMATION (from works) --------
+    // NAVBAR UNDERLINE
     const underline = document.getElementById('underline');
     const links = document.querySelectorAll('.nav-link');
     let currentTarget = document.querySelector('[data-page="contact"]') || links[0];
@@ -117,41 +159,86 @@
       const widthPx=linkRect.width;
       if(!animate){
         underline.style.left=leftPx+'px';
-        underline.style.width=widthPx+'px';
+        underline.style.width=widthPx;
       } else {
         gsap.to(underline,{ left:leftPx+'px', width:widthPx, duration:0.02, ease:"power2.out", overwrite:"auto" });
       }
     }
 
-    window.addEventListener('load',()=>{
-      setUnderlineInstant(currentTarget);
-      gsap.fromTo(underline,{scaleX:0.98, transformOrigin:"center center"},{scaleX:1,duration:0.05,ease:"elastic.out(1,0.5)",repeat:0,onComplete:()=>{gsap.set(underline,{clearProps:"transform, scaleX"});}});
-    });
+    window.addEventListener('load',()=>{ setUnderlineInstant(currentTarget); });
 
     links.forEach(link=>{
       link.addEventListener('mouseenter',()=>moveUnderline(link,true));
       link.addEventListener('mouseleave',()=>moveUnderline(currentTarget,true));
-      link.addEventListener('click',()=>{
+      link.addEventListener('click', ev=>{
+        ev.preventDefault();
         links.forEach(l=>l.classList.remove('active'));
         link.classList.add('active');
         currentTarget=link;
         setUnderlineInstant(currentTarget);
         sound.play();
+        window.location.href = link.getAttribute('href');
       });
     });
 
     window.addEventListener('resize',()=>{ clearTimeout(window._navResizeTimer); window._navResizeTimer=setTimeout(()=>{ setUnderlineInstant(currentTarget); },80); });
 
     // MOBILE MENU
-    document.getElementById('hamburger').addEventListener('click',()=>{ document.getElementById('mobile-menu').classList.toggle('hidden'); sound.play(); });
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobile-menu");
+    function lockBody(locked){
+      if(locked){ document.body.style.overflow='hidden'; document.documentElement.style.overflow='hidden'; }
+      else { document.body.style.overflow=''; document.documentElement.style.overflow=''; }
+    }
 
-    // CONTACT PAGE ANIMATION
+    hamburger.addEventListener("click", ()=>{
+      const isHidden = mobileMenu.classList.contains("hidden");
+      if(isHidden){
+        mobileMenu.classList.remove("hidden"); mobileMenu.setAttribute('aria-hidden','false');
+        hamburger.setAttribute('aria-expanded','true'); lockBody(true);
+      }else{
+        mobileMenu.classList.add("hidden"); mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.setAttribute('aria-expanded','false'); lockBody(false);
+      }
+      sound.play();
+      hamburger.classList.toggle("active");
+      if(hamburger.classList.contains("active")){
+        gsap.to(hamburger.children[0], {rotate:45, y:6, duration:0.28});
+        gsap.to(hamburger.children[1], {opacity:0, duration:0.18});
+        gsap.to(hamburger.children[2], {rotate:-45, y:-6, duration:0.28});
+      } else {
+        gsap.to(hamburger.children[0], {rotate:0, y:0, duration:0.28});
+        gsap.to(hamburger.children[1], {opacity:1, duration:0.18});
+        gsap.to(hamburger.children[2], {rotate:0, y:0, duration:0.28});
+      }
+    });
+
+    mobileMenu.addEventListener("click", (e)=>{
+      if(e.target.tagName === "A"){
+        mobileMenu.classList.add("hidden"); mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.classList.remove("active"); hamburger.setAttribute('aria-expanded','false');
+        lockBody(false);
+        gsap.to(hamburger.children[0], {rotate:0, y:0, duration:0.2});
+        gsap.to(hamburger.children[1], {opacity:1, duration:0.2});
+        gsap.to(hamburger.children[2], {rotate:0, y:0, duration:0.2});
+        sound.play();
+      }
+    });
+
+    window.addEventListener('keydown', (ev)=>{
+      if(ev.key==='Escape' && !mobileMenu.classList.contains('hidden')){
+        mobileMenu.classList.add("hidden"); mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.classList.remove("active"); hamburger.setAttribute('aria-expanded','false'); lockBody(false);
+      }
+    });
+
+    // CONTACT ANIMATIONS
     gsap.timeline()
       .to('.invite-text',{opacity:1,y:0,duration:0.7,ease:"power2.out"})
       .to('.email-container',{opacity:1,y:0,duration:0.7,ease:"power2.out"},"-=0.4")
       .to('.social-links',{opacity:1,y:0,duration:0.7,ease:"power2.out"},"-=0.4");
 
-    // COPY EMAIL BUTTON
+    // COPY BUTTON
     const copyBtn=document.getElementById('copy-btn');
     if(copyBtn){
       const feedback=copyBtn.querySelector('.copy-feedback');
@@ -165,41 +252,20 @@
           .to(copyBtn.querySelector('svg'),{opacity:1,scale:1,duration:0.2,ease:"power2.out"},"-=0.2");
       });
     }
+
+    // COPYRIGHT SHOW/HIDE
+    (function(){
+      const el=document.getElementById('bottom-copyright');
+      let shown=false;
+      const check=()=>{
+        const nearBottom=(window.innerHeight + window.scrollY) >= (document.body.offsetHeight-100);
+        if(nearBottom && !shown){ shown=true; el.style.visibility='visible'; gsap.to(el,{opacity:1,duration:0.8,ease:"power2.out"});}
+        else if(!nearBottom && shown){ shown=false; gsap.to(el,{opacity:0,duration:0.1,ease:"power2.in",onComplete:()=>el.style.visibility='hidden'});}
+      };
+      window.addEventListener('scroll',check);
+      window.addEventListener('load',check);
+      requestAnimationFrame(check);
+    })();
   </script>
-<!-- Bottom-left copyright – 100% INVISIBLE on load, appears ONLY at bottom -->
-<div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0 !important; visibility:hidden;">
-  © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
-</div>
-
-<script>
-  (function () {
-    const el = document.getElementById('bottom-copyright');
-    let shown = false;
-
-    const check = () => {
-      const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
-      if (nearBottom && !shown) {
-        shown = true;
-        el.style.visibility = 'visible';
-        gsap.to(el, { opacity: 1, duration: 0.8, ease: "power2.out" });
-      } else if (!nearBottom && shown) {
-        shown = false;
-        gsap.to(el, {
-          opacity: 0,
-          duration: 0.1,
-          ease: "power2.in",
-          onComplete: () => el.style.visibility = 'hidden'
-        });
-      }
-    };
-
-    // Run on every scroll
-    window.addEventListener('scroll', check);
-    // Run once after everything is painted
-    window.addEventListener('load', check);
-    // Extra safety for fast browsers
-    requestAnimationFrame(check);
-  })();
-</script>
 </body>
 </html>
