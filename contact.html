@@ -69,7 +69,7 @@
     .dark .underline { background:#fff; }
 
     /* Hamburger + mobile menu */
-    .hamburger {
+    #hamburger {
       position: absolute; /* Hides with nav-container */
       right: 2rem;
       top: 1.8rem; /* Aligned for visibility */
@@ -402,8 +402,10 @@
         gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
         sound.play();
         return; // allow navigation
-      } else {
-        // 2. User clicks anywhere else (background)
+      }
+
+      // 2. User clicks the black background (outside the menu links)
+      if (e.target === mobileMenu) {
         mobileMenu.classList.add("hidden");
         mobileMenu.setAttribute('aria-hidden', 'true');
         hamburger.classList.remove("active");
