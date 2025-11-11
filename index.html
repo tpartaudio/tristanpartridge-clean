@@ -1,55 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
   <title>Tristan Partridge - Music & Sound Design</title>
+
   <!-- Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
   <style>
     :root {
       --logo-height: 85px;
     }
+
+    /* ---------- Base / Desktop (unchanged intent) ---------- */
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       background: #fff;
       color: #111;
       transition: all 0.6s;
       font-size: 16px; /* Prevent iOS zoom issues */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior-y: contain;
     }
+
     .nav-container {
       backdrop-filter: blur(60px) saturate(180%);
       background: rgba(255, 255, 255, 0.85);
       transition: transform 0.6s cubic-bezier(.22,1,.36,1);
       padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center; /* help mobile alignment */
+      gap: 1rem;
     }
+
     .logo-container {
       position: absolute;
       left: 2rem;
       top: 1.5rem;
     }
+
     #logo {
       height: var(--logo-height);
       cursor: pointer;
       transition: transform .2s;
       transform: translateY(-18px);
     }
+
     #logo:hover { transform: scale(1.08) translateY(-18px); }
+
     .nav-links {
       position: relative;
       display: flex;
       gap: 40px;
       margin-left: auto;
     }
+
     .nav-link {
       font-weight: 600;
       padding: 8px 0;
       position: relative;
       z-index: 2;
     }
+
     .underline {
       position: absolute;
       bottom: 4px;
@@ -58,17 +76,20 @@
       background: #000;
       transition: all .22s cubic-bezier(.4,0,.2,1);
     }
+
     .works-container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
     }
+
     /* === DESKTOP GRID (UNCHANGED) === */
     .works-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 3rem;
     }
+
     .project-thumb {
       width: 100%;
       max-width: 320px;
@@ -80,20 +101,27 @@
       box-shadow: 0 20px 50px rgba(0,0,0,0.18);
       background: #000;
       transition: transform .7s cubic-bezier(.22,1,.36,1), box-shadow .7s cubic-bezier(.22,1,.36,1);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
+
     .project-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform .9s cubic-bezier(.22,1,.36,1);
+      display: block;
     }
+
     .project-thumb:hover {
       transform: translateY(-12px) scale(1.03);
       box-shadow: 0 60px 120px rgba(0,0,0,0.38);
     }
+
     .project-thumb:hover img {
       transform: scale(1.10);
     }
+
     .project-thumb.active {
       transform: translateY(-6px) scale(1.02);
       box-shadow: 0 30px 60px rgba(0,0,0,0.25);
@@ -107,169 +135,196 @@
       z-index: 60;
       background: transparent;
       border: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
     }
+
+    #hamburger[aria-expanded="true"] span:first-child {
+      transform-origin: center;
+    }
+
+    #hamburger span {
+      height: 4px;
+      width: 32px;
+      background-color: #000;
+      transition: all 0.3s ease;
+      display: block;
+      border-radius: 2px;
+    }
+
     #mobile-menu {
       transition: opacity 0.4s cubic-bezier(.22,1,.36,1), visibility 0.4s;
+      position: fixed;
+      inset: 0;
+      z-index: 55;
     }
+
     #mobile-menu.hidden {
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
     }
+
     #mobile-menu:not(.hidden) {
       opacity: 1;
       visibility: visible;
+      pointer-events: auto;
     }
 
-    /* === MOBILE ONLY (≤767px) === */
+    /* ---------- MOBILE ONLY (≤767px) ---------- */
     @media (max-width: 767px) {
-      /* --- NAV SECTION --- 
-      Handles mobile nav bar padding, backdrop, and positioning. 
-      Adjust padding or blur here for nav appearance. */
+      /* Nav adjustments for mobile */
       .nav-container {
-        padding: 2.2rem 1.5rem; /* Bigger menu bar */
+        padding: 1.2rem 1rem; /* reduce bulk */
         backdrop-filter: blur(20px) saturate(150%);
+        height: 64px;
+        align-items: center;
       }
+
       .logo-container {
-        left: 1.5rem;
-        top: 1.5rem;
+        left: 1.25rem;
+        top: 0.8rem;
+        position: absolute;
       }
+
       #logo {
         height: 50px; /* Smaller logo */
         transform: translateY(0);
       }
+
       #logo:hover { transform: scale(1.05); }
 
-      /* --- HAMBURGER SECTION --- 
-      Controls the 3-line menu icon. 
-      Thickness: span height 4px (thicker). 
-      Adjust gap or width for size. */
+      /* show hamburger on mobile */
       #hamburger {
-        right: 1.5rem; /* Upper right corner */
-        top: 2.5rem; /* Adjusted for bigger nav, upper position */
-        padding: 0.5rem;
+        display: flex;
+        right: 1rem;
+        top: 0.9rem;
+        padding: 0.35rem;
         width: 44px;
         height: 44px;
-        display: flex !important; /* Force display */
-        flex-direction: column;
-        justify-content: center;
         gap: 6px;
-        opacity: 1 !important; /* Force visibility */
-        visibility: visible !important; /* Force visibility */
-      }
-      #hamburger span {
-        height: 4px;
-        width: 32px;
-        background-color: #000 !important; /* Force black */
-        transition: all 0.3s ease;
-        opacity: 1 !important; /* Force lines visible */
+        opacity: 1;
+        visibility: visible;
       }
 
-      /* --- MOBILE MENU SECTION --- 
-      Manages the dropdown menu on hamburger click. 
-      Adjust font-size, gap, or padding-top for layout. */
-      #mobile-menu {
-        padding-top: 6rem;
-        gap: 2.5rem;
-        font-size: 2rem;
-        font-weight: 600;
+      /* Slightly thinner lines on smaller devices */
+      #hamburger span {
+        height: 3px;
+        width: 28px;
       }
+
+      /* Menu content (centered) */
+      #mobile-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.98);
+        gap: 2.5rem;
+        font-size: 1.9rem;
+        font-weight: 600;
+        padding-top: 0;
+      }
+
       #mobile-menu a {
         opacity: 0;
         transform: translateY(20px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transition: opacity 0.28s ease, transform 0.28s ease;
       }
+
       #mobile-menu:not(.hidden) a {
         opacity: 1;
         transform: translateY(0);
       }
-      #mobile-menu a:nth-child(1) { transition-delay: 0.1s; }
-      #mobile-menu a:nth-child(2) { transition-delay: 0.2s; }
-      #mobile-menu a:nth-child(3) { transition-delay: 0.3s; }
+
+      #mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
+      #mobile-menu a:nth-child(2) { transition-delay: 0.12s; }
+      #mobile-menu a:nth-child(3) { transition-delay: 0.18s; }
+
       #mobile-menu a:active {
-        transform: scale(0.95);
+        transform: scale(0.97);
       }
 
-      /* --- MAIN CONTENT SECTION --- 
-      Sets padding for the main area to avoid overlap with nav. 
-      Adjust pt (padding-top) if nav height changes. */
-      main { padding-top: 6rem; /* Adjusted for bigger nav */ }
+      /* MAIN CONTENT - make room for nav */
+      main { padding-top: 5.25rem; }
 
-      /* --- GRID SECTION --- 
-      Defines the project grid for mobile: single column. 
-      Adjust gap for spacing between thumbs. */
+      /* Grid -> single column with comfortable gutters */
       .works-container { padding: 0 1rem; }
       .works-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 2.1rem;
         padding: 0;
       }
 
-      /* --- PROJECT THUMB SECTION --- 
-      Styles individual project thumbnails. 
-      Aspect-ratio 4/5. 
-      Reduced size: max-width 80%, centered with auto margin. 
-      Adjust border-radius or shadow for visual tweaks. */
+      /* PROJECT THUMB - mobile-friendly sizing & consistent shadows */
       .project-thumb {
-        max-width: 80%;
+        width: min(520px, 94%);
+        max-width: 520px;
         margin: 0 auto;
         aspect-ratio: 4/5;
         border-radius: 20px;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-        transition: none !important; /* No animation */
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s cubic-bezier(.22,1,.36,1);
+        -webkit-tap-highlight-color: transparent;
       }
+
       .project-thumb:active, .project-thumb.active {
-        transform: none !important; /* No change on tap or hold */
-        box-shadow: 0 12px 30px rgba(0,0,0,0.15) !important;
+        transform: translateY(-4px);
+        box-shadow: 0 18px 36px rgba(0,0,0,0.14);
       }
+
       .project-thumb img {
         border-radius: 20px;
-        transition: none !important; /* No animation on img */
-        transform: none !important; /* Static scale */
+        transition: transform .6s cubic-bezier(.22,1,.36,1);
+        transform: none;
       }
 
-      /* --- FOOTER SECTION --- 
-      Social links at bottom. 
-      Adjust gap or sizes for icons. */
-      footer .flex {
-        gap: 3rem;
-      }
-      footer img {
-        width: 40px;
-        height: 40px;
-      }
+      /* Footer icon sizes */
+      footer .flex { gap: 2rem; }
+      footer img { width: 36px; height: 36px; }
 
-      /* --- COPYRIGHT SECTION --- 
-      Bottom copyright text. 
-      Adjust position or font-size as needed. */
+      /* Copyright bottom */
       #bottom-copyright {
         left: 1rem;
         bottom: 1rem;
         font-size: 10px;
       }
     }
+
+    /* small accessibility focus outlines */
+    a:focus, button:focus {
+      outline: 3px solid rgba(0,0,0,0.08);
+      outline-offset: 3px;
+    }
+
   </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
   <!-- NAVBAR -->
-  <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-start justify-between">
+  <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-center justify-between">
     <div class="logo-container">
       <img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'">
     </div>
-    <div class="hidden md:flex nav-links text-lg font-medium">
+
+    <div class="hidden md:flex nav-links text-lg font-medium" aria-label="Primary">
       <a href="index.html" class="nav-link active" data-page="works">Works</a>
       <a href="about.html" class="nav-link" data-page="about">About</a>
       <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
       <div class="underline" id="underline"></div>
     </div>
-    <button id="hamburger" class="md:hidden space-y-2 z-50">
-      <span class="block w-8 h-1 bg-black transition-all"></span>
-      <span class="block w-8 h-1 bg-black transition-all"></span>
-      <span class="block w-8 h-1 bg-black transition-all"></span>
+
+    <!-- Hamburger (mobile) -->
+    <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+      <span class="block"></span>
+      <span class="block"></span>
+      <span class="block"></span>
     </button>
   </nav>
 
   <!-- MOBILE MENU -->
-  <nav id="mobile-menu" class="fixed inset-0 bg-white hidden flex-col items-center justify-center gap-12 text-4xl z-40">
+  <nav id="mobile-menu" class="hidden" aria-hidden="true" role="navigation">
     <a href="index.html">Works</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
@@ -285,11 +340,11 @@
   <!-- FOOTER -->
   <footer class="py-20 px-6 text-center">
     <div class="flex justify-center gap-12">
-      <a href="https://www.instagram.com/tristanpartridge/" target="_blank">
-        <img id="insta-logo" src="insta logo.png" class="w-11 h-11 hover:scale-110 transition">
+      <a href="https://www.instagram.com/tristanpartridge/" target="_blank" rel="noopener noreferrer">
+        <img id="insta-logo" src="insta logo.png" class="w-11 h-11 hover:scale-110 transition" alt="Instagram">
       </a>
-      <a href="https://www.behance.net/tristanpartrid1" target="_blank">
-        <img id="behance-logo" src="behance logo.png" class="w-11 h-11 hover:scale-110 transition">
+      <a href="https://www.behance.net/tristanpartrid1" target="_blank" rel="noopener noreferrer">
+        <img id="behance-logo" src="behance logo.png" class="w-11 h-11 hover:scale-110 transition" alt="Behance">
       </a>
     </div>
   </footer>
@@ -297,6 +352,7 @@
   <!-- SCRIPTS -->
   <script>
     gsap.registerPlugin(ScrollTrigger);
+
     const sound = new Howl({
       src: ["https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"],
       volume: 0.3
@@ -308,10 +364,10 @@
     fetch("config.json")
       .then(r => r.json())
       .then(cfg => {
-        document.getElementById("logo").src = cfg.logo;
-        document.getElementById("insta-logo").src = cfg.instagram_logo;
-        document.getElementById("behance-logo").src = cfg.behance_logo;
-      });
+        if (cfg.logo) document.getElementById("logo").src = cfg.logo;
+        if (cfg.instagram_logo) document.getElementById("insta-logo").src = cfg.instagram_logo;
+        if (cfg.behance_logo) document.getElementById("behance-logo").src = cfg.behance_logo;
+      }).catch(()=>{/* silent fail if missing */});
 
     // -----------------------------
     // LOAD PROJECTS + SMOOTH ANIMATION
@@ -320,12 +376,12 @@
       .then(r => r.json())
       .then(projects => {
         const grid = document.getElementById("projects");
-        const visible = projects.filter(p => !p.disabled);
+        const visible = Array.isArray(projects) ? projects.filter(p => !p.disabled) : [];
         visible.forEach(p => {
           if (!p.thumb) return;
           const div = document.createElement("div");
           div.className = "project-thumb opacity-0 translate-y-16";
-          div.innerHTML = `<img src="images/${p.thumb}" alt="${p.title}" loading="lazy">`;
+          div.innerHTML = `<img src="images/${p.thumb}" alt="${(p.title||'project').replace(/"/g,'')}" loading="lazy">`;
 
           // Mobile tap handling to prevent accidental clicks during scroll or hold
           let touchStartY = 0;
@@ -334,31 +390,31 @@
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
             div.classList.add('active');
-          });
+          }, {passive: true});
           div.addEventListener('touchmove', (e) => {
             const touchMoveY = e.touches[0].clientY;
             if (Math.abs(touchMoveY - touchStartY) > 20) {
               div.classList.remove('active');
-              e.preventDefault();
             }
-          });
+          }, {passive: true});
           div.addEventListener('touchend', (e) => {
             const touchEndY = e.changedTouches[0].clientY;
             const touchDuration = Date.now() - touchStartTime;
-            if (Math.abs(touchEndY - touchStartY) <= 20 && touchDuration < 300) { // Short tap only, no hold
+            if (Math.abs(touchEndY - touchStartY) <= 20 && touchDuration < 350) { // Short tap only
+              // small delay so the tap scale is visible on mobile
               setTimeout(() => {
-                sessionStorage.setItem('scrollPosition', window.scrollY);
-                window.location.href = p.video;
+                try { sessionStorage.setItem('scrollPosition', window.scrollY); } catch(e){}
+                window.location.href = p.video || p.url || 'index.html';
               }, 120);
             }
             div.classList.remove('active');
           });
 
           // Desktop click (unchanged)
-          div.onclick = () => {
-            sessionStorage.setItem('scrollPosition', window.scrollY);
-            window.location.href = p.video;
-          };
+          div.addEventListener('click', () => {
+            try { sessionStorage.setItem('scrollPosition', window.scrollY); } catch(e){}
+            window.location.href = p.video || p.url || 'index.html';
+          });
 
           grid.appendChild(div);
         });
@@ -368,8 +424,9 @@
           document.querySelectorAll('.project-thumb').forEach(el => {
             el.classList.remove('opacity-0', 'translate-y-16');
           });
-          window.scrollTo({ top: parseInt(scrollPosition), behavior: 'instant' });
-          sessionStorage.removeItem('scrollPosition');
+          // 'instant' isn't standard; use auto
+          window.scrollTo({ top: parseInt(scrollPosition, 10) || 0, behavior: 'auto' });
+          try { sessionStorage.removeItem('scrollPosition'); } catch(e){}
         } else {
           gsap.fromTo(
             ".project-thumb",
@@ -388,7 +445,7 @@
             }
           );
         }
-      });
+      }).catch(()=>{/* silent if no works.json during dev */});
 
     // -----------------------------
     // NAVBAR UNDERLINE ANIMATION
@@ -434,26 +491,31 @@
 
     window.addEventListener('load', () => {
       setUnderlineInstant(currentTarget);
-      gsap.fromTo(underline,
-        { scaleX: 0.98, transformOrigin: "center center" },
-        {
-          scaleX: 1,
-          duration: 0.05,
-          ease: "elastic.out(1, 0.5)",
-          onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
-        }
-      );
+      if (underline) {
+        gsap.fromTo(underline,
+          { scaleX: 0.98, transformOrigin: "center center" },
+          {
+            scaleX: 1,
+            duration: 0.05,
+            ease: "elastic.out(1, 0.5)",
+            onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
+          }
+        );
+      }
     });
 
     links.forEach(link => {
       link.addEventListener('mouseenter', () => moveUnderline(link, true));
       link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (ev) => {
+        ev.preventDefault();
         links.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
         currentTarget = link;
         setUnderlineInstant(currentTarget);
         sound.play();
+        // navigate
+        window.location.href = link.getAttribute('href');
       });
     });
 
@@ -468,31 +530,67 @@
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobile-menu");
 
-    hamburger.addEventListener("click", () => {
-      mobileMenu.classList.toggle("hidden");
-      sound.play();
+    function lockBody(locked) {
+      if (locked) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      }
+    }
 
-      // Animation du hamburger → croix
+    hamburger.addEventListener("click", () => {
+      const isHidden = mobileMenu.classList.contains("hidden");
+      if (isHidden) {
+        mobileMenu.classList.remove("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        hamburger.setAttribute('aria-expanded', 'true');
+        lockBody(true);
+      } else {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+      }
+
+      // sound + animate hamburger → cross
+      sound.play();
       hamburger.classList.toggle("active");
       if (hamburger.classList.contains("active")) {
-        gsap.to(hamburger.children[0], { rotate: 45, y: 10, duration: 0.3 });
-        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.3 });
-        gsap.to(hamburger.children[2], { rotate: -45, y: -10, duration: 0.3 });
+        gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
       } else {
-        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.3 });
-        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.3 });
-        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.3 });
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
       }
     });
 
     mobileMenu.addEventListener("click", (e) => {
       if (e.target.tagName === "A") {
         mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
         hamburger.classList.remove("active");
-        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.3 });
-        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.3 });
-        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.3 });
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
         sound.play();
+        // let default anchor navigation happen
+      }
+    });
+
+    // Close mobile menu on escape
+    window.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.classList.remove("active");
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
       }
     });
 
@@ -511,12 +609,16 @@
       }
       lastY = y;
     });
+
   </script>
 
-  <!-- Bottom-left copyright -->
-  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0 !important; visibility:hidden;">
+  <!-- Bottom-left copyright (appears only when near bottom) -->
+  <div id="bottom-copyright"
+       class="fixed bottom-6 left-8 text-xs text-gray-400 select-none font-light tracking-wider z-50 pointer-events-none"
+       style="opacity:0; visibility:hidden;">
     © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
   </div>
+
   <script>
     (function () {
       const el = document.getElementById('bottom-copyright');
