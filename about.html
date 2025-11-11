@@ -11,27 +11,56 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <style>
     :root { --logo-height: 85px; }
-    body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background:#ffffff; color:#111; transition: all .6s; }
+    body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; background:#fff; color:#111; transition: all .6s; }
     .dark { background:#000; color:#fff; }
-    .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); padding: 1.5rem 2rem; }
+    .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(.22,1,.36,1); padding: 1.5rem 2rem; }
     .dark .nav-container { background: rgba(0,0,0,0.85); }
-    .nav-container.hidden { transform: translateY(-100%); }
-    .logo-container { position: absolute; left: 2rem; top: 1.5rem; }
+    .logo-container { position:absolute; left:2rem; top:1.5rem; }
     #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(-18px); }
     #logo:hover { transform: scale(1.08) translateY(-18px); }
-    .nav-links { position: relative; display: flex; gap: 40px; margin-left: auto; }
-    .nav-link { font-weight: 600; padding: 8px 0; z-index:2; position: relative; }
-    .underline { position: absolute; bottom: 4px; left: 0; height: 2px; background: #000; }
+    .nav-links { position:relative; display:flex; gap:40px; margin-left:auto; }
+    .nav-link { font-weight:600; padding:8px 0; z-index:2; position:relative; }
+    .underline { position:absolute; bottom:4px; left:0; height:2px; background:#000; }
     .dark .underline { background:#fff; }
-    .about-content { max-width: 1300px; margin:0 auto; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2rem; }
+
+    .about-content { max-width:1300px; margin:0 auto; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2rem; }
     .about-statement { text-align:right; font-weight:700; font-size:1.9rem; line-height:1.25; letter-spacing:-0.03em; opacity:0.95; max-width:720px; margin-left:auto; padding-right:2rem; }
     .about-header { display:flex; align-items:flex-end; justify-content:flex-start; gap:5rem; width:100%; margin-top:-3rem; margin-left:3.2rem; }
     .about-photo { width:190px; height:260px; border-radius:32px; object-fit:cover; box-shadow:0 20px 40px rgba(0,0,0,0.15); flex-shrink:0; }
     .about-intro { font-size:1.35rem; line-height:1.55; letter-spacing:-0.02em; opacity:0.92; font-weight:500; max-width:540px; margin-bottom:0.8rem; }
-    @media (min-width:768px){ .about-statement{font-size:2.1rem;} .about-intro{font-size:1.75rem;} }
     .tags-container { display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:flex-start; margin-top:1rem; margin-left:3.2rem; }
     .tag-box { border:1.5px solid rgba(0,0,0,0.12); border-radius:20px; padding:0.7rem 1.4rem; background: rgba(255,255,255,0.5); backdrop-filter: blur(6px); font-size:0.95rem; font-weight:600; letter-spacing:0.02em; opacity:0; transform: translateY(20px); }
     .dark .tag-box { border-color: rgba(255,255,255,0.18); background: rgba(0,0,0,0.35); }
+
+    /* === MOBILE FIXES === */
+    @media (max-width: 767px) {
+      .nav-container { padding:2rem 1.5rem; backdrop-filter: blur(20px) saturate(150%); }
+      .logo-container { left:1.5rem; top:1.5rem; }
+      #logo { height:50px; transform: translateY(0); }
+      #logo:hover { transform: scale(1.05); }
+
+      #hamburger { position:absolute; right:1.5rem; top:2.5rem; padding:0.5rem; width:44px; height:44px; display:flex !important; flex-direction:column; justify-content:center; gap:6px; opacity:1 !important; visibility:visible !important; }
+      #hamburger span { height:4px; width:32px; background-color:#000 !important; transition:all 0.3s ease; opacity:1 !important; }
+      .dark #hamburger span { background-color:#fff !important; }
+
+      #mobile-menu { padding-top:6rem; gap:2.5rem; font-size:2rem; font-weight:600; }
+      #mobile-menu a { opacity:0; transform:translateY(20px); transition:opacity 0.3s ease, transform 0.3s ease; }
+      #mobile-menu:not(.hidden) a { opacity:1; transform:translateY(0); }
+      #mobile-menu a:nth-child(1){ transition-delay:0.1s; }
+      #mobile-menu a:nth-child(2){ transition-delay:0.2s; }
+      #mobile-menu a:nth-child(3){ transition-delay:0.3s; }
+
+      main { padding-top:6rem; }
+      .about-content { padding:1rem 1.5rem; gap:1.5rem; }
+      .about-statement { font-size:1.4rem; text-align:center; padding:0; margin:0 auto; max-width:95%; }
+      .about-header { flex-direction:column; align-items:center; margin-left:0; margin-top:1rem; gap:1.5rem; width:100%; }
+      .about-photo { width:140px; height:200px; border-radius:24px; }
+      .about-intro { font-size:1rem; max-width:90%; text-align:center; margin:0; }
+      .tags-container { margin-left:0; justify-content:center; gap:0.8rem; }
+      .tag-box { padding:0.6rem 1rem; font-size:0.85rem; border-radius:16px; }
+      footer .flex { gap:2rem; }
+      footer img { width:36px; height:36px; }
+    }
   </style>
 </head>
 <body class="light min-h-screen flex flex-col">
@@ -76,6 +105,7 @@
       <a href="https://www.behance.net/tristanpartrid1" target="_blank"><img id="behance-logo" src="behance logo.png" alt="Behance" class="w-11 h-11 hover:scale-110 transition"></a>
     </div>
   </footer>
+
   <script>
     gsap.registerPlugin(ScrollTrigger);
     const sound = new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'], volume:0.3 });
@@ -89,10 +119,8 @@
       if(behanceEl&&cfg.behance_logo) behanceEl.src=cfg.behance_logo;
     }).catch(()=>{});
 
-    // --------- NAVBAR UNDERLINE ANIMATION (from works) ---------
     const underline = document.getElementById('underline');
     const links = document.querySelectorAll('.nav-link');
-
     let currentTarget = document.querySelector('[data-page="about"]') || links[0];
     links.forEach(l=>l.classList.remove('active'));
     if(currentTarget) currentTarget.classList.add('active');
@@ -120,42 +148,15 @@
         underline.style.left=leftPx+'px';
         underline.style.width=widthPx+'px';
       }else{
-        gsap.to(underline,{
-          left:leftPx+'px',
-          width:widthPx,
-          duration:0.28,
-          ease:"power2.out",
-          overwrite:"auto"
-        });
+        gsap.to(underline,{left:leftPx+'px', width:widthPx, duration:0.28, ease:"power2.out", overwrite:"auto"});
       }
     }
 
-    window.addEventListener('load',()=>{
-      setUnderlineInstant(currentTarget);
-      gsap.fromTo(underline,
-        {scaleX:0.98, transformOrigin:"center center"},
-        {scaleX:1, duration:0.05, ease:"elastic.out(1,0.5)", repeat:0, onComplete:()=>{gsap.set(underline,{clearProps:"transform, scaleX"});}
-      });
-    });
+    window.addEventListener('load',()=>{ setUnderlineInstant(currentTarget); });
+    links.forEach(link=>{ link.addEventListener('mouseenter',()=>moveUnderline(link,true)); link.addEventListener('mouseleave',()=>moveUnderline(currentTarget,true)); link.addEventListener('click',()=>{ links.forEach(l=>l.classList.remove('active')); link.classList.add('active'); currentTarget=link; setUnderlineInstant(currentTarget); sound.play(); }); });
+    window.addEventListener('resize',()=>{ clearTimeout(window._navResizeTimer); window._navResizeTimer=setTimeout(()=>{setUnderlineInstant(currentTarget);},80); });
 
-    links.forEach(link=>{
-      link.addEventListener('mouseenter',()=>moveUnderline(link,true));
-      link.addEventListener('mouseleave',()=>moveUnderline(currentTarget,true));
-      link.addEventListener('click',()=>{
-        links.forEach(l=>l.classList.remove('active'));
-        link.classList.add('active');
-        currentTarget=link;
-        setUnderlineInstant(currentTarget);
-        sound.play();
-      });
-    });
-
-    window.addEventListener('resize',()=>{
-      clearTimeout(window._navResizeTimer);
-      window._navResizeTimer=setTimeout(()=>{setUnderlineInstant(currentTarget);},80);
-    });
-
-    // MOBILE MENU
+    // Mobile menu toggle
     document.getElementById("hamburger").addEventListener("click",()=>{
       document.getElementById("mobile-menu").classList.toggle("hidden");
       sound.play();
@@ -164,41 +165,23 @@
     // Tags animation
     gsap.fromTo('.tag-box',{opacity:0,y:30},{opacity:1,y:0,duration:0.9,stagger:0.1,ease:"power3.out",delay:0.8});
   </script>
-</div>
-<!-- Bottom-left copyright – 100% INVISIBLE on load, appears ONLY at bottom -->
-<div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0 !important; visibility:hidden;">
-  © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
-</div>
 
-<script>
-  (function () {
-    const el = document.getElementById('bottom-copyright');
-    let shown = false;
-
-    const check = () => {
-      const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
-      if (nearBottom && !shown) {
-        shown = true;
-        el.style.visibility = 'visible';
-        gsap.to(el, { opacity: 1, duration: 0.8, ease: "power2.out" });
-      } else if (!nearBottom && shown) {
-        shown = false;
-        gsap.to(el, {
-          opacity: 0,
-          duration: 0.1,
-          ease: "power2.in",
-          onComplete: () => el.style.visibility = 'hidden'
-        });
-      }
-    };
-
-    // Run on every scroll
-    window.addEventListener('scroll', check);
-    // Run once after everything is painted
-    window.addEventListener('load', check);
-    // Extra safety for fast browsers
-    requestAnimationFrame(check);
-  })();
-</script>
+  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0 !important; visibility:hidden;">
+    © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
+  </div>
+  <script>
+    (function () {
+      const el = document.getElementById('bottom-copyright');
+      let shown = false;
+      const check = () => {
+        const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
+        if (nearBottom && !shown) { shown=true; el.style.visibility='visible'; gsap.to(el,{opacity:1,duration:0.8,ease:"power2.out"}); }
+        else if(!nearBottom && shown) { shown=false; gsap.to(el,{opacity:0,duration:0.1,ease:"power2.in",onComplete:()=>el.style.visibility='hidden'}); }
+      };
+      window.addEventListener('scroll',check);
+      window.addEventListener('load',check);
+      requestAnimationFrame(check);
+    })();
+  </script>
 </body>
 </html>
