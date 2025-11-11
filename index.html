@@ -126,16 +126,16 @@
       Handles mobile nav bar padding, backdrop, and positioning. 
       Adjust padding or blur here for nav appearance. */
       .nav-container {
-        padding: 2.2rem 1.5rem; /* Bigger menu bar (increased vertical padding) */
+        padding: 2.2rem 1.5rem; /* Bigger menu bar */
         backdrop-filter: blur(20px) saturate(150%);
       }
       .logo-container {
         left: 1.5rem;
-        top: 1.5rem; /* Centered in bigger nav */
+        top: 1.5rem;
       }
       #logo {
         height: 50px; /* Smaller logo */
-        transform: translateY(0); /* No stick out */
+        transform: translateY(0);
       }
       #logo:hover { transform: scale(1.05); }
 
@@ -144,21 +144,23 @@
       Thickness: span height 4px (thicker). 
       Adjust gap or width for size. */
       #hamburger {
-        right: 1.5rem;
-        top: 2.5rem; /* Adjusted for bigger nav, upper right */
+        right: 1.5rem; /* Upper right corner */
+        top: 2.5rem; /* Adjusted for bigger nav, upper position */
         padding: 0.5rem;
         width: 44px;
         height: 44px;
-        display: flex;
+        display: flex !important; /* Force display */
         flex-direction: column;
         justify-content: center;
         gap: 6px;
+        opacity: 1; /* Ensure visibility */
       }
       #hamburger span {
         height: 4px;
         width: 32px;
         background-color: #000;
         transition: all 0.3s ease;
+        opacity: 1; /* Ensure lines visible */
       }
 
       /* --- MOBILE MENU SECTION --- 
@@ -212,10 +214,11 @@
         aspect-ratio: 4/5;
         border-radius: 20px;
         box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        transition: none; /* No animation */
       }
       .project-thumb:active {
-        transform: none !important; /* No zoom/animation on tap or hold */
-        box-shadow: 0 12px 30px rgba(0,0,0,0.15); /* Static shadow */
+        transform: none !important; /* No change on tap or hold */
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       }
       .project-thumb img {
         border-radius: 20px;
