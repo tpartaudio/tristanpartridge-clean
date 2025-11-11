@@ -139,6 +139,52 @@
     .dark .video-title,
     .dark .video-title .dash,
     .dark .video-title .credit { color: #fff; }
+
+    /* Mobile Optimization Section - Adjust values here for easy tweaks */
+    @media (max-width: 768px) {
+      .page-wrapper {
+        flex-direction: column; /* Stack title and video vertically */
+        gap: 2rem; /* Reduce gap for mobile */
+        padding: 1rem; /* Symmetric padding */
+        align-items: center; /* Center content */
+        justify-content: center;
+      }
+
+      .video-container {
+        width: 100%; /* Full width on mobile */
+        max-width: 100%; /* Ensure it fits screen */
+        aspect-ratio: 9 / 16; /* Maintain portrait ratio */
+      }
+
+      .video-title {
+        max-width: 100%; /* Full width title */
+        text-align: center;
+      }
+
+      .video-title .title {
+        font-size: 1.8rem; /* Slightly smaller for mobile */
+      }
+
+      .video-title .dash {
+        font-size: 1.1rem;
+      }
+
+      .video-title .credit {
+        font-size: 1rem;
+      }
+
+      .close-btn {
+        top: 1rem; /* Adjust position for mobile */
+        right: 1rem;
+        font-size: 2rem;
+      }
+
+      body {
+        overflow-y: auto; /* Allow scrolling if needed */
+      }
+    }
+    /* End Mobile Optimization Section */
+
   </style>
 </head>
 <body class="light">
