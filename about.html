@@ -61,6 +61,11 @@
       footer .flex { gap:2rem; }
       footer img { width:36px; height:36px; }
     }
+
+    /* === 3-DOTTED MENU === */
+    .three-dots-menu { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:6px; z-index:60; cursor:pointer; }
+    .three-dots-menu span { width:8px; height:8px; background:#111; border-radius:50%; display:block; }
+    .dark .three-dots-menu span { background:#fff; }
   </style>
 </head>
 <body class="light min-h-screen flex flex-col">
@@ -78,11 +83,13 @@
       <span class="block w-8 h-1 bg-black dark:bg-white"></span>
     </button>
   </nav>
+
   <nav id="mobile-menu" class="fixed inset-0 bg-white dark:bg-black hidden flex-col items-center justify-center gap-12 text-4xl z-40">
     <a href="index.html">Works</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
   </nav>
+
   <main class="flex-1 flex items-center justify-center">
     <section class="about-content">
       <div class="about-statement">Original music and Sound Design<br>for film, video, and beyond.</div>
@@ -99,6 +106,14 @@
       </div>
     </section>
   </main>
+
+  <!-- 3-DOTTED MENU WIDGET -->
+  <div class="three-dots-menu" onclick="alert('Menu clicked!')">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
   <footer class="py-16 px-6 text-center">
     <div class="flex justify-center gap-12">
       <a href="https://www.instagram.com/tristanpartridge/" target="_blank"><img id="insta-logo" src="insta logo.png" alt="Instagram" class="w-11 h-11 hover:scale-110 transition"></a>
@@ -146,7 +161,7 @@
       const widthPx=linkRect.width;
       if(!animate){
         underline.style.left=leftPx+'px';
-        underline.style.width=widthPx+'px';
+        underline.style.width=widthPx;
       }else{
         gsap.to(underline,{left:leftPx+'px', width:widthPx, duration:0.28, ease:"power2.out", overwrite:"auto"});
       }
