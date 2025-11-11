@@ -127,43 +127,91 @@
     .dark .video-title .dash,
     .dark .video-title .credit { color: #fff; }
 
-    /* Mobile (phones) */
+    /* Phone (max-width: 767px) */
     @media (max-width: 767px) {
       .page-wrapper {
-        flex-direction: column;
-        gap: 2rem;
-        padding-left: 5vw;
-        padding-right: 5vw;
-        justify-content: center;
+        flex-direction: column-reverse;
+        gap: 1.5rem;
+        padding: 5vw;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 10vh;
       }
       .video-title {
-        max-width: none;
+        max-width: 90vw;
         text-align: center;
       }
+      .video-title .title {
+        font-size: 1.8rem;
+      }
+      .video-title .dash {
+        font-size: 1rem;
+        margin: 0.5rem 0;
+      }
+      .video-title .credit {
+        font-size: 1rem;
+      }
       .video-container {
-        width: 90vw;
-        max-width: 90vw;
+        width: 100%;
+        max-width: 100%;
+        aspect-ratio: 9 / 16;
+        border-radius: 16px;
+      }
+      .control-btn {
+        width: 48px;
+        height: 48px;
+      }
+      .control-btn svg {
+        width: 20px;
+        height: 20px;
       }
       .close-btn {
         top: 1rem;
         right: 1rem;
         font-size: 2rem;
       }
+      body {
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow-y: auto;
+      }
     }
 
-    /* Tablets/iPads */
+    /* Tablet (min-width: 768px and max-width: 1024px) */
     @media (min-width: 768px) and (max-width: 1024px) {
       .page-wrapper {
-        gap: 4rem;
+        flex-direction: row;
+        gap: 3rem;
         padding-left: 6vw;
         padding-right: 6vw;
+        justify-content: center;
+        align-items: center;
       }
       .video-title {
-        max-width: 400px;
+        max-width: 40vw;
+        text-align: left;
+      }
+      .video-title .title {
+        font-size: 2rem;
+      }
+      .video-title .dash {
+        font-size: 1.1rem;
+      }
+      .video-title .credit {
+        font-size: 1.1rem;
       }
       .video-container {
-        width: 500px;
-        max-width: 80vw;
+        width: 50vw;
+        max-width: 600px;
+        border-radius: 20px;
+      }
+      .control-btn {
+        width: 60px;
+        height: 60px;
+      }
+      .control-btn svg {
+        width: 28px;
+        height: 28px;
       }
       .close-btn {
         top: 1.5rem;
