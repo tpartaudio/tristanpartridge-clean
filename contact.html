@@ -15,17 +15,31 @@
     body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; background:#fff; color:#111; transition: all .6s; font-size:16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overscroll-behavior-y: contain; }
     .dark { background:#000; color:#fff; }
 
+    /* NAVBAR */
     .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(.22,1,.36,1); padding: 1.5rem 2rem; display:flex; align-items:center; gap:1rem; position:fixed; top:0; left:0; right:0; z-index:50; }
     .dark .nav-container { background: rgba(0,0,0,0.85); }
 
-    .logo-container { position:absolute; left:2rem; top:1.5rem; }
-    #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(-18px); }
-    #logo:hover { transform: scale(1.08) translateY(-18px); }
+    .logo-container { position:absolute; left:2rem; top:1.5rem; z-index:55; }
+    #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(0); }
+    #logo:hover { transform: scale(1.08); }
 
     .nav-links { position:relative; display:flex; gap:40px; margin-left:auto; }
     .nav-link { font-weight:600; padding:8px 0; position:relative; z-index:2; }
     .underline { position:absolute; bottom:4px; left:0; height:2px; background:#000; }
     .dark .underline { background:#fff; }
+
+    /* CONTACT CONTENT */
+    .contact-content { max-width:900px; margin:0 auto; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2.2rem; text-align:center; }
+    .invite-text { font-weight:700; font-size:1.8rem; line-height:1.4; opacity:0; transform:translateY(-30px); }
+    .email-container { display:flex; align-items:center; justify-content:center; gap:1rem; font-size:1.65rem; font-weight:500; opacity:0; transform:translateY(20px); }
+    .email-link { color:inherit; text-decoration:none; transition: transform .18s cubic-bezier(.25,.8,.25,1); }
+    .email-link:hover { transform: scale(1.04); }
+    .copy-btn { background:none; border:none; cursor:pointer; opacity:0.7; transition: opacity .18s, transform .18s cubic-bezier(.25,.8,.25,1); position:relative; }
+    .copy-btn svg { stroke:#111; transition: stroke .3s; }
+    .dark .copy-btn svg { stroke:#fff; }
+    .copy-btn:hover { opacity:1; transform:scale(1.1); }
+    .copy-feedback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0; }
+    .social-links { display:flex; gap:1.8rem; justify-content:center; opacity:0; transform:translateY(20px); }
 
     /* MOBILE FIXES */
     @media (max-width: 767px) {
@@ -33,20 +47,6 @@
       .logo-container { left:1.25rem; top:0.8rem; }
       #logo { height:50px; transform: translateY(0); }
       #logo:hover { transform: scale(1.05); }
-
-      #hamburger { display:flex; right:1rem; top:0.9rem; padding:0.35rem; width:44px; height:44px; gap:6px; opacity:1; visibility:visible; align-items:center; justify-content:center; position:absolute; z-index:60; }
-      #hamburger span { height:3px; width:28px; background-color:#000; border-radius:2px; transition:all 0.3s ease; }
-      .dark #hamburger span { background-color:#fff; }
-
-      #mobile-menu { display:flex; flex-direction:column; align-items:center; justify-content:center; background: rgba(255,255,255,0.98); gap:2.5rem; font-size:1.9rem; font-weight:600; padding-top:0; position:fixed; inset:0; z-index:55; opacity:0; visibility:hidden; transition:opacity 0.4s, visibility 0.4s; }
-      #mobile-menu:not(.hidden) { opacity:1; visibility:visible; pointer-events:auto; }
-      #mobile-menu a { opacity:0; transform:translateY(20px); transition:opacity 0.28s ease, transform 0.28s ease; }
-      #mobile-menu:not(.hidden) a { opacity:1; transform:translateY(0); }
-      #mobile-menu a:nth-child(1) { transition-delay:0.06s; }
-      #mobile-menu a:nth-child(2) { transition-delay:0.12s; }
-      #mobile-menu a:nth-child(3) { transition-delay:0.18s; }
-
-      main { padding-top:5.25rem; }
     }
   </style>
 </head>
@@ -71,7 +71,7 @@
   </nav>
 
   <!-- MOBILE MENU -->
-  <nav id="mobile-menu" class="hidden" aria-hidden="true" role="navigation">
+  <nav id="mobile-menu" class="hidden flex-col items-center justify-center gap-12 text-4xl fixed inset-0 bg-white dark:bg-black z-55" aria-hidden="true" role="navigation">
     <a href="index.html">Works</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
@@ -79,28 +79,38 @@
 
   <!-- MAIN CONTENT -->
   <main class="flex-1 flex items-center justify-center">
-    <section class="flex flex-col items-center justify-center gap-6 p-6 text-center">
-      <h1 class="text-3xl font-bold">Get in Touch</h1>
-      <p class="text-lg max-w-xl">Feel free to reach out via email at <a href="mailto:tristan@example.com" class="underline text-blue-600">tristan@example.com</a> or connect with me on social media.</p>
+    <section class="contact-content">
+      <p class="invite-text">Feel free to get in touch for any projects or collaborations.</p>
+      <div class="email-container">
+        <a href="mailto:tpartaudio@gmail.com" class="email-link">tpartaudio@gmail.com</a>
+        <button class="copy-btn" id="copy-btn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <div class="copy-feedback">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tristanpartridge/" target="_blank"><img id="insta-logo" src="insta logo.png" alt="Instagram" class="w-11 h-11 hover:scale-110 transition"></a>
+        <a href="https://www.behance.net/tristanpartrid1" target="_blank"><img id="behance-logo" src="behance logo.png" alt="Behance" class="w-11 h-11 hover:scale-110 transition"></a>
+      </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="py-16 px-6 text-center">
-    <div class="flex justify-center gap-12">
-      <a href="https://www.instagram.com/tristanpartridge/" target="_blank"><img id="insta-logo" src="insta logo.png" alt="Instagram" class="w-11 h-11 hover:scale-110 transition"></a>
-      <a href="https://www.behance.net/tristanpartrid1" target="_blank"><img id="behance-logo" src="behance logo.png" alt="Behance" class="w-11 h-11 hover:scale-110 transition"></a>
-    </div>
-  </footer>
-
   <!-- COPYRIGHT -->
-  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50" style="opacity:0; visibility:hidden;">
+  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0; visibility:hidden;">
     © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
   </div>
 
   <!-- SCRIPTS -->
   <script>
-    const sound = new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'], volume:0.3 });
+    gsap.registerPlugin(ScrollTrigger);
+    const sound = new Howl({ src:['https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'], volume:0.3 });
 
     fetch('config.json').then(r=>r.json()).then(cfg=>{
       const logoEl=document.getElementById('logo');
@@ -111,6 +121,7 @@
       if(behanceEl&&cfg.behance_logo) behanceEl.src=cfg.behance_logo;
     }).catch(()=>{});
 
+    // NAVBAR UNDERLINE
     const underline = document.getElementById('underline');
     const links = document.querySelectorAll('.nav-link');
     let currentTarget = document.querySelector('[data-page="contact"]') || links[0];
@@ -118,7 +129,7 @@
     if(currentTarget) currentTarget.classList.add('active');
 
     function setUnderlineInstant(target){
-      if(!target||!underline)return;
+      if(!target||!underline) return;
       underline.style.transform='none';
       underline.style.transition='none';
       const linkRect=target.getBoundingClientRect();
@@ -130,17 +141,17 @@
     }
 
     function moveUnderline(target, animate=true){
-      if(!target||!underline)return;
-      gsap.set(underline,{clearProps:"transform,x,xPercent"});
+      if(!target||!underline) return;
+      gsap.set(underline,{clearProps:"transform, x, xPercent"});
       const linkRect=target.getBoundingClientRect();
       const containerRect=target.parentElement.getBoundingClientRect();
       const leftPx=linkRect.left-containerRect.left;
       const widthPx=linkRect.width;
       if(!animate){
         underline.style.left=leftPx+'px';
-        underline.style.width=widthPx+'px';
-      }else{
-        gsap.to(underline,{left:leftPx+'px', width:widthPx, duration:0.02, ease:"power2.out", overwrite:"auto"});
+        underline.style.width=widthPx;
+      } else {
+        gsap.to(underline,{ left:leftPx+'px', width:widthPx, duration:0.02, ease:"power2.out", overwrite:"auto" });
       }
     }
 
@@ -162,9 +173,13 @@
 
     window.addEventListener('resize',()=>{ clearTimeout(window._navResizeTimer); window._navResizeTimer=setTimeout(()=>{ setUnderlineInstant(currentTarget); },80); });
 
+    // MOBILE MENU
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobile-menu");
-    function lockBody(locked){ if(locked){ document.body.style.overflow='hidden'; document.documentElement.style.overflow='hidden'; } else { document.body.style.overflow=''; document.documentElement.style.overflow=''; } }
+    function lockBody(locked){
+      if(locked){ document.body.style.overflow='hidden'; document.documentElement.style.overflow='hidden'; }
+      else { document.body.style.overflow=''; document.documentElement.style.overflow=''; }
+    }
 
     hamburger.addEventListener("click", ()=>{
       const isHidden = mobileMenu.classList.contains("hidden");
@@ -207,7 +222,28 @@
       }
     });
 
-    // COPYRIGHT SHOW/HIDE NEAR BOTTOM
+    // CONTACT ANIMATIONS
+    gsap.timeline()
+      .to('.invite-text',{opacity:1,y:0,duration:0.7,ease:"power2.out"})
+      .to('.email-container',{opacity:1,y:0,duration:0.7,ease:"power2.out"},"-=0.4")
+      .to('.social-links',{opacity:1,y:0,duration:0.7,ease:"power2.out"},"-=0.4");
+
+    // COPY BUTTON
+    const copyBtn=document.getElementById('copy-btn');
+    if(copyBtn){
+      const feedback=copyBtn.querySelector('.copy-feedback');
+      copyBtn.addEventListener('click',()=>{
+        navigator.clipboard.writeText('tpartaudio@gmail.com').catch(()=>{});
+        sound.play();
+        gsap.timeline()
+          .to(copyBtn.querySelector('svg'),{opacity:0,scale:0.3,duration:0.15,ease:"power2.in"})
+          .to(feedback,{opacity:1,scale:1,duration:0.22,ease:"elastic.out(2.4,0.16)"},"-=0.1")
+          .to(feedback,{opacity:0,scale:0.3,duration:0.2,delay:0.8,ease:"power2.in"})
+          .to(copyBtn.querySelector('svg'),{opacity:1,scale:1,duration:0.2,ease:"power2.out"},"-=0.2");
+      });
+    }
+
+    // COPYRIGHT SHOW/HIDE
     (function(){
       const el=document.getElementById('bottom-copyright');
       let shown=false;
