@@ -101,7 +101,7 @@
 
     /* === FIX HAMBURGER GLITCH === */
     #hamburger {
-      position: fixed;
+      position: absolute; /* Changed from fixed to absolute so it hides with nav-container */
       right: 2rem;
       top: 2.2rem;
       z-index: 60;
@@ -122,7 +122,9 @@
 
     /* === MOBILE ONLY (≤767px) === */
     @media (max-width: 767px) {
-      /* Nav */
+      /* --- NAV SECTION --- 
+      Handles mobile nav bar padding, backdrop, and positioning. 
+      Adjust padding or blur here for nav appearance. */
       .nav-container {
         padding: 1rem 1.5rem;
         backdrop-filter: blur(20px) saturate(150%);
@@ -137,7 +139,10 @@
       }
       #logo:hover { transform: scale(1.05) translateY(-14px); }
 
-      /* Hamburger */
+      /* --- HAMBURGER SECTION --- 
+      Controls the 3-line menu icon. 
+      Thickness increased: span height from 2px to 3px. 
+      Adjust gap or width for size. */
       #hamburger {
         right: 1.5rem;
         top: 1.8rem;
@@ -147,14 +152,16 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 5px;
+        gap: 6px; /* Increased gap for thicker feel */
       }
       #hamburger span {
-        height: 2px;
+        height: 3px; /* Thicker lines */
         transition: all 0.3s ease;
       }
 
-      /* Mobile Menu */
+      /* --- MOBILE MENU SECTION --- 
+      Manages the dropdown menu on hamburger click. 
+      Adjust font-size, gap, or padding-top for layout. */
       #mobile-menu {
         padding-top: 6rem;
         gap: 3rem;
@@ -168,10 +175,14 @@
         transform: scale(0.95);
       }
 
-      /* Main padding */
+      /* --- MAIN CONTENT SECTION --- 
+      Sets padding for the main area to avoid overlap with nav. 
+      Adjust pt (padding-top) if nav height changes. */
       main { padding-top: 5rem; }
 
-      /* Grid */
+      /* --- GRID SECTION --- 
+      Defines the project grid for mobile: single column. 
+      Adjust gap for spacing between thumbs. */
       .works-container { padding: 0 1rem; }
       .works-grid {
         grid-template-columns: 1fr;
@@ -179,10 +190,13 @@
         padding: 0;
       }
 
-      /* Project Thumb */
+      /* --- PROJECT THUMB SECTION --- 
+      Styles individual project thumbnails. 
+      Aspect-ratio set to 4/5 per request. 
+      Adjust border-radius or shadow for visual tweaks. */
       .project-thumb {
         max-width: 100%;
-        aspect-ratio: 16/9;
+        aspect-ratio: 4/5; /* Changed to 4:5 format */
         border-radius: 20px;
         box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       }
@@ -194,7 +208,9 @@
         border-radius: 20px;
       }
 
-      /* Footer */
+      /* --- FOOTER SECTION --- 
+      Social links at bottom. 
+      Adjust gap or sizes for icons. */
       footer .flex {
         gap: 3rem;
       }
@@ -203,7 +219,9 @@
         height: 40px;
       }
 
-      /* Copyright */
+      /* --- COPYRIGHT SECTION --- 
+      Bottom copyright text. 
+      Adjust position or font-size as needed. */
       #bottom-copyright {
         left: 1rem;
         bottom: 1rem;
@@ -289,19 +307,37 @@
           const div = document.createElement("div");
           div.className = "project-thumb opacity-0 translate-y-16";
           div.innerHTML = `<img src="images/${p.thumb}" alt="${p.title}" loading="lazy">`;
+
+          // Mobile tap handling to prevent accidental clicks during scroll
+          let touchStartY = 0;
+          div.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            div.classList.add('active');
+          });
+          div.addEventListener('touchmove', (e) => {
+            const touchMoveY = e.touches[0].clientY;
+            if (Math.abs(touchMoveY - touchStartY) > 10) { // Threshold for swipe vs tap
+              div.classList.remove('active');
+              e.preventDefault(); // Cancel if scrolling
+            }
+          });
+          div.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            if (Math.abs(touchEndY - touchStartY) <= 10) { // Only navigate if not a swipe
+              setTimeout(() => {
+                sessionStorage.setItem('scrollPosition', window.scrollY);
+                window.location.href = p.video;
+              }, 120);
+            }
+            div.classList.remove('active');
+          });
+
+          // Desktop click (unchanged)
           div.onclick = () => {
             sessionStorage.setItem('scrollPosition', window.scrollY);
             window.location.href = p.video;
           };
-          // Mobile tap feedback
-          div.addEventListener('touchstart', () => div.classList.add('active'));
-          div.addEventListener('touchend', () => {
-            div.classList.remove('active');
-            setTimeout(() => {
-              sessionStorage.setItem('scrollPosition', window.scrollY);
-              window.location.href = p.video;
-            }, 120);
-          });
+
           grid.appendChild(div);
         });
 
