@@ -103,7 +103,7 @@
     #hamburger {
       position: absolute; /* Hides with nav-container */
       right: 2rem;
-      top: 2.2rem;
+      top: 1.8rem; /* Aligned for visibility */
       z-index: 60;
       background: transparent;
       border: none;
@@ -126,26 +126,26 @@
       Handles mobile nav bar padding, backdrop, and positioning. 
       Adjust padding or blur here for nav appearance. */
       .nav-container {
-        padding: 1rem 1.5rem;
+        padding: 0.8rem 1.5rem; /* Reduced padding to contain logo better */
         backdrop-filter: blur(20px) saturate(150%);
       }
       .logo-container {
         left: 1.5rem;
-        top: 1.2rem; /* Brought up a bit */
+        top: 0.8rem; /* Brought up */
       }
       #logo {
-        height: 60px; /* Reduced size */
-        transform: translateY(-12px); /* Adjusted translateY for new size */
+        height: 60px; /* Smaller size */
+        transform: translateY(0); /* Removed negative translateY to prevent sticking out */
       }
-      #logo:hover { transform: scale(1.05) translateY(-12px); }
+      #logo:hover { transform: scale(1.05); }
 
       /* --- HAMBURGER SECTION --- 
       Controls the 3-line menu icon. 
-      Thickness: span height 3px. 
+      Thickness: span height 4px (thicker). 
       Adjust gap or width for size. */
       #hamburger {
         right: 1.5rem;
-        top: 1.8rem;
+        top: 1.4rem; /* Aligned with smaller nav */
         padding: 0.5rem;
         width: 44px;
         height: 44px;
@@ -155,7 +155,7 @@
         gap: 6px;
       }
       #hamburger span {
-        height: 3px;
+        height: 4px; /* Thicker lines */
         transition: all 0.3s ease;
       }
 
@@ -164,13 +164,22 @@
       Adjust font-size, gap, or padding-top for layout. */
       #mobile-menu {
         padding-top: 6rem;
-        gap: 3rem;
+        gap: 2.5rem; /* Cleaner spacing */
         font-size: 2rem;
         font-weight: 600;
       }
       #mobile-menu a {
-        transition: transform 0.2s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
       }
+      #mobile-menu:not(.hidden) a {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      #mobile-menu a:nth-child(1) { transition-delay: 0.1s; }
+      #mobile-menu a:nth-child(2) { transition-delay: 0.2s; }
+      #mobile-menu a:nth-child(3) { transition-delay: 0.3s; }
       #mobile-menu a:active {
         transform: scale(0.95);
       }
@@ -178,7 +187,7 @@
       /* --- MAIN CONTENT SECTION --- 
       Sets padding for the main area to avoid overlap with nav. 
       Adjust pt (padding-top) if nav height changes. */
-      main { padding-top: 5rem; }
+      main { padding-top: 4.5rem; /* Adjusted for smaller nav */ }
 
       /* --- GRID SECTION --- 
       Defines the project grid for mobile: single column. 
@@ -196,8 +205,8 @@
       Reduced size: max-width 90%, centered with auto margin. 
       Adjust border-radius or shadow for visual tweaks. */
       .project-thumb {
-        max-width: 90%; /* Smaller images */
-        margin: 0 auto; /* Center */
+        max-width: 90%;
+        margin: 0 auto;
         aspect-ratio: 4/5;
         border-radius: 20px;
         box-shadow: 0 12px 30px rgba(0,0,0,0.15);
@@ -310,7 +319,7 @@
           div.className = "project-thumb opacity-0 translate-y-16";
           div.innerHTML = `<img src="images/${p.thumb}" alt="${p.title}" loading="lazy">`;
 
-          // Mobile tap handling to prevent accidental clicks during scroll (increased threshold)
+          // Mobile tap handling to prevent accidental clicks during scroll
           let touchStartY = 0;
           div.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
@@ -318,14 +327,14 @@
           });
           div.addEventListener('touchmove', (e) => {
             const touchMoveY = e.touches[0].clientY;
-            if (Math.abs(touchMoveY - touchStartY) > 20) { // Higher threshold for swipe detection
+            if (Math.abs(touchMoveY - touchStartY) > 20) {
               div.classList.remove('active');
-              e.preventDefault(); // Cancel if scrolling
+              e.preventDefault();
             }
           });
           div.addEventListener('touchend', (e) => {
             const touchEndY = e.changedTouches[0].clientY;
-            if (Math.abs(touchEndY - touchStartY) <= 20) { // Only navigate if short tap
+            if (Math.abs(touchEndY - touchStartY) <= 20) {
               setTimeout(() => {
                 sessionStorage.setItem('scrollPosition', window.scrollY);
                 window.location.href = p.video;
