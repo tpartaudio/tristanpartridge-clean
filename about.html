@@ -25,6 +25,13 @@
     #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(-18px); }
     #logo:hover { transform: scale(1.08) translateY(-18px); }
 
+      /* Copyright bottom */
+      #bottom-copyright {
+        left: 2rem;
+        bottom: 1.5rem;
+        font-size: 12px;
+      }
+
     .nav-links { position:relative; display:flex; gap:40px; margin-left:auto; }
     .nav-link { font-weight:600; padding:8px 0; position:relative; z-index:2; }
     .underline { position:absolute; bottom:4px; left:0; height:2px; background:#000; }
@@ -150,10 +157,13 @@
     </div>
   </footer>
 
-  <!-- COPYRIGHT -->
-  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-400 dark:text-gray-500 select-none">
+  <!-- Bottom-left copyright (appears only when near bottom) -->
+  <div id="bottom-copyright"
+       class="fixed bottom-6 left-8 text-xs text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none"
+       style="opacity:0; visibility:hidden;">
     © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
   </div>
+
 
   <!-- ================================
        SCRIPTS
@@ -303,6 +313,31 @@
        TAGS ANIMATION
        ================================================================= */
     gsap.fromTo('.tag-box',{opacity:0,y:30},{opacity:1,y:0,duration:0.9,stagger:0.1,delay:0.8});
+
+    (function () {
+      const el = document.getElementById('bottom-copyright');
+      let shown = false;
+      const check = () => {
+        const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
+        if (nearBottom && !shown) {
+          shown = true;
+          el.style.visibility = 'visible';
+          gsap.to(el, { opacity: 1, duration: 0.8, ease: "power2.out" });
+        } else if (!nearBottom && shown) {
+          shown = false;
+          gsap.to(el, {
+            opacity: 0,
+            duration: 0.1,
+            ease: "power2.in",
+            onComplete: () => el.style.visibility = 'hidden'
+          });
+        }
+      };
+      window.addEventListener('scroll', check);
+      window.addEventListener('load', check);
+      requestAnimationFrame(check);
+    })();
+    
 
   </script>
 </body>

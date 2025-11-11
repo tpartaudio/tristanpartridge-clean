@@ -15,18 +15,108 @@
     body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; background:#fff; color:#111; transition: all .6s; font-size:16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overscroll-behavior-y: contain; }
     .dark { background:#000; color:#fff; }
 
-    /* NAVBAR */
-    .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(.22,1,.36,1); padding: 1.5rem 2rem; display:flex; align-items:center; gap:1rem; position:fixed; top:0; left:0; right:0; z-index:50; }
+    /* ========================= NAVBAR STYLES ========================= */
+    /* All styles that affect the nav are grouped here so you can copy them */
+    .nav-container {
+      backdrop-filter: blur(60px) saturate(180%);
+      background: rgba(255, 255, 255, 0.85);
+      transition: transform 0.6s cubic-bezier(.22,1,.36,1);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center; /* help mobile alignment */
+      gap: 1rem;
+    }
     .dark .nav-container { background: rgba(0,0,0,0.85); }
 
-    .logo-container { position:absolute; left:2rem; top:1.5rem; z-index:55; }
-    #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(0); }
-    #logo:hover { transform: scale(1.08); }
+    .logo-container {
+      position: absolute;
+      left: 2rem;
+      top: 1.5rem;
+      z-index:55;
+    }
 
-    .nav-links { position:relative; display:flex; gap:40px; margin-left:auto; }
-    .nav-link { font-weight:600; padding:8px 0; position:relative; z-index:2; }
-    .underline { position:absolute; bottom:4px; left:0; height:2px; background:#000; }
+    #logo {
+      height: var(--logo-height);
+      cursor: pointer;
+      transition: transform .2s;
+      transform: translateY(-18px);
+    }
+
+    #logo:hover { transform: scale(1.08) translateY(-18px); }
+
+    .nav-links {
+      position: relative;
+      display: flex;
+      gap: 40px;
+      margin-left: auto;
+    }
+
+    .nav-link {
+      font-weight: 600;
+      padding: 8px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .underline {
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      height: 2px;
+      background: #000;
+      transition: all .22s cubic-bezier(.4,0,.2,1);
+    }
     .dark .underline { background:#fff; }
+
+    /* Hamburger + mobile menu */
+    #hamburger {
+      position: absolute; /* Hides with nav-container */
+      right: 2rem;
+      top: 1.8rem; /* Aligned for visibility */
+      z-index: 60;
+      background: transparent;
+      border: none;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #hamburger[aria-expanded="true"] span:first-child {
+      transform-origin: center;
+    }
+
+    #hamburger span {
+      height: 4px;
+      width: 32px;
+      background-color: #000;
+      transition: all 0.3s ease;
+      display: block;
+      border-radius: 2px;
+    }
+    .dark #hamburger span {
+      background-color: #fff;
+    }
+
+    #mobile-menu {
+      transition: opacity 0.4s cubic-bezier(.22,1,.36,1), visibility 0.4s;
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+    }
+
+    #mobile-menu.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #mobile-menu:not(.hidden) {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* ========================= END NAVBAR STYLES ========================= */
 
     /* CONTACT CONTENT */
     .contact-content { max-width:900px; margin:0 auto; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2.2rem; text-align:center; }
@@ -47,48 +137,6 @@
       .logo-container { left:1.25rem; top:0.8rem; }
       #logo { height:50px; transform: translateY(0); }
       #logo:hover { transform: scale(1.05); }
-    }
-
-    /* ADDED STYLES FOR MOBILE MENU BAR (FROM WORKS) */
-    #hamburger {
-      position: absolute;
-      right: 2rem;
-      top: 1.8rem;
-      z-index: 60;
-      background: transparent;
-      border: none;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    #hamburger span {
-      height: 4px;
-      width: 32px;
-      background-color: #000;
-      transition: all 0.3s ease;
-      display: block;
-      border-radius: 2px;
-    }
-    .dark #hamburger span {
-      background-color: #fff;
-    }
-    #mobile-menu {
-      transition: opacity 0.4s cubic-bezier(.22,1,.36,1), visibility 0.4s;
-      position: fixed;
-      inset: 0;
-      z-index: 55;
-    }
-    #mobile-menu.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    #mobile-menu:not(.hidden) {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-    @media (max-width: 767px) {
       #hamburger {
         display: flex;
         right: 1rem;
@@ -135,34 +183,47 @@
       }
       main { padding-top: 5.25rem; }
     }
+
+    /* small accessibility focus outlines */
+    a:focus, button:focus {
+      outline: 3px solid rgba(0,0,0,0.08);
+      outline-offset: 3px;
+    }
   </style>
 </head>
 <body class="light min-h-screen flex flex-col">
 
-  <!-- NAVBAR -->
-  <nav class="nav-container">
-    <div class="logo-container"><img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'"></div>
-    <div class="hidden md:flex nav-links text-lg font-medium">
-      <a href="index.html" class="nav-link" data-page="works">Works</a>
-      <a href="about.html" class="nav-link" data-page="about">About</a>
-      <a href="contact.html" class="nav-link active" data-page="contact">Contact</a>
-      <div class="underline" id="underline"></div>
-    </div>
+  <!-- ========================= SITE NAVBAR (COPY/PASTE THIS SECTION) ========================= -->
+  <section id="site-navbar">
+    <!-- NAVBAR -->
+    <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-center justify-between">
+      <div class="logo-container">
+        <img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'">
+      </div>
 
-    <!-- Hamburger for mobile -->
-    <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+      <div class="hidden md:flex nav-links text-lg font-medium" aria-label="Primary">
+        <a href="index.html" class="nav-link" data-page="works">Works</a>
+        <a href="about.html" class="nav-link" data-page="about">About</a>
+        <a href="contact.html" class="nav-link active" data-page="contact">Contact</a>
+        <div class="underline" id="underline"></div>
+      </div>
 
-  <!-- MOBILE MENU -->
-  <nav id="mobile-menu" class="hidden flex-col items-center justify-center gap-12 text-4xl fixed inset-0 bg-white dark:bg-black z-55" aria-hidden="true" role="navigation">
-    <a href="index.html" class="mobile-link">Works</a>
-    <a href="about.html" class="mobile-link">About</a>
-    <a href="contact.html" class="mobile-link">Contact</a>
-  </nav>
+      <!-- Hamburger (mobile) -->
+      <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+        <span class="block"></span>
+        <span class="block"></span>
+        <span class="block"></span>
+      </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <nav id="mobile-menu" class="hidden" aria-hidden="true" role="navigation">
+      <a href="index.html" class="mobile-link">Works</a>
+      <a href="about.html" class="mobile-link">About</a>
+      <a href="contact.html" class="mobile-link">Contact</a>
+    </nav>
+  </section>
+  <!-- ========================= END SITE NAVBAR ========================= -->
 
   <!-- MAIN CONTENT -->
   <main class="flex-1 flex items-center justify-center">
@@ -208,116 +269,177 @@
       if(behanceEl&&cfg.behance_logo) behanceEl.src=cfg.behance_logo;
     }).catch(()=>{});
 
-    // NAVBAR UNDERLINE
+    // NAVBAR UNDERLINE ANIMATION
     const underline = document.getElementById('underline');
     const links = document.querySelectorAll('.nav-link');
     let currentTarget = document.querySelector('[data-page="contact"]') || links[0];
-    links.forEach(l=>l.classList.remove('active'));
-    if(currentTarget) currentTarget.classList.add('active');
+    links.forEach(l => l.classList.remove('active'));
+    if (currentTarget) currentTarget.classList.add('active');
 
-    function setUnderlineInstant(target){
-      if(!target||!underline) return;
-      underline.style.transform='none';
-      underline.style.transition='none';
-      const linkRect=target.getBoundingClientRect();
-      const containerRect=target.parentElement.getBoundingClientRect();
-      underline.style.left=(linkRect.left-containerRect.left)+'px';
-      underline.style.width=linkRect.width+'px';
+    function setUnderlineInstant(target) {
+      if (!target || !underline) return;
+      underline.style.transform = 'none';
+      underline.style.transition = 'none';
+      const linkRect = target.getBoundingClientRect();
+      const containerRect = target.parentElement.getBoundingClientRect();
+      underline.style.left = (linkRect.left - containerRect.left) + 'px';
+      underline.style.width = linkRect.width + 'px';
       void underline.offsetHeight;
-      underline.style.transition='';
+      underline.style.transition = '';
     }
 
-    function moveUnderline(target, animate=true){
-      if(!target||!underline) return;
-      gsap.set(underline,{clearProps:"transform, x, xPercent"});
-      const linkRect=target.getBoundingClientRect();
-      const containerRect=target.parentElement.getBoundingClientRect();
-      const leftPx=linkRect.left-containerRect.left;
-      const widthPx=linkRect.width;
-      if(!animate){
-        underline.style.left=leftPx+'px';
-        underline.style.width=widthPx;
+    function moveUnderline(target, animate = true) {
+      if (!target || !underline) return;
+      gsap.set(underline, { clearProps: "transform, x, xPercent" });
+      const linkRect = target.getBoundingClientRect();
+      const containerRect = target.parentElement.getBoundingClientRect();
+      const leftPx = linkRect.left - containerRect.left;
+      const widthPx = linkRect.width;
+      if (!animate) {
+        underline.style.left = leftPx + 'px';
+        underline.style.width = widthPx + 'px';
       } else {
-        gsap.to(underline,{ left:leftPx+'px', width:widthPx, duration:0.02, ease:"power2.out", overwrite:"auto" });
+        gsap.to(underline, {
+          left: leftPx + 'px',
+          width: widthPx,
+          duration: 0.02,
+          ease: "power2.out",
+          overwrite: "auto"
+        });
       }
     }
 
-    window.addEventListener('load',()=>{ setUnderlineInstant(currentTarget); });
+    window.addEventListener('load', () => {
+      setUnderlineInstant(currentTarget);
+      if (underline) {
+        gsap.fromTo(underline,
+          { scaleX: 0.98, transformOrigin: "center center" },
+          {
+            scaleX: 1,
+            duration: 0.05,
+            ease: "elastic.out(1, 0.5)",
+            onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
+          }
+        );
+      }
+    });
 
-    links.forEach(link=>{
-      link.addEventListener('mouseenter',()=>moveUnderline(link,true));
-      link.addEventListener('mouseleave',()=>moveUnderline(currentTarget,true));
-      link.addEventListener('click', ev=>{
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => moveUnderline(link, true));
+      link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
+      link.addEventListener('click', (ev) => {
         ev.preventDefault();
-        links.forEach(l=>l.classList.remove('active'));
+        links.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
-        currentTarget=link;
+        currentTarget = link;
         setUnderlineInstant(currentTarget);
         sound.play();
+        // navigate
         window.location.href = link.getAttribute('href');
       });
     });
 
-    window.addEventListener('resize',()=>{ clearTimeout(window._navResizeTimer); window._navResizeTimer=setTimeout(()=>{ setUnderlineInstant(currentTarget); },80); });
+    window.addEventListener('resize', () => {
+      clearTimeout(window._navResizeTimer);
+      window._navResizeTimer = setTimeout(() => setUnderlineInstant(currentTarget), 80);
+    });
 
-    // MOBILE MENU
+    // MOBILE MENU + HAMBURGER
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobile-menu");
     const mobileLinks = document.querySelectorAll("#mobile-menu .mobile-link");
 
-    function lockBody(locked){
-      if(locked){ document.body.style.overflow='hidden'; document.documentElement.style.overflow='hidden'; }
-      else { document.body.style.overflow=''; document.documentElement.style.overflow=''; }
+    function lockBody(locked) {
+      if (locked) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      }
     }
 
-    hamburger.addEventListener("click", ()=>{
+    hamburger.addEventListener("click", () => {
       const isHidden = mobileMenu.classList.contains("hidden");
-      if(isHidden){
-        mobileMenu.classList.remove("hidden"); 
-        mobileMenu.setAttribute('aria-hidden','false');
-        hamburger.setAttribute('aria-expanded','true'); 
+      if (isHidden) {
+        mobileMenu.classList.remove("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        hamburger.setAttribute('aria-expanded', 'true');
         lockBody(true);
-      }else{
-        mobileMenu.classList.add("hidden"); 
-        mobileMenu.setAttribute('aria-hidden','true');
-        hamburger.setAttribute('aria-expanded','false'); 
+      } else {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
         lockBody(false);
       }
+
+      // sound + animate hamburger → cross
       sound.play();
       hamburger.classList.toggle("active");
-      if(hamburger.classList.contains("active")){
-        gsap.to(hamburger.children[0], {rotate:45, y:6, duration:0.28});
-        gsap.to(hamburger.children[1], {opacity:0, duration:0.18});
-        gsap.to(hamburger.children[2], {rotate:-45, y:-6, duration:0.28});
+      if (hamburger.classList.contains("active")) {
+        gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
       } else {
-        gsap.to(hamburger.children[0], {rotate:0, y:0, duration:0.28});
-        gsap.to(hamburger.children[1], {opacity:1, duration:0.18});
-        gsap.to(hamburger.children[2], {rotate:0, y:0, duration:0.28});
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
       }
     });
 
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', ()=>{
+    // FULL MOBILE MENU CLICK HANDLER WITH OUTSIDE-CLOSE
+    mobileMenu.addEventListener("click", (e) => {
+
+      // 1. User clicks on a link
+      if (e.target.tagName === "A") {
         mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden','true');
+        mobileMenu.setAttribute('aria-hidden', 'true');
         hamburger.classList.remove("active");
-        hamburger.setAttribute('aria-expanded','false');
+        hamburger.setAttribute('aria-expanded', 'false');
         lockBody(false);
-        gsap.to(hamburger.children[0], {rotate:0, y:0, duration:0.2});
-        gsap.to(hamburger.children[1], {opacity:1, duration:0.2});
-        gsap.to(hamburger.children[2], {rotate:0, y:0, duration:0.2});
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
         sound.play();
-      });
+        return; // allow navigation
+      }
+
+      // 2. User clicks the black background (outside the menu links)
+      if (e.target === mobileMenu) {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.classList.remove("active");
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+      }
     });
 
-    window.addEventListener('keydown', (ev)=>{
-      if(ev.key==='Escape' && !mobileMenu.classList.contains('hidden')){
+    // Close mobile menu on escape
+    window.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
         mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute('aria-hidden','true');
+        mobileMenu.setAttribute('aria-hidden', 'true');
         hamburger.classList.remove("active");
-        hamburger.setAttribute('aria-expanded','false');
+        hamburger.setAttribute('aria-expanded', 'false');
         lockBody(false);
       }
+    });
+
+    // NAVBAR HIDE/SHOW ON SCROLL
+    let lastY = 0;
+    const nav = document.querySelector(".nav-container");
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      const d = y - lastY;
+      if (d > 8 && y > 100) {
+        gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
+      } else if (d < -8) {
+        gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
+      }
+      lastY = y;
     });
 
     // CONTACT ANIMATIONS
