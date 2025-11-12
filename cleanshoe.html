@@ -302,6 +302,7 @@
 
     video.pause();
     btn.classList.add('show');
+    fullscreenBtn.classList.add('show'); // Initially show fullscreen too when paused
 
     let hideTimeout;
 
@@ -310,14 +311,14 @@
 
     function toggleFullScreen() {
       if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        if (video.requestFullscreen) {
-          video.requestFullscreen();
-        } else if (video.mozRequestFullScreen) {
-          video.mozRequestFullScreen();
-        } else if (video.webkitRequestFullscreen) {
-          video.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (video.msRequestFullscreen) {
-          video.msRequestFullscreen();
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.mozRequestFullScreen) {
+          container.mozRequestFullScreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (container.msRequestFullscreen) {
+          container.msRequestFullscreen();
         }
       } else {
         if (document.exitFullscreen) {
@@ -347,71 +348,98 @@
     document.addEventListener('webkitfullscreenchange', updateIcons);
     document.addEventListener('MSFullscreenChange', updateIcons);
 
-    fullscreenBtn.addEventListener('click', toggleFullScreen);
+    fullscreenBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent container click handling
+      toggleFullScreen();
+    });
 
     /* ============================================
        SECTION 6: BOUTON PLAY/PAUSE (JS logic for play/pause button - edit behavior here if needed)
        ============================================ */
     // Note: This section contains the JS for handling play/pause on mobile/iPad vs desktop.
-    // Mobile/iPad: Tap play button to play (hides button), tap video to pause (shows play button persistently).
-    // Desktop: Original toggle behavior on any container click, with timeouts.
+    // Mobile/iPad: Tap control button to play/pause; tap screen to show controls (auto-hide if playing).
+    // Desktop: Original toggle on container click, with mouse hover timeouts.
     // Adjust delays, conditions, or add features here for easy modification.
-    container.addEventListener('click', (e) => {
-      if (e.target === fullscreenBtn || fullscreenBtn.contains(e.target)) return;
+
+    // Common: Update icon based on play state (can be called after play/pause)
+    function updateControlIcon() {
+      if (video.paused) {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+      } else {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      }
+    }
+
+    // Control button: Handles play/pause toggle for both mobile and desktop (but desktop uses container click)
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent bubbling to container
       clearTimeout(hideTimeout);
 
-      if (isMobile) {
-        // Mobile/iPad-specific behavior
-        if (video.paused) {
-          // Paused: Only play if tapped directly on the control button
-          if (e.target.closest('#control-btn')) {
-            video.play();
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
-            // Briefly show pause icon, then fade away smoothly (adjust delay for timing)
-            hideTimeout = setTimeout(() => {
-              btn.classList.remove('show');
-              fullscreenBtn.classList.remove('show');
-            }, 800); // 800ms delay for smooth fade - modify this value
-          }
-          // If tapped outside button, do nothing (prevents accidental play)
-        } else {
-          // Playing: Any tap on video pauses, shows play button persistently (no auto-hide)
-          video.pause();
-          pauseIcon.style.display = 'none';
-          playIcon.style.display = 'block';
-          btn.classList.add('show');
-          fullscreenBtn.classList.add('show');
-          // No timeout here - button stays visible when paused
+      if (video.paused) {
+        video.play();
+        updateControlIcon();
+        btn.classList.add('show');
+        fullscreenBtn.classList.add('show');
+        if (!video.paused) { // After play
+          hideTimeout = setTimeout(() => {
+            btn.classList.remove('show');
+            fullscreenBtn.classList.remove('show');
+          }, isMobile ? 800 : 1800); // Mobile short hide, desktop as original
         }
       } else {
-        // Desktop/laptop behavior (unchanged)
-        if (video.paused) {
-          video.play();
-          playIcon.style.display = 'none';
-          pauseIcon.style.display = 'block';
-          hideTimeout = setTimeout(() => {
-            btn.classList.remove('show');
-            fullscreenBtn.classList.remove('show');
-          }, 1800);
-        } else {
-          video.pause();
-          pauseIcon.style.display = 'none';
-          playIcon.style.display = 'block';
-          hideTimeout = setTimeout(() => {
-            btn.classList.remove('show');
-            fullscreenBtn.classList.remove('show');
-          }, 3000);
-        }
+        video.pause();
+        updateControlIcon();
+        btn.classList.add('show');
+        fullscreenBtn.classList.add('show');
+        // No hide timeout when paused
       }
     });
 
-    // Mouse events (only relevant for desktop - no change needed for mobile)
-    if (!isMobile) {
+    if (isMobile) {
+      // Mobile-specific: Tap on container (not buttons) to show controls
+      container.addEventListener('click', (e) => {
+        // Ignore if click on buttons
+        if (e.target.closest('#control-btn') || e.target.closest('#fullscreen-btn')) return;
+
+        clearTimeout(hideTimeout);
+        btn.classList.add('show');
+        fullscreenBtn.classList.add('show');
+        updateControlIcon(); // Ensure correct icon
+
+        if (!video.paused) { // If playing, auto-hide
+          hideTimeout = setTimeout(() => {
+            btn.classList.remove('show');
+            fullscreenBtn.classList.remove('show');
+          }, 3000); // Adjust this delay for how long controls stay visible on tap
+        } // If paused, stay visible, no timeout
+      });
+    } else {
+      // Desktop-specific: Toggle play/pause on container click, mouse hover
+      container.addEventListener('click', (e) => {
+        // Ignore if click on fullscreen button
+        if (e.target.closest('#fullscreen-btn')) return;
+
+        clearTimeout(hideTimeout);
+
+        if (video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+        updateControlIcon();
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, video.paused ? 3000 : 1800); // Original timeouts
+      });
+
       container.addEventListener('mouseenter', () => {
         clearTimeout(hideTimeout);
         btn.classList.add('show');
         fullscreenBtn.classList.add('show');
+        updateControlIcon();
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
@@ -427,6 +455,9 @@
         }
       });
     }
+
+    // Ensure correct icon on load
+    updateControlIcon();
   </script>
 </body>
 </html>
