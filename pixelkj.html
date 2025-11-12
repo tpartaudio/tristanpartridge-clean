@@ -425,19 +425,23 @@
       clearTimeout(hideTimeout);
 
       if (video.paused) {
+        // Était en pause : lancer la lecture
         video.play();
         playIcon.style.display = 'none';
         pauseIcon.style.display = 'block';
+        btn.classList.add('show');
         hideTimeout = setTimeout(() => btn.classList.remove('show'), 1800);
       } else {
+        // Était en lecture : mettre en pause
         video.pause();
         pauseIcon.style.display = 'none';
         playIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => btn.classList.remove('show'), 3000);
+        btn.classList.add('show');
+        // Pas de timeout pour masquer quand en pause – reste visible
       }
     });
 
-    // Gestion du survol
+    // Gestion du survol (pour desktop)
     container.addEventListener('mouseenter', () => {
       clearTimeout(hideTimeout);
       btn.classList.add('show');
