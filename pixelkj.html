@@ -17,9 +17,9 @@
       
       /* LAPTOP - Ajuste la position */
       --laptop-text-x: -150px;  /* Déplace le texte horizontalement (négatif = gauche, positif = droite) */
-      --laptop-text-y: -30px;     /* Déplace le texte verticalement (négatif = haut, positif = bas) */
+      --laptop-text-y: -10px;     /* Déplace le texte verticalement (négatif = haut, positif = bas) */
       --laptop-video-x: -80px;  /* Déplace la vidéo horizontalement (négatif = gauche, positif = droite) */
-      --laptop-video-y: -30px;    /* Déplace la vidéo verticalement (négatif = haut, positif = bas) */
+      --laptop-video-y: -10px;    /* Déplace la vidéo verticalement (négatif = haut, positif = bas) */
       --laptop-gap: 6rem;       /* Espace entre texte et vidéo */
       
       /* IPAD - Ajuste la position */
@@ -356,7 +356,7 @@
   </div>
 
   <!-- BOUTON FERMER -->
-  <button class="close-btn" onclick="history.back()">×</button>
+  <button class="close-btn" onclick="const referrer = document.referrer; if (referrer && new URL(referrer).hostname === location.hostname) { history.back(); } else { window.location.href = 'works.html'; }">×</button>
 
   <script>
     /* ============================================
