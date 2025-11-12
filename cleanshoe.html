@@ -88,6 +88,40 @@
       transform: translate(-50%, -50%) scale(1.15);
     }
 
+    .fullscreen-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .fullscreen-btn.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .fullscreen-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .fullscreen-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #000;
+    }
+
     .close-btn {
       position: absolute;
       top: 2rem;
@@ -178,6 +212,15 @@
           <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
         </svg>
       </div>
+
+      <div class="fullscreen-btn" id="fullscreen-btn">
+        <svg id="enter-fullscreen" viewBox="0 0 24 24">
+          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+        </svg>
+        <svg id="exit-fullscreen" viewBox="0 0 24 24" style="display: none;">
+          <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm1-8V7h-3V5h5v5h-2z"/>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -211,6 +254,9 @@
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
     const container = document.getElementById('video-container');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const enterIcon = document.getElementById('enter-fullscreen');
+    const exitIcon = document.getElementById('exit-fullscreen');
 
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
@@ -221,31 +267,86 @@
 
     let hideTimeout;
 
-    container.addEventListener('click', () => {
+    function toggleFullScreen() {
+      if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.mozRequestFullScreen) {
+          video.mozRequestFullScreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    }
+
+    function updateIcons() {
+      if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+        enterIcon.style.display = 'none';
+        exitIcon.style.display = 'block';
+      } else {
+        enterIcon.style.display = 'block';
+        exitIcon.style.display = 'none';
+      }
+    }
+
+    document.addEventListener('fullscreenchange', updateIcons);
+    document.addEventListener('mozfullscreenchange', updateIcons);
+    document.addEventListener('webkitfullscreenchange', updateIcons);
+    document.addEventListener('MSFullscreenChange', updateIcons);
+
+    fullscreenBtn.addEventListener('click', toggleFullScreen);
+
+    container.addEventListener('click', (e) => {
+      if (e.target === fullscreenBtn || fullscreenBtn.contains(e.target)) return; // Prevent triggering play/pause on fullscreen click
       clearTimeout(hideTimeout);
 
       if (video.paused) {
         video.play();
         playIcon.style.display = 'none';
         pauseIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => btn.classList.remove('show'), 1800);
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, 1800);
       } else {
         video.pause();
         pauseIcon.style.display = 'none';
         playIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => btn.classList.remove('show'), 3000);
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, 3000);
       }
     });
 
     container.addEventListener('mouseenter', () => {
       clearTimeout(hideTimeout);
       btn.classList.add('show');
-      hideTimeout = setTimeout(() => btn.classList.remove('show'), 1200);
+      fullscreenBtn.classList.add('show');
+      hideTimeout = setTimeout(() => {
+        btn.classList.remove('show');
+        fullscreenBtn.classList.remove('show');
+      }, 1200);
     });
 
     container.addEventListener('mouseleave', () => {
       if (!video.paused) {
-        hideTimeout = setTimeout(() => btn.classList.remove('show'), 300);
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, 300);
       }
     });
   </script>
