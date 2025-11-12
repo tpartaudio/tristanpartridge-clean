@@ -3,17 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> - Tristan Partridge</title>
+  <title>- Tristan Partridge</title>
   <style>
     :root {
-      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/pixelkj.mov; /* Path to your video file */
+      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/pixelkj.mov;
       --title: "KJ-PIXEL-01";
       --credit: Visual by Kevin Jaeger;
-
-      /* Vertical Adjustment Section (Mobile Only) - Adjust these for positioning on vertical axis in mobile view */
-      --title-shift: -70px; /* Shift for title and credits, e.g., 20px, -10%, 5vh */
-      --video-shift: -50px; /* Shift for video container, e.g., 20px, -10%, 5vh */
-      /* End Vertical Adjustment Section */
+      --title-shift: -70px;
+      --video-shift: -50px;
     }
 
     body { 
@@ -27,16 +24,17 @@
       overflow: hidden;
       backdrop-filter: blur(4px);
     }
+
     .dark body { background: rgba(0,0,0,0.96); }
 
     .page-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7.5rem;
-      max-width: 95vw;
-      padding-left: 8vw;
-      padding-right: 15vw;
+      gap: 6rem;
+      max-width: 100vw;
+      padding: 0 5vw;
+      box-sizing: border-box;
     }
 
     .video-container {
@@ -119,12 +117,19 @@
       margin: 0;
       text-align: center;
       max-width: 360px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
+
     .video-title .title {
       font-weight: 700;
       font-size: 2.2rem;
       letter-spacing: -0.03em;
     }
+
     .video-title .dash {
       display: block;
       margin: 0.3rem 0;
@@ -132,12 +137,14 @@
       opacity: 0.5;
       font-weight: 300;
     }
+
     .video-title .credit {
       display: block;
       font-size: 1.2rem;
       font-weight: 400;
       opacity: 0.9;
     }
+
     .video-title .credit strong {
       font-weight: 700;
     }
@@ -146,97 +153,38 @@
     .dark .video-title .dash,
     .dark .video-title .credit { color: #fff; }
 
-    /* Mobile Optimization Section - Adjust values here for easy tweaks */
-    @media (max-width: 768px) {
+    /* Mobile & Tablet */
+    @media (max-width: 1024px) {
       .page-wrapper {
-        flex-direction: column; /* Stack title and video vertically */
-        gap: 1rem; /* Reduce gap for mobile */
-        padding: 1rem; /* Symmetric padding */
-        align-items: center; /* Center content */
-        justify-content: center;
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
       }
 
       .video-container {
-        width: 80%; /* Full width on mobile */
-        max-width: 100%; /* Ensure it fits screen */
-        aspect-ratio: 9 / 16; /* Maintain portrait ratio */
+        width: 80%;
+        max-width: 100%;
         transform: translateY(var(--video-shift));
       }
 
       .video-title {
-        max-width: 80%; /* Match video width */
+        max-width: 80%;
         text-align: center;
         transform: translateY(var(--title-shift));
       }
 
-      .video-title .title {
-        font-size: 1.2rem; /* Slightly smaller for mobile */
-      }
-
-      .video-title .dash {
-        font-size: 1.1rem;
-      }
-
-      .video-title .credit {
-        font-size: 0.8rem;
-      }
+      .video-title .title { font-size: 1.4rem; }
+      .video-title .dash { font-size: 1.1rem; }
+      .video-title .credit { font-size: 0.9rem; }
 
       .close-btn {
-        top: 1rem; /* Adjust position for mobile */
+        top: 1rem;
         right: 1rem;
         font-size: 2rem;
       }
 
-      body {
-        overflow-y: auto; /* Allow scrolling if needed */
-      }
+      body { overflow-y: auto; }
     }
-    @media (max-width: 769px) {
-      .page-wrapper {
-        flex-direction: column; /* Stack title and video vertically */
-        gap: 1rem; /* Reduce gap for mobile */
-        padding: 2rem; /* Symmetric padding */
-        align-items: center; /* Center content */
-        justify-content: center;
-      }
-
-      .video-container {
-        width: 80%; /* Full width on mobile */
-        max-width: 100%; /* Ensure it fits screen */
-        aspect-ratio: 9 / 16; /* Maintain portrait ratio */
-        transform: translateY(var(--video-shift));
-      }
-
-      .video-title {
-        max-width: 80%; /* Match video width */
-        text-align: center;
-        transform: translateY(var(--title-shift));
-      }
-
-      .video-title .title {
-        font-size: 1.2rem; /* Slightly smaller for mobile */
-      }
-
-      .video-title .dash {
-        font-size: 1.1rem;
-      }
-
-      .video-title .credit {
-        font-size: 0.8rem;
-      }
-
-      .close-btn {
-        top: 1rem; /* Adjust position for mobile */
-        right: 1rem;
-        font-size: 2rem;
-      }
-
-      body {
-        overflow-y: auto; /* Allow scrolling if needed */
-      }
-    }
-    /* End Mobile Optimization Section */
-
   </style>
 </head>
 <body class="light">
@@ -265,26 +213,29 @@
 
   <script>
     // TITLE + CREDIT
-    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+    document.getElementById('title-el').textContent =
+      getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
 
-    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+    const creditText =
+      getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
     const creditEl = document.getElementById('credit-el');
 
     if (creditText.toLowerCase().includes('by')) {
       const parts = creditText.split(/by/i);
-      creditEl.innerHTML = (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
+      creditEl.innerHTML =
+        (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
     } else {
       creditEl.textContent = creditText;
     }
 
     // VIDEO
     const videoEl = document.getElementById('video-el');
-    videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+    videoEl.src =
+      getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
 
-    // Removed buggy line that tried to access nonexistent <a>
-    // videoEl.nextElementSibling.querySelector('a').href = videoEl.src;
-
-    document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
+    document.title =
+      getComputedStyle(document.documentElement).getPropertyValue('--title').trim() +
+      ' - Tristan Partridge';
 
     const video = videoEl;
     const btn = document.getElementById('control-btn');
