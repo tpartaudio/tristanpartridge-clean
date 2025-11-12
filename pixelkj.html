@@ -11,20 +11,30 @@
        ============================================ */
     :root {
       /* Contenu */
-      --video-src: url(https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/pixelkj.mov);
+      --video-src: ur[](https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/pixelkj.mov);
       --title: "KJ-PIXEL-01";
       --credit: Visual by Kevin Jaeger;
       
-      /* LAPTOP - Ajuste la position horizontale */
-      --laptop-text-offset: -100px;  /* Déplace le texte (négatif = gauche, positif = droite) */
-      --laptop-video-offset: -80px;  /* Déplace la vidéo (négatif = gauche, positif = droite) */
-      --laptop-gap: 6rem;            /* Espace entre texte et vidéo */
+      /* LAPTOP - Ajuste la position */
+      --laptop-text-x: -150px;  /* Déplace le texte horizontalement (négatif = gauche, positif = droite) */
+      --laptop-text-y: 0px;     /* Déplace le texte verticalement (négatif = haut, positif = bas) */
+      --laptop-video-x: -80px;  /* Déplace la vidéo horizontalement (négatif = gauche, positif = droite) */
+      --laptop-video-y: 0px;    /* Déplace la vidéo verticalement (négatif = haut, positif = bas) */
+      --laptop-gap: 6rem;       /* Espace entre texte et vidéo */
       
       /* IPAD - Ajuste la position */
-      --ipad-gap: 5.5rem;              /* Espace entre texte et vidéo */
+      --ipad-text-x: 0px;       /* Déplace le texte horizontalement */
+      --ipad-text-y: 0px;       /* Déplace le texte verticalement */
+      --ipad-video-x: 0px;      /* Déplace la vidéo horizontalement */
+      --ipad-video-y: 0px;      /* Déplace la vidéo verticalement */
+      --ipad-gap: 5.5rem;       /* Espace entre texte et vidéo */
       
       /* MOBILE - Ajuste la position */
-      --mobile-gap: 2rem;            /* Espace entre texte et vidéo */
+      --mobile-text-x: 0px;     /* Déplace le texte horizontalement */
+      --mobile-text-y: -20px;   /* Déplace le texte verticalement (ajusté plus haut, augmente la valeur négative pour monter plus) */
+      --mobile-video-x: 0px;    /* Déplace la vidéo horizontalement */
+      --mobile-video-y: -20px;  /* Déplace la vidéo verticalement (ajusté plus haut, augmente la valeur négative pour monter plus) */
+      --mobile-gap: 2rem;       /* Espace entre texte et vidéo */
       
       /* Tailles vidéo */
       --laptop-video-width: 360px;
@@ -81,7 +91,7 @@
       justify-content: center;
       max-width: 360px;
       flex-shrink: 0;
-      transform: translateX(var(--laptop-text-offset));
+      transform: translate(var(--laptop-text-x), var(--laptop-text-y));
     }
 
     .video-title .title {
@@ -137,7 +147,7 @@
       box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       cursor: pointer;
       flex-shrink: 0;
-      transform: translateX(var(--laptop-video-offset));
+      transform: translate(var(--laptop-video-x), var(--laptop-video-y));
     }
 
     video {
@@ -229,12 +239,12 @@
       .video-container {
         width: var(--ipad-video-width);
         max-width: 40vw;
-        transform: none;
+        transform: translate(var(--ipad-video-x), var(--ipad-video-y));
       }
 
       .video-title {
         max-width: min(340px, 45vw);
-        transform: none;
+        transform: translate(var(--ipad-text-x), var(--ipad-text-y));
       }
 
       .video-title .title { 
@@ -264,7 +274,7 @@
         flex-direction: column;
         gap: var(--mobile-gap);
         padding: 3rem 5vw;
-        justify-content: center;
+        justify-content: flex-start; /* Changé à flex-start pour placer le contenu plus haut */
         min-height: 100vh;
       }
 
@@ -272,13 +282,13 @@
         width: var(--mobile-video-width);
         max-width: 80vw;
         order: 2;
-        transform: none;
+        transform: translate(var(--mobile-video-x), var(--mobile-video-y));
       }
 
       .video-title {
         order: 1;
         max-width: 85vw;
-        transform: none;
+        transform: translate(var(--mobile-text-x), var(--mobile-text-y));
       }
 
       .video-title .title { 
