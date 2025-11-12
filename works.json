@@ -52,7 +52,7 @@
   "title": "Aimedion Laptop",
   "thumb": "aimedionlaptop.jpg",
   "video": "aimedionlaptop.html",
-  "disabled": true
+  "disabled": false
 },
   {
     "title": "Brdiver",
@@ -63,7 +63,7 @@
     "title": "Cactus",
     "thumb": "cactus.jpg",
     "video": "cactus.html",
-    "disabled": true
+    "disabled": false
   },
   {
     "title": "Canyon Helmets",
@@ -94,7 +94,7 @@
     "title": "Canyon Bike",
     "thumb": "canyonbike.jpg",
     "video": "canyonbike.html",
-    "disabled": true
+    "disabled": false
   },
     {
     "title": "Sceptical Topography",
