@@ -302,7 +302,7 @@
 
     video.pause();
     btn.classList.add('show');
-    fullscreenBtn.classList.add('show'); // Initially show fullscreen too when paused
+    fullscreenBtn.classList.add('show');
 
     let hideTimeout;
 
@@ -310,17 +310,9 @@
     const isMobile = window.matchMedia("(max-width: 1024px)").matches;
 
     function toggleFullScreen() {
-      if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        if (container.requestFullscreen) {
-          container.requestFullscreen();
-        } else if (container.mozRequestFullScreen) {
-          container.mozRequestFullScreen();
-        } else if (container.webkitRequestFullscreen) {
-          container.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (container.msRequestFullscreen) {
-          container.msRequestFullscreen();
-        }
-      } else {
+      const isInFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+
+      if (isInFullScreen) {
         if (document.exitFullscreen) {
           document.exitFullscreen();
         } else if (document.mozCancelFullScreen) {
@@ -330,11 +322,24 @@
         } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
+      } else {
+        if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        } else if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.mozRequestFullScreen) {
+          video.mozRequestFullScreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        }
       }
     }
 
     function updateIcons() {
-      if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+      const isInFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+      if (isInFullScreen) {
         enterIcon.style.display = 'none';
         exitIcon.style.display = 'block';
       } else {
@@ -347,9 +352,11 @@
     document.addEventListener('mozfullscreenchange', updateIcons);
     document.addEventListener('webkitfullscreenchange', updateIcons);
     document.addEventListener('MSFullscreenChange', updateIcons);
+    video.addEventListener('webkitbeginfullscreen', updateIcons);
+    video.addEventListener('webkitendfullscreen', updateIcons);
 
     fullscreenBtn.addEventListener('click', (e) => {
-      e.stopPropagation(); // Prevent container click handling
+      e.stopPropagation();
       toggleFullScreen();
     });
 
@@ -357,11 +364,11 @@
        SECTION 6: BOUTON PLAY/PAUSE (JS logic for play/pause button - edit behavior here if needed)
        ============================================ */
     // Note: This section contains the JS for handling play/pause on mobile/iPad vs desktop.
-    // Mobile/iPad: Tap control button to play/pause; tap screen to show controls (auto-hide if playing).
+    // Mobile/iPad: Tap video area to toggle controls visibility (show/hide); tap control button to play/pause.
     // Desktop: Original toggle on container click, with mouse hover timeouts.
     // Adjust delays, conditions, or add features here for easy modification.
 
-    // Common: Update icon based on play state (can be called after play/pause)
+    // Common: Update icon based on play state
     function updateControlIcon() {
       if (video.paused) {
         playIcon.style.display = 'block';
@@ -372,53 +379,54 @@
       }
     }
 
-    // Control button: Handles play/pause toggle for both mobile and desktop (but desktop uses container click)
+    // Control button: Handles play/pause toggle (only clickable when shown)
     btn.addEventListener('click', (e) => {
-      e.stopPropagation(); // Prevent bubbling to container
+      e.stopPropagation();
       clearTimeout(hideTimeout);
 
       if (video.paused) {
         video.play();
         updateControlIcon();
-        btn.classList.add('show');
-        fullscreenBtn.classList.add('show');
-        if (!video.paused) { // After play
-          hideTimeout = setTimeout(() => {
-            btn.classList.remove('show');
-            fullscreenBtn.classList.remove('show');
-          }, isMobile ? 800 : 1800); // Mobile short hide, desktop as original
-        }
+        // After play, auto-hide after short delay (adjust for smoothness)
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, isMobile ? 800 : 1800);
       } else {
         video.pause();
         updateControlIcon();
-        btn.classList.add('show');
-        fullscreenBtn.classList.add('show');
-        // No hide timeout when paused
+        // When paused, keep controls visible, no auto-hide
       }
     });
 
     if (isMobile) {
-      // Mobile-specific: Tap on container (not buttons) to show controls
+      // Mobile-specific: Tap on video area (not buttons) to toggle controls visibility
       container.addEventListener('click', (e) => {
-        // Ignore if click on buttons
         if (e.target.closest('#control-btn') || e.target.closest('#fullscreen-btn')) return;
 
         clearTimeout(hideTimeout);
-        btn.classList.add('show');
-        fullscreenBtn.classList.add('show');
-        updateControlIcon(); // Ensure correct icon
 
-        if (!video.paused) { // If playing, auto-hide
-          hideTimeout = setTimeout(() => {
-            btn.classList.remove('show');
-            fullscreenBtn.classList.remove('show');
-          }, 3000); // Adjust this delay for how long controls stay visible on tap
-        } // If paused, stay visible, no timeout
+        if (btn.classList.contains('show')) {
+          // If shown, hide immediately
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        } else {
+          // If hidden, show and update icon
+          btn.classList.add('show');
+          fullscreenBtn.classList.add('show');
+          updateControlIcon();
+          // If playing, auto-hide after delay (adjust this value)
+          if (!video.paused) {
+            hideTimeout = setTimeout(() => {
+              btn.classList.remove('show');
+              fullscreenBtn.classList.remove('show');
+            }, 3000);
+          }
+        }
       });
     } else {
       // Desktop-specific: Toggle play/pause on container click, mouse hover
       container.addEventListener('click', (e) => {
-        // Ignore if click on fullscreen button
         if (e.target.closest('#fullscreen-btn')) return;
 
         clearTimeout(hideTimeout);
@@ -432,7 +440,7 @@
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
-        }, video.paused ? 3000 : 1800); // Original timeouts
+        }, video.paused ? 3000 : 1800);
       });
 
       container.addEventListener('mouseenter', () => {
