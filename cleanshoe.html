@@ -1,216 +1,286 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+  <!-- ============================================
+     SECTION 1: META TAGS AND TITLE
+     ============================================ -->
+  <!-- Basic meta tags for character encoding and viewport responsiveness. -->
+  <!-- Adjust language or add more metas if needed. -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Page title template: Dynamically set via CSS variables and JS. -->
   <title> - Tristan Partridge</title>
 
+  <!-- ============================================
+     SECTION 2: CSS STYLES
+     ============================================ -->
+  <!-- All styles are defined here. Organized into subsections for clarity. -->
+  <!-- Use comments to explain each part, making it easy to adjust. -->
   <style>
+    /* ============================================
+       SUBSECTION 2.1: ROOT VARIABLES
+       ============================================ */
+    /* These variables control key elements like video source, title, etc. */
+    /* Adjust these values to customize the page content without changing code elsewhere. */
     :root {
-      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/cleanshoe.mov;
-      --title: "Tie";
-      --credit: Visual by Quim Amat;
-      --video-width: 900px;
+      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/cleanshoe.mov; /* Path to your video file */
+      --title: "Tie"; /* Main title text */
+      --credit: Visual by Quim Amat; /* Credit text, e.g., "Visual by Quim Amat" */
+      --video-width: 900px; /* Default video frame width on desktop; adjust as needed */
     }
 
+    /* ============================================
+       SUBSECTION 2.2: BODY AND THEME STYLES
+       ============================================ */
+    /* Basic body setup: centering, background, font, etc. */
+    /* Light theme by default; dark theme applied via class. */
     body { 
       margin: 0; 
-      background: rgba(255,255,255,0.96);
+      background: rgba(255,255,255,0.96); /* Light background; semi-transparent white */
       display: flex; 
       align-items: center; 
       justify-content: center; 
       min-height: 100vh; 
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      overflow: hidden;
-      backdrop-filter: blur(4px);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Font stack */
+      overflow: hidden; /* Prevent scrolling */
+      backdrop-filter: blur(4px); /* Subtle blur effect */
     }
+    /* Dark mode body background. Add .dark to <body> via JS or manually. */
+    .dark body { background: rgba(0,0,0,0.96); /* Dark background; semi-transparent black */ }
 
-    .dark body { background: rgba(0,0,0,0.96); }
-
+    /* ============================================
+       SUBSECTION 2.3: LAYOUT WRAPPER
+       ============================================ */
+    /* Wrapper for title and video; flex layout for side-by-side on desktop. */
     .page-wrapper {
       display: flex;
       align-items: center;
-      gap: 7.5rem;
-      max-width: 95vw;
-      padding-left: 8vw;
-      padding-right: 15vw;
+      gap: 7.5rem; /* Space between title and video */
+      max-width: 95vw; /* Max width to fit screen */
+      padding-left: 8vw; /* Left padding */
+      padding-right: 15vw; /* Right padding */
     }
 
+    /* ============================================
+       SUBSECTION 2.4: VIDEO CONTAINER AND VIDEO
+       ============================================ */
+    /* Container for video and controls; relative positioning for overlays. */
     .video-container {
       position: relative;
-      width: var(--video-width);
-      max-width: 90vw;
-      aspect-ratio: 16 / 9;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
-      cursor: pointer;
+      width: var(--video-width); /* Uses root variable; adjust there */
+      max-width: 90vw; /* Max width on smaller screens */
+      aspect-ratio: 16 / 9; /* Maintains video aspect ratio */
+      border-radius: 24px; /* Rounded corners */
+      overflow: hidden; /* Hide overflow */
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35); /* Shadow for depth */
+      cursor: pointer; /* Pointer cursor for interactivity */
     }
 
+    /* Video element styles. */
     video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      background: #000;
+      object-fit: contain; /* Fit video without cropping */
+      background: #000; /* Black background while loading */
     }
 
+    /* ============================================
+       SUBSECTION 2.5: PLAY/PAUSE BUTTON
+       ============================================ */
+    /* Styles for the central play/pause button. */
+    /* Adjust sizes, colors, transitions here for customization. */
     .control-btn {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 52px;
-      height: 52px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0); /* Hidden by default */
+      width: 52px; /* Button size */
+      height: 52px; /* Button size */
+      background: rgba(255,255,255,0.95); /* Semi-transparent white background */
+      border-radius: 50%; /* Circular shape */
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Shadow */
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease; /* Smooth fade/scale */
       opacity: 0;
-      pointer-events: none;
-      z-index: 10;
+      pointer-events: none; /* Disable clicks when hidden */
+      z-index: 10; /* Above video */
     }
 
+    /* Show class to reveal button. */
     .control-btn.show {
       opacity: 1;
       pointer-events: all;
       transform: translate(-50%, -50%) scale(1);
     }
 
+    /* Icon inside button. */
     .control-btn svg {
-      width: 24px;
-      height: 24px;
-      fill: #000;
+      width: 24px; /* Icon size */
+      height: 24px; /* Icon size */
+      fill: #000; /* Icon color */
     }
 
+    /* Hover effect for desktop. */
     .control-btn:hover {
-      transform: translate(-50%, -50%) scale(1.15);
+      transform: translate(-50%, -50%) scale(1.15); /* Slight scale up */
     }
 
+    /* ============================================
+       SUBSECTION 2.6: FULLSCREEN BUTTON
+       ============================================ */
+    /* Styles for the fullscreen button in bottom-right. */
+    /* Adjust sizes, positions, etc., here. */
     .fullscreen-btn {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
+      bottom: 10px; /* Distance from bottom */
+      right: 10px; /* Distance from right */
+      width: 32px; /* Button size */
+      height: 32px; /* Button size */
+      background: rgba(255,255,255,0.95); /* Semi-transparent white */
+      border-radius: 50%; /* Circular */
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Lighter shadow */
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth transitions */
       opacity: 0;
       pointer-events: none;
       z-index: 10;
     }
 
+    /* Show class for fullscreen button. */
     .fullscreen-btn.show {
       opacity: 1;
       pointer-events: all;
     }
 
+    /* Hover effect. */
     .fullscreen-btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.1); /* Scale up on hover */
     }
 
+    /* Icon inside fullscreen button. */
     .fullscreen-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: #000;
+      width: 16px; /* Icon size */
+      height: 16px; /* Icon size */
+      fill: #000; /* Icon color */
     }
 
+    /* ============================================
+       SUBSECTION 2.7: CLOSE BUTTON
+       ============================================ */
+    /* Close button in top-right; goes back in history. */
     .close-btn {
       position: absolute;
-      top: 2rem;
-      right: 2rem;
+      top: 2rem; /* Distance from top */
+      right: 2rem; /* Distance from right */
       background: none;
       border: none;
-      font-size: 2.5rem;
+      font-size: 2.5rem; /* Size */
       cursor: pointer;
-      color: #000;
-      z-index: 20;
-      transition: transform 0.2s ease;
+      color: #000; /* Color in light mode */
+      z-index: 20; /* Above everything */
+      transition: transform 0.2s ease; /* Smooth scale on hover */
     }
 
+    /* Dark mode color. */
     .dark .close-btn { color: #fff; }
 
+    /* Hover effect. */
     .close-btn:hover {
       transform: scale(1.2);
     }
 
+    /* ============================================
+       SUBSECTION 2.8: VIDEO TITLE AND CREDIT
+       ============================================ */
+    /* Container for title, dash, and credit. */
     .video-title {
-      color: #000;
-      line-height: 1.2;
-      opacity: 0.95;
+      color: #000; /* Text color in light mode */
+      line-height: 1.2; /* Spacing */
+      opacity: 0.95; /* Slight transparency */
       margin: 0;
-      text-align: center;
-      max-width: 360px;
+      text-align: center; /* Centered */
+      max-width: 360px; /* Max width to prevent overflow */
     }
-
+    /* Main title style. */
     .video-title .title {
-      font-weight: 700;
-      font-size: 2.2rem;
-      letter-spacing: -0.03em;
+      font-weight: 700; /* Bold */
+      font-size: 2.2rem; /* Size */
+      letter-spacing: -0.03em; /* Tight spacing */
     }
-
+    /* Dash separator. */
     .video-title .dash {
       display: block;
-      margin: 0.9rem 0;
-      font-size: 1.3rem;
-      opacity: 0.5;
-      font-weight: 300;
+      margin: 0.9rem 0; /* Vertical spacing */
+      font-size: 1.3rem; /* Size */
+      opacity: 0.5; /* Faded */
+      font-weight: 300; /* Light */
     }
-
+    /* Credit text. */
     .video-title .credit {
       display: block;
-      font-size: 1.2rem;
-      font-weight: 400;
-      opacity: 0.9;
+      font-size: 1.2rem; /* Size */
+      font-weight: 400; /* Normal */
+      opacity: 0.9; /* Slightly faded */
     }
-
+    /* Strong emphasis in credit. */
     .video-title .credit strong {
-      font-weight: 700;
+      font-weight: 700; /* Bold */
     }
 
+    /* Dark mode colors for title elements. */
     .dark .video-title,
     .dark .video-title .dash,
-    .dark .video-title .credit { color: #fff; }
+    .dark .video-title .credit { color: #fff; /* White in dark mode */ }
 
+    /* ============================================
+       SUBSECTION 2.9: RESPONSIVE MEDIA QUERIES
+       ============================================ */
+    /* Adjustments for mobile/iPad (up to 1024px width). */
+    /* Switches to vertical layout. */
     @media (max-width: 1024px) {
       .page-wrapper {
-        flex-direction: column;
-        gap: 3rem;
-        padding: 5vw;
+        flex-direction: column; /* Stack vertically */
+        gap: 3rem; /* Smaller gap */
+        padding: 5vw; /* Uniform padding */
       }
       .video-title {
-        order: 2;
-        max-width: 90vw;
+        order: 2; /* Title below video */
+        max-width: 90vw; /* Full width */
       }
       .video-container {
-        order: 1;
-        width: 90vw;
-        max-width: none;
+        order: 1; /* Video above title */
+        width: 90vw; /* Full width */
+        max-width: none; /* No max limit */
       }
     }
   </style>
 </head>
 
+<!-- ============================================
+   SECTION 3: HTML BODY STRUCTURE
+   ============================================ -->
+<!-- Main content: Wrapper with title and video container. -->
+<!-- Class "light" for initial theme; change to "dark" if needed. -->
 <body class="light">
   <div class="page-wrapper">
+    <!-- Title section: Populated via JS. -->
     <div class="video-title">
       <div class="title" id="title-el"></div>
       <div class="dash">-</div>
       <div class="credit" id="credit-el"></div>
     </div>
 
+    <!-- Video container: Holds video and control buttons. -->
     <div class="video-container" id="video-container">
       <video id="video-el" src="" preload="metadata" playsinline type="video/mp4"></video>
       
+      <!-- Play/pause button with icons. -->
       <div class="control-btn" id="control-btn">
         <svg id="play-icon" viewBox="0 0 24 24">
           <path d="M8 5v14l11-7z"/>
@@ -220,6 +290,7 @@
         </svg>
       </div>
 
+      <!-- Fullscreen button with icons. -->
       <div class="fullscreen-btn" id="fullscreen-btn">
         <svg id="enter-fullscreen" viewBox="0 0 24 24">
           <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
@@ -231,15 +302,25 @@
     </div>
   </div>
 
+  <!-- Close button: Goes back in browser history. -->
   <button class="close-btn" onclick="history.back()">×</button>
 
+  <!-- ============================================
+     SECTION 4: JAVASCRIPT LOGIC
+     ============================================ -->
+  <!-- Script organized into subsections: Initialization, Functions, Event Listeners. -->
+  <!-- Comments explain each part for easy modification. -->
   <script>
-    document.getElementById('title-el').textContent =
-      getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+    /* ============================================
+       SUBSECTION 4.1: INITIALIZATION AND SETUP
+       ============================================ */
+    // Set page title and credit from CSS variables.
+    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
 
     const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
     const creditEl = document.getElementById('credit-el');
 
+    // Special handling for credit text containing 'by' (makes the name bold).
     if (creditText.toLowerCase().includes('by')) {
       const parts = creditText.split(/by/i);
       creditEl.innerHTML = (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
@@ -247,16 +328,12 @@
       creditEl.textContent = creditText;
     }
 
+    // Set video source from CSS variable and update document title.
     const videoEl = document.getElementById('video-el');
     videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
     document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
 
-    // === Disable native browser controls & menu ===
-    videoEl.controls = false;
-    videoEl.setAttribute('controlsList', 'nodownload noremoteplayback noplaybackrate nofullscreen');
-    videoEl.disablePictureInPicture = true;
-    videoEl.addEventListener('contextmenu', e => e.preventDefault());
-
+    // Element references for easy access.
     const video = videoEl;
     const btn = document.getElementById('control-btn');
     const playIcon = document.getElementById('play-icon');
@@ -266,48 +343,73 @@
     const enterIcon = document.getElementById('enter-fullscreen');
     const exitIcon = document.getElementById('exit-fullscreen');
 
+    // Check for dark theme in localStorage and apply if set.
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
 
+    // Initial state: Video paused, controls visible.
     video.pause();
     btn.classList.add('show');
     fullscreenBtn.classList.add('show');
 
+    // Timeout variable for auto-hiding controls.
     let hideTimeout;
+
+    // Detect if on mobile/iPad based on screen width (matches CSS media query).
     const isMobile = window.matchMedia("(max-width: 1024px)").matches;
 
-    function toggleFullScreen() {
-      const isInFullScreen =
-        document.fullscreenElement ||
-        document.mozFullScreenElement ||
-        document.webkitFullscreenElement ||
-        document.msFullscreenElement;
+    /* ============================================
+       SUBSECTION 4.2: FUNCTIONS
+       ============================================ */
+    // Function to detect fullscreen across browsers.
+    function isInFullScreen() {
+      return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+    }
 
-      if (isInFullScreen) {
-        if (document.exitFullscreen) document.exitFullscreen();
-        else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        else if (document.msExitFullscreen) document.msExitFullscreen();
+    // Function to toggle fullscreen mode (preserves your original logic: use video.webkitEnterFullscreen if available).
+    function toggleFullScreen() {
+      const isInFull = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+
+      if (isInFull) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
       } else {
-        if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
-        else if (video.requestFullscreen) video.requestFullscreen();
-        else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
-        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        else if (video.msRequestFullscreen) video.msRequestFullscreen();
+        // Keep your existing preference for video.webkitEnterFullscreen (iOS Safari) and video.requestFullscreen for others.
+        if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        } else if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.mozRequestFullScreen) {
+          video.mozRequestFullScreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        }
       }
     }
 
+    // Function to update fullscreen icons based on current state (unchanged).
     function updateIcons() {
-      const isInFullScreen =
-        document.fullscreenElement ||
-        document.mozFullScreenElement ||
-        document.webkitFullscreenElement ||
-        document.msFullscreenElement;
-      enterIcon.style.display = isInFullScreen ? 'none' : 'block';
-      exitIcon.style.display = isInFullScreen ? 'block' : 'none';
+      const isInFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+      if (isInFullScreen) {
+        enterIcon.style.display = 'none';
+        exitIcon.style.display = 'block';
+      } else {
+        enterIcon.style.display = 'block';
+        exitIcon.style.display = 'none';
+      }
     }
 
+    // Common function: Update play/pause icon based on video state.
     function updateControlIcon() {
       if (video.paused) {
         playIcon.style.display = 'block';
@@ -318,25 +420,15 @@
       }
     }
 
-    document.addEventListener('fullscreenchange', updateIcons);
-    document.addEventListener('mozfullscreenchange', updateIcons);
-    document.addEventListener('webkitfullscreenchange', updateIcons);
-    document.addEventListener('MSFullscreenChange', updateIcons);
-    video.addEventListener('webkitbeginfullscreen', updateIcons);
-    video.addEventListener('webkitendfullscreen', updateIcons);
-
-    fullscreenBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleFullScreen();
-    });
-
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
+    // New: centralize play/pause toggling so keyboard and click handlers use the same behavior.
+    function togglePlayPause(fromEvent = null) {
+      // fromEvent is optional; used if we want to stop propagation on certain callers (not needed here).
       clearTimeout(hideTimeout);
 
       if (video.paused) {
         video.play();
         updateControlIcon();
+        // Auto-hide after play; respect mobile vs desktop timings.
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
@@ -344,17 +436,46 @@
       } else {
         video.pause();
         updateControlIcon();
+        // keep visible when paused
       }
+    }
+
+    /* ============================================
+       SUBSECTION 4.3: EVENT LISTENERS
+       ============================================ */
+    // Listeners for fullscreen state changes across browsers.
+    document.addEventListener('fullscreenchange', updateIcons);
+    document.addEventListener('mozfullscreenchange', updateIcons);
+    document.addEventListener('webkitfullscreenchange', updateIcons);
+    document.addEventListener('MSFullscreenChange', updateIcons);
+    video.addEventListener('webkitbeginfullscreen', updateIcons);
+    video.addEventListener('webkitendfullscreen', updateIcons);
+
+    // Click on fullscreen button (unchanged behaviour).
+    fullscreenBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent bubbling to container click.
+      toggleFullScreen();
+    });
+
+    // Click on play/pause button: Toggle play/pause and handle hiding (now uses togglePlayPause()).
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlayPause();
     });
 
     if (isMobile) {
+      // Mobile/iPad: Tap video (not buttons) to toggle controls visibility (unchanged).
       container.addEventListener('click', (e) => {
         if (e.target.closest('#control-btn') || e.target.closest('#fullscreen-btn')) return;
+
         clearTimeout(hideTimeout);
+
         if (btn.classList.contains('show')) {
+          // Hide if shown.
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
         } else {
+          // Show if hidden; auto-hide if playing.
           btn.classList.add('show');
           fullscreenBtn.classList.add('show');
           updateControlIcon();
@@ -362,23 +483,25 @@
             hideTimeout = setTimeout(() => {
               btn.classList.remove('show');
               fullscreenBtn.classList.remove('show');
-            }, 3000);
+            }, 3000); // Adjust auto-hide delay (ms).
           }
         }
       });
     } else {
+      // Desktop: Click container to toggle play/pause; hover to show controls (unchanged, but use togglePlayPause()).
       container.addEventListener('click', (e) => {
         if (e.target.closest('#fullscreen-btn')) return;
+
         clearTimeout(hideTimeout);
-        if (video.paused) video.play();
-        else video.pause();
-        updateControlIcon();
+        togglePlayPause();
+        // Auto-hide; different delays for paused/playing.
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
-        }, video.paused ? 3000 : 1800);
+        }, video.paused ? 3000 : 1800); // Adjust delays (ms).
       });
 
+      // Mouse enter: Show controls, auto-hide.
       container.addEventListener('mouseenter', () => {
         clearTimeout(hideTimeout);
         btn.classList.add('show');
@@ -387,19 +510,64 @@
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
-        }, 1200);
+        }, 1200); // Adjust delay (ms).
       });
 
+      // Mouse leave: Hide if playing.
       container.addEventListener('mouseleave', () => {
         if (!video.paused) {
           hideTimeout = setTimeout(() => {
             btn.classList.remove('show');
             fullscreenBtn.classList.remove('show');
-          }, 300);
+          }, 300); // Adjust delay (ms).
+        }
+      });
+
+      // --- NEW: Keyboard controls for laptop ---
+      // Space: play/pause ONLY when in fullscreen
+      // 'f' : enter fullscreen ONLY when not already in fullscreen
+      document.addEventListener('keydown', (e) => {
+        // Ignore if typing in an input or editable element
+        const active = document.activeElement;
+        const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+        if (isTyping) return;
+
+        // Space -> toggle play/pause only when in fullscreen
+        if (e.code === 'Space' || e.key === ' ') {
+          if (isInFullScreen()) {
+            e.preventDefault(); // prevent page scroll
+            togglePlayPause();
+          }
+        }
+
+        // 'f' to enter fullscreen when not in fullscreen
+        if (e.key && e.key.toLowerCase() === 'f') {
+          if (!isInFullScreen()) {
+            e.preventDefault();
+            toggleFullScreen();
+          }
+        }
+      });
+
+      // --- NEW: Click anywhere in fullscreen to toggle play/pause (but exclude fullscreen button) ---
+      // When video element itself is fullscreen (or page fullscreen), container click may not fire, so use document click.
+      document.addEventListener('click', (e) => {
+        // If not in fullscreen, do nothing here; container already handles clicks.
+        if (!isInFullScreen()) return;
+
+        // Exclude clicks on fullscreen button (so that button behaviour stays as-is).
+        if (e.target.closest && e.target.closest('#fullscreen-btn')) return;
+
+        // Only toggle if click is on the video area (either the video element or the container).
+        // Allow clicks on control button to propagate if you want them to toggle too. Since control-btn stops propagation in its handler, this won't double fire.
+        if (e.target === video || e.target.closest && e.target.closest('#video-container')) {
+          // prevent accidental double-handling if some other handler already called stopPropagation (safe)
+          togglePlayPause();
         }
       });
     }
 
+    // Initial icon setup.
     updateControlIcon();
   </script>
 </body>
