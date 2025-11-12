@@ -121,24 +121,27 @@
       height: 16px;
       fill: #000;
     }
+
     /* ============================================
-       SECTION 6: BOUTON PLAY/PAUSE
+       SECTION 6: BOUTON PLAY/PAUSE (CSS for play/pause button - edit styles here if needed)
        ============================================ */
+    /* Note: This section contains the CSS for the play/pause control button. */
+    /* You can modify sizes, colors, transitions, etc., here for easy access. */
     .control-btn {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      width: 52px;
-      height: 52px;
-      background: rgba(255,255,255,0.95);
+      width: 52px; /* Adjust button size */
+      height: 52px; /* Adjust button size */
+      background: rgba(255,255,255,0.95); /* Button background */
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Shadow */
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease; /* Fade/scale animation - adjust timing for smoothness */
       opacity: 0;
       pointer-events: none;
       z-index: 10;
@@ -151,14 +154,15 @@
     }
 
     .control-btn svg {
-      width: 24px;
-      height: 24px;
-      fill: #000;
+      width: 24px; /* Icon size */
+      height: 24px; /* Icon size */
+      fill: #000; /* Icon color */
     }
 
     .control-btn:hover {
-      transform: translate(-50%, -50%) scale(1.15);
+      transform: translate(-50%, -50%) scale(1.15); /* Hover scale - adjust for effect */
     }
+
     .close-btn {
       position: absolute;
       top: 2rem;
@@ -227,44 +231,6 @@
         width: 90vw;
         max-width: none;
       }
-          /* ============================================
-       SECTION 6: BOUTON PLAY/PAUSE
-       ============================================ */
-    .control-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 52px;
-      height: 52px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .control-btn.show {
-      opacity: 1;
-      pointer-events: all;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .control-btn svg {
-      width: 24px;
-      height: 24px;
-      fill: #000;
-    }
-
-    .control-btn:hover {
-      transform: translate(-50%, -50%) scale(1.15);
-    }
     }
   </style>
 </head>
@@ -319,9 +285,6 @@
     const videoEl = document.getElementById('video-el');
     videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
 
-    // Removed buggy line that tried to access nonexistent <a>
-    // videoEl.nextElementSibling.querySelector('a').href = videoEl.src;
-
     document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
 
     const video = videoEl;
@@ -341,6 +304,9 @@
     btn.classList.add('show');
 
     let hideTimeout;
+
+    // Detect mobile/iPad (matches your existing media query breakpoint)
+    const isMobile = window.matchMedia("(max-width: 1024px)").matches;
 
     function toggleFullScreen() {
       if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
@@ -383,47 +349,84 @@
 
     fullscreenBtn.addEventListener('click', toggleFullScreen);
 
+    /* ============================================
+       SECTION 6: BOUTON PLAY/PAUSE (JS logic for play/pause button - edit behavior here if needed)
+       ============================================ */
+    // Note: This section contains the JS for handling play/pause on mobile/iPad vs desktop.
+    // Mobile/iPad: Tap play button to play (hides button), tap video to pause (shows play button persistently).
+    // Desktop: Original toggle behavior on any container click, with timeouts.
+    // Adjust delays, conditions, or add features here for easy modification.
     container.addEventListener('click', (e) => {
-      if (e.target === fullscreenBtn || fullscreenBtn.contains(e.target)) return; // Prevent triggering play/pause on fullscreen click
+      if (e.target === fullscreenBtn || fullscreenBtn.contains(e.target)) return;
       clearTimeout(hideTimeout);
 
-      if (video.paused) {
-        video.play();
-        playIcon.style.display = 'none';
-        pauseIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 1800);
+      if (isMobile) {
+        // Mobile/iPad-specific behavior
+        if (video.paused) {
+          // Paused: Only play if tapped directly on the control button
+          if (e.target.closest('#control-btn')) {
+            video.play();
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+            // Briefly show pause icon, then fade away smoothly (adjust delay for timing)
+            hideTimeout = setTimeout(() => {
+              btn.classList.remove('show');
+              fullscreenBtn.classList.remove('show');
+            }, 800); // 800ms delay for smooth fade - modify this value
+          }
+          // If tapped outside button, do nothing (prevents accidental play)
+        } else {
+          // Playing: Any tap on video pauses, shows play button persistently (no auto-hide)
+          video.pause();
+          pauseIcon.style.display = 'none';
+          playIcon.style.display = 'block';
+          btn.classList.add('show');
+          fullscreenBtn.classList.add('show');
+          // No timeout here - button stays visible when paused
+        }
       } else {
-        video.pause();
-        pauseIcon.style.display = 'none';
-        playIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 3000);
+        // Desktop/laptop behavior (unchanged)
+        if (video.paused) {
+          video.play();
+          playIcon.style.display = 'none';
+          pauseIcon.style.display = 'block';
+          hideTimeout = setTimeout(() => {
+            btn.classList.remove('show');
+            fullscreenBtn.classList.remove('show');
+          }, 1800);
+        } else {
+          video.pause();
+          pauseIcon.style.display = 'none';
+          playIcon.style.display = 'block';
+          hideTimeout = setTimeout(() => {
+            btn.classList.remove('show');
+            fullscreenBtn.classList.remove('show');
+          }, 3000);
+        }
       }
     });
 
-    container.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimeout);
-      btn.classList.add('show');
-      fullscreenBtn.classList.add('show');
-      hideTimeout = setTimeout(() => {
-        btn.classList.remove('show');
-        fullscreenBtn.classList.remove('show');
-      }, 1200);
-    });
-
-    container.addEventListener('mouseleave', () => {
-      if (!video.paused) {
+    // Mouse events (only relevant for desktop - no change needed for mobile)
+    if (!isMobile) {
+      container.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+        btn.classList.add('show');
+        fullscreenBtn.classList.add('show');
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
-        }, 300);
-      }
-    });
+        }, 1200);
+      });
+
+      container.addEventListener('mouseleave', () => {
+        if (!video.paused) {
+          hideTimeout = setTimeout(() => {
+            btn.classList.remove('show');
+            fullscreenBtn.classList.remove('show');
+          }, 300);
+        }
+      });
+    }
   </script>
 </body>
 </html>
