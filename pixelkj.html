@@ -355,8 +355,16 @@
     </div>
   </div>
 
-  <!-- BOUTON FERMER -->
-  <button class="close-btn" onclick="const referrer = document.referrer; if (referrer && new URL(referrer).hostname === location.hostname) { history.back(); } else { window.location.href = 'works.html'; }">×</button>
+  <button class="close-btn" onclick="
+  const referrer = document.referrer;
+  const sameSite = referrer && new URL(referrer).hostname === location.hostname;
+  if (sameSite && history.length > 1) {
+    history.back();
+  } else {
+    window.location.href = 'works.html';
+  }
+">×</button>
+
 
   <script>
     /* ============================================
