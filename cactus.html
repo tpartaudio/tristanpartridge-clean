@@ -6,34 +6,32 @@
   <title> - Tristan Partridge</title>
   <style>
     :root {
-      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/cactus.mov; /* Path to your video file */
+      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/cactus.mov;
       --title: "Cacto";
       --credit: Visual by Quim Amat;
-      --video-width: 900px; /* Adjust this value to change the video frame size */
+      --video-width: 900px;
     }
-
-    body { 
-      margin: 0; 
+    /* ===== BASE LAYOUT ===== */
+    body {
+      margin: 0;
       background: rgba(255,255,255,0.96);
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      min-height: 100vh; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      overflow: hidden;
       backdrop-filter: blur(4px);
     }
     .dark body { background: rgba(0,0,0,0.96); }
-
     .page-wrapper {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 7.5rem;
       max-width: 95vw;
-      padding-left: 8vw;
-      padding-right: 15vw;
+      padding: 5rem 10vw;
     }
-
+    /* ===== VIDEO CONTAINER ===== */
     .video-container {
       position: relative;
       width: var(--video-width);
@@ -44,14 +42,13 @@
       box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       cursor: pointer;
     }
-
     video {
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: #000;
     }
-
+    /* ===== CONTROL BUTTON ===== */
     .control-btn {
       position: absolute;
       top: 50%;
@@ -66,28 +63,25 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+      transition: transform 0.25s, opacity 0.25s ease;
       opacity: 0;
       pointer-events: none;
       z-index: 10;
     }
-
     .control-btn.show {
       opacity: 1;
       pointer-events: all;
       transform: translate(-50%, -50%) scale(1);
     }
-
     .control-btn svg {
       width: 24px;
       height: 24px;
       fill: #000;
     }
-
     .control-btn:hover {
       transform: translate(-50%, -50%) scale(1.15);
     }
-
+    /* ===== FULLSCREEN BUTTON ===== */
     .fullscreen-btn {
       position: absolute;
       bottom: 10px;
@@ -101,29 +95,26 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.25s ease, transform 0.25s;
       opacity: 0;
       pointer-events: none;
       z-index: 10;
     }
-
     .fullscreen-btn.show {
       opacity: 1;
       pointer-events: all;
     }
-
-    .fullscreen-btn:hover {
-      transform: scale(1.1);
-    }
-
     .fullscreen-btn svg {
       width: 16px;
       height: 16px;
       fill: #000;
     }
-
+    .fullscreen-btn:hover {
+      transform: scale(1.1);
+    }
+    /* ===== CLOSE BUTTON ===== */
     .close-btn {
-      position: absolute;
+      position: fixed;
       top: 2rem;
       right: 2rem;
       background: none;
@@ -134,19 +125,15 @@
       z-index: 20;
       transition: transform 0.2s ease;
     }
-
     .dark .close-btn { color: #fff; }
-
-    .close-btn:hover {
-      transform: scale(1.2);
-    }
-
+    .close-btn:hover { transform: scale(1.2); }
+    /* ===== TITLE AND CREDITS ===== */
     .video-title {
       color: #000;
       line-height: 1.2;
       opacity: 0.95;
-      margin: 0;
       text-align: center;
+      margin: 0;
       max-width: 360px;
     }
     .video-title .title {
@@ -167,14 +154,10 @@
       font-weight: 400;
       opacity: 0.9;
     }
-    .video-title .credit strong {
-      font-weight: 700;
-    }
-
     .dark .video-title,
     .dark .video-title .dash,
     .dark .video-title .credit { color: #fff; }
-
+    /* ===== RESPONSIVE QUERIES ===== */
     @media (max-width: 1024px) {
       .page-wrapper {
         flex-direction: column;
@@ -191,6 +174,26 @@
         max-width: none;
       }
     }
+    /* ===== 📱 LANDSCAPE (90°) MODE FIX ===== */
+    @media (orientation: landscape) and (max-width: 1024px) {
+      .page-wrapper {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      /* ✅ Make it super easy: just edit these two values */
+      .video-container {
+        width: 70vw; /* reduce video size when tilted, try 65–75vw */
+        max-width: 700px;
+      }
+      .video-title {
+        margin: 1rem auto 0 auto;
+        text-align: center;
+        transform: translateX(0rem); /* easy manual tweak: use px/rem */
+      }
+    }
   </style>
 </head>
 <body class="light">
@@ -200,10 +203,8 @@
       <div class="dash">-</div>
       <div class="credit" id="credit-el"></div>
     </div>
-
     <div class="video-container" id="video-container">
       <video id="video-el" src="" preload="metadata" playsinline type="video/mp4"></video>
-      
       <div class="control-btn" id="control-btn">
         <svg id="play-icon" viewBox="0 0 24 24">
           <path d="M8 5v14l11-7z"/>
@@ -212,7 +213,6 @@
           <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
         </svg>
       </div>
-
       <div class="fullscreen-btn" id="fullscreen-btn">
         <svg id="enter-fullscreen" viewBox="0 0 24 24">
           <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
@@ -223,32 +223,20 @@
       </div>
     </div>
   </div>
-
-  <button class="close-btn" onclick="history.back()">×</button>
-
+  <button class="close-btn" onclick="window.location.href = 'index.html';">×</button>
   <script>
-    // TITLE + CREDIT
     document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
-
     const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
     const creditEl = document.getElementById('credit-el');
-
     if (creditText.toLowerCase().includes('by')) {
       const parts = creditText.split(/by/i);
       creditEl.innerHTML = (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
     } else {
       creditEl.textContent = creditText;
     }
-
-    // VIDEO
     const videoEl = document.getElementById('video-el');
     videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
-
-    // Removed buggy line that tried to access nonexistent <a>
-    // videoEl.nextElementSibling.querySelector('a').href = videoEl.src;
-
     document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
-
     const video = videoEl;
     const btn = document.getElementById('control-btn');
     const playIcon = document.getElementById('play-icon');
@@ -257,98 +245,161 @@
     const fullscreenBtn = document.getElementById('fullscreen-btn');
     const enterIcon = document.getElementById('enter-fullscreen');
     const exitIcon = document.getElementById('exit-fullscreen');
-
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-    }
-
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
     video.pause();
     btn.classList.add('show');
-
+    fullscreenBtn.classList.add('show');
     let hideTimeout;
-
-    function toggleFullScreen() {
-      if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        if (video.requestFullscreen) {
-          video.requestFullscreen();
-        } else if (video.mozRequestFullScreen) {
-          video.mozRequestFullScreen();
-        } else if (video.webkitRequestFullscreen) {
-          video.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (video.msRequestFullscreen) {
-          video.msRequestFullscreen();
-        }
+    const mediaQuery = window.matchMedia("(max-width: 1024px)");
+    let isMobile = mediaQuery.matches;
+    function setupListeners() {
+      container.removeEventListener('click', handleContainerClick);
+      container.removeEventListener('mouseenter', handleMouseEnter);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('keydown', handleKeydown);
+      document.removeEventListener('click', handleDocumentClick);
+      if (isMobile) {
+        container.addEventListener('click', handleContainerClick);
       } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
+        container.addEventListener('click', handleContainerClick);
+        container.addEventListener('mouseenter', handleMouseEnter);
+        container.addEventListener('mouseleave', handleMouseLeave);
+        document.addEventListener('keydown', handleKeydown);
+        document.addEventListener('click', handleDocumentClick);
       }
     }
-
-    function updateIcons() {
-      if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
-        enterIcon.style.display = 'none';
-        exitIcon.style.display = 'block';
+    function handleContainerClick(e) {
+      if (isMobile) {
+        if (e.target.closest('#control-btn') || e.target.closest('#fullscreen-btn')) return;
+        clearTimeout(hideTimeout);
+        if (btn.classList.contains('show')) {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        } else {
+          btn.classList.add('show');
+          fullscreenBtn.classList.add('show');
+          updateControlIcon();
+          if (!video.paused) {
+            hideTimeout = setTimeout(() => {
+              btn.classList.remove('show');
+              fullscreenBtn.classList.remove('show');
+            }, 3000);
+          }
+        }
       } else {
-        enterIcon.style.display = 'block';
-        exitIcon.style.display = 'none';
-      }
-    }
-
-    document.addEventListener('fullscreenchange', updateIcons);
-    document.addEventListener('mozfullscreenchange', updateIcons);
-    document.addEventListener('webkitfullscreenchange', updateIcons);
-    document.addEventListener('MSFullscreenChange', updateIcons);
-
-    fullscreenBtn.addEventListener('click', toggleFullScreen);
-
-    container.addEventListener('click', (e) => {
-      if (e.target === fullscreenBtn || fullscreenBtn.contains(e.target)) return; // Prevent triggering play/pause on fullscreen click
-      clearTimeout(hideTimeout);
-
-      if (video.paused) {
-        video.play();
-        playIcon.style.display = 'none';
-        pauseIcon.style.display = 'block';
+        if (e.target.closest('#fullscreen-btn')) return;
+        clearTimeout(hideTimeout);
+        togglePlayPause();
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
-        }, 1800);
-      } else {
-        video.pause();
-        pauseIcon.style.display = 'none';
-        playIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 3000);
+        }, video.paused ? 3000 : 1800);
       }
-    });
-
-    container.addEventListener('mouseenter', () => {
+    }
+    function handleMouseEnter() {
       clearTimeout(hideTimeout);
       btn.classList.add('show');
       fullscreenBtn.classList.add('show');
+      updateControlIcon();
       hideTimeout = setTimeout(() => {
         btn.classList.remove('show');
         fullscreenBtn.classList.remove('show');
       }, 1200);
-    });
-
-    container.addEventListener('mouseleave', () => {
+    }
+    function handleMouseLeave() {
       if (!video.paused) {
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
         }, 300);
       }
-    });
+    }
+    function handleKeydown(e) {
+      const active = document.activeElement;
+      const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+      if (isTyping) return;
+      if (e.code === 'Space' || e.key === ' ') {
+        if (isInFullScreen()) {
+          e.preventDefault();
+          togglePlayPause();
+        }
+      }
+      if (e.key && e.key.toLowerCase() === 'f') {
+        if (!isInFullScreen()) {
+          e.preventDefault();
+          toggleFullScreen();
+        }
+      }
+    }
+    function handleDocumentClick(e) {
+      if (!isInFullScreen()) return;
+      if (e.target.closest && e.target.closest('#fullscreen-btn')) return;
+      if (e.target === video || (e.target.closest && e.target.closest('#video-container'))) {
+        togglePlayPause();
+      }
+    }
+    setupListeners();
+    mediaQuery.addEventListener('change', (e) => { isMobile = e.matches; setupListeners(); });
+    function isInFullScreen() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement || (video && video.webkitDisplayingFullscreen));
+    }
+    function toggleFullScreen() {
+      if (isInFullScreen()) {
+        if (video.webkitDisplayingFullscreen) {
+          video.webkitExitFullscreen();
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } else {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        } else if (video.mozRequestFullScreen) {
+          video.mozRequestFullScreen();
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        }
+      }
+    }
+    function updateIcons() {
+      const isFull = isInFullScreen();
+      enterIcon.style.display = isFull ? 'none' : 'block';
+      exitIcon.style.display = isFull ? 'block' : 'none';
+    }
+    function updateControlIcon() {
+      playIcon.style.display = video.paused ? 'block' : 'none';
+      pauseIcon.style.display = video.paused ? 'none' : 'block';
+    }
+    function togglePlayPause() {
+      clearTimeout(hideTimeout);
+      if (video.paused) {
+        video.play();
+        updateControlIcon();
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, isMobile ? 800 : 1800);
+      } else {
+        video.pause();
+        updateControlIcon();
+      }
+    }
+    document.addEventListener('fullscreenchange', updateIcons);
+    document.addEventListener('webkitfullscreenchange', updateIcons);
+    document.addEventListener('mozfullscreenchange', updateIcons);
+    document.addEventListener('MSFullscreenChange', updateIcons);
+    video.addEventListener('webkitbeginfullscreen', updateIcons);
+    video.addEventListener('webkitendfullscreen', updateIcons);
+    fullscreenBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleFullScreen(); });
+    btn.addEventListener('click', (e) => { e.stopPropagation(); togglePlayPause(); });
+    updateControlIcon();
   </script>
 </body>
 </html>
