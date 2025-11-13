@@ -42,7 +42,6 @@
       justify-content: center; 
       min-height: 100vh; 
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Font stack */
-      overflow: hidden; /* Prevent scrolling */
       backdrop-filter: blur(4px); /* Subtle blur effect */
     }
     /* Dark mode body background. Add .dark to <body> via JS or manually. */
@@ -59,6 +58,8 @@
       max-width: 95vw; /* Max width to fit screen */
       padding-left: 8vw; /* Left padding */
       padding-right: 15vw; /* Right padding */
+      padding-top: 5rem; /* Added top padding for close button spacing */
+      padding-bottom: 5rem; /* Added bottom padding to ensure scrollable space if needed */
     }
 
     /* ============================================
@@ -175,7 +176,7 @@
        ============================================ */
     /* Close button in top-right; goes back in history. */
     .close-btn {
-      position: absolute;
+      position: fixed;
       top: 2rem; /* Distance from top */
       right: 2rem; /* Distance from right */
       background: none;
@@ -259,6 +260,13 @@
         max-width: none; /* No max limit */
       }
     }
+
+    /* Additional query for landscape orientation on smaller devices to ensure scrollability if height is constrained. */
+    @media (orientation: landscape) and (max-height: 600px) {
+      .page-wrapper {
+        align-items: flex-start; /* Align to top if height is limited */
+      }
+    }
   </style>
 </head>
 
@@ -303,7 +311,7 @@
   </div>
 
   <!-- Close button: Goes back to 'Works' page. -->
-<button class="close-btn" onclick="window.location.href = 'index.html';">×</button>
+  <button class="close-btn" onclick="window.location.href = 'index.html';">×</button>
 
   <!-- ============================================
      SECTION 4: JAVASCRIPT LOGIC
@@ -356,8 +364,121 @@
     // Timeout variable for auto-hiding controls.
     let hideTimeout;
 
-    // Detect if on mobile/iPad based on screen width (matches CSS media query).
-    const isMobile = window.matchMedia("(max-width: 1024px)").matches;
+    // Dynamic media query for mobile detection (handles resize/rotation).
+    const mediaQuery = window.matchMedia("(max-width: 1024px)");
+    let isMobile = mediaQuery.matches;
+
+    // Function to setup event listeners based on isMobile (called initially and on change).
+    function setupListeners() {
+      // Remove all previous listeners to avoid duplicates/conflicts.
+      container.removeEventListener('click', handleContainerClick);
+      container.removeEventListener('mouseenter', handleMouseEnter);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('keydown', handleKeydown);
+      document.removeEventListener('click', handleDocumentClick);
+
+      if (isMobile) {
+        container.addEventListener('click', handleContainerClick);
+      } else {
+        container.addEventListener('click', handleContainerClick);
+        container.addEventListener('mouseenter', handleMouseEnter);
+        container.addEventListener('mouseleave', handleMouseLeave);
+        document.addEventListener('keydown', handleKeydown);
+        document.addEventListener('click', handleDocumentClick);
+      }
+    }
+
+    // Define handler functions separately for easy removal/addition.
+    function handleContainerClick(e) {
+      if (isMobile) {
+        // Mobile: Tap to toggle controls visibility.
+        if (e.target.closest('#control-btn') || e.target.closest('#fullscreen-btn')) return;
+
+        clearTimeout(hideTimeout);
+
+        if (btn.classList.contains('show')) {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        } else {
+          btn.classList.add('show');
+          fullscreenBtn.classList.add('show');
+          updateControlIcon();
+          if (!video.paused) {
+            hideTimeout = setTimeout(() => {
+              btn.classList.remove('show');
+              fullscreenBtn.classList.remove('show');
+            }, 3000);
+          }
+        }
+      } else {
+        // Desktop: Click to toggle play/pause.
+        if (e.target.closest('#fullscreen-btn')) return;
+
+        clearTimeout(hideTimeout);
+        togglePlayPause();
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, video.paused ? 3000 : 1800);
+      }
+    }
+
+    function handleMouseEnter() {
+      clearTimeout(hideTimeout);
+      btn.classList.add('show');
+      fullscreenBtn.classList.add('show');
+      updateControlIcon();
+      hideTimeout = setTimeout(() => {
+        btn.classList.remove('show');
+        fullscreenBtn.classList.remove('show');
+      }, 1200);
+    }
+
+    function handleMouseLeave() {
+      if (!video.paused) {
+        hideTimeout = setTimeout(() => {
+          btn.classList.remove('show');
+          fullscreenBtn.classList.remove('show');
+        }, 300);
+      }
+    }
+
+    function handleKeydown(e) {
+      const active = document.activeElement;
+      const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+      if (isTyping) return;
+
+      if (e.code === 'Space' || e.key === ' ') {
+        if (isInFullScreen()) {
+          e.preventDefault();
+          togglePlayPause();
+        }
+      }
+
+      if (e.key && e.key.toLowerCase() === 'f') {
+        if (!isInFullScreen()) {
+          e.preventDefault();
+          toggleFullScreen();
+        }
+      }
+    }
+
+    function handleDocumentClick(e) {
+      if (!isInFullScreen()) return;
+      if (e.target.closest && e.target.closest('#fullscreen-btn')) return;
+      if (e.target === video || (e.target.closest && e.target.closest('#video-container'))) {
+        togglePlayPause();
+      }
+    }
+
+    // Initial setup.
+    setupListeners();
+
+    // Listen for media query changes (e.g., rotation or resize).
+    mediaQuery.addEventListener('change', (e) => {
+      isMobile = e.matches;
+      setupListeners();
+    });
 
     /* ============================================
        SUBSECTION 4.2: FUNCTIONS
@@ -367,9 +488,9 @@
       return !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
     }
 
-    // Function to toggle fullscreen mode (preserves your original logic: use video.webkitEnterFullscreen if available).
+    // Function to toggle fullscreen mode.
     function toggleFullScreen() {
-      const isInFull = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+      const isInFull = isInFullScreen();
 
       if (isInFull) {
         if (document.exitFullscreen) {
@@ -382,7 +503,6 @@
           document.msExitFullscreen();
         }
       } else {
-        // Keep your existing preference for video.webkitEnterFullscreen (iOS Safari) and video.requestFullscreen for others.
         if (video.webkitEnterFullscreen) {
           video.webkitEnterFullscreen();
         } else if (video.requestFullscreen) {
@@ -397,10 +517,10 @@
       }
     }
 
-    // Function to update fullscreen icons based on current state (unchanged).
+    // Function to update fullscreen icons based on current state.
     function updateIcons() {
-      const isInFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-      if (isInFullScreen) {
+      const isInFull = isInFullScreen();
+      if (isInFull) {
         enterIcon.style.display = 'none';
         exitIcon.style.display = 'block';
       } else {
@@ -420,15 +540,13 @@
       }
     }
 
-    // New: centralize play/pause toggling so keyboard and click handlers use the same behavior.
-    function togglePlayPause(fromEvent = null) {
-      // fromEvent is optional; used if we want to stop propagation on certain callers (not needed here).
+    // Centralize play/pause toggling.
+    function togglePlayPause() {
       clearTimeout(hideTimeout);
 
       if (video.paused) {
         video.play();
         updateControlIcon();
-        // Auto-hide after play; respect mobile vs desktop timings.
         hideTimeout = setTimeout(() => {
           btn.classList.remove('show');
           fullscreenBtn.classList.remove('show');
@@ -436,7 +554,7 @@
       } else {
         video.pause();
         updateControlIcon();
-        // keep visible when paused
+        // Keep visible when paused.
       }
     }
 
@@ -451,121 +569,17 @@
     video.addEventListener('webkitbeginfullscreen', updateIcons);
     video.addEventListener('webkitendfullscreen', updateIcons);
 
-    // Click on fullscreen button (unchanged behaviour).
+    // Click on fullscreen button.
     fullscreenBtn.addEventListener('click', (e) => {
-      e.stopPropagation(); // Prevent bubbling to container click.
+      e.stopPropagation();
       toggleFullScreen();
     });
 
-    // Click on play/pause button: Toggle play/pause and handle hiding (now uses togglePlayPause()).
+    // Click on play/pause button.
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       togglePlayPause();
     });
-
-    if (isMobile) {
-      // Mobile/iPad: Tap video (not buttons) to toggle controls visibility (unchanged).
-      container.addEventListener('click', (e) => {
-        if (e.target.closest('#control-btn') || e.target.closest('#fullscreen-btn')) return;
-
-        clearTimeout(hideTimeout);
-
-        if (btn.classList.contains('show')) {
-          // Hide if shown.
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        } else {
-          // Show if hidden; auto-hide if playing.
-          btn.classList.add('show');
-          fullscreenBtn.classList.add('show');
-          updateControlIcon();
-          if (!video.paused) {
-            hideTimeout = setTimeout(() => {
-              btn.classList.remove('show');
-              fullscreenBtn.classList.remove('show');
-            }, 3000); // Adjust auto-hide delay (ms).
-          }
-        }
-      });
-    } else {
-      // Desktop: Click container to toggle play/pause; hover to show controls (unchanged, but use togglePlayPause()).
-      container.addEventListener('click', (e) => {
-        if (e.target.closest('#fullscreen-btn')) return;
-
-        clearTimeout(hideTimeout);
-        togglePlayPause();
-        // Auto-hide; different delays for paused/playing.
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, video.paused ? 3000 : 1800); // Adjust delays (ms).
-      });
-
-      // Mouse enter: Show controls, auto-hide.
-      container.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimeout);
-        btn.classList.add('show');
-        fullscreenBtn.classList.add('show');
-        updateControlIcon();
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 1200); // Adjust delay (ms).
-      });
-
-      // Mouse leave: Hide if playing.
-      container.addEventListener('mouseleave', () => {
-        if (!video.paused) {
-          hideTimeout = setTimeout(() => {
-            btn.classList.remove('show');
-            fullscreenBtn.classList.remove('show');
-          }, 300); // Adjust delay (ms).
-        }
-      });
-
-      // --- NEW: Keyboard controls for laptop ---
-      // Space: play/pause ONLY when in fullscreen
-      // 'f' : enter fullscreen ONLY when not already in fullscreen
-      document.addEventListener('keydown', (e) => {
-        // Ignore if typing in an input or editable element
-        const active = document.activeElement;
-        const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
-        if (isTyping) return;
-
-        // Space -> toggle play/pause only when in fullscreen
-        if (e.code === 'Space' || e.key === ' ') {
-          if (isInFullScreen()) {
-            e.preventDefault(); // prevent page scroll
-            togglePlayPause();
-          }
-        }
-
-        // 'f' to enter fullscreen when not in fullscreen
-        if (e.key && e.key.toLowerCase() === 'f') {
-          if (!isInFullScreen()) {
-            e.preventDefault();
-            toggleFullScreen();
-          }
-        }
-      });
-
-      // --- NEW: Click anywhere in fullscreen to toggle play/pause (but exclude fullscreen button) ---
-      // When video element itself is fullscreen (or page fullscreen), container click may not fire, so use document click.
-      document.addEventListener('click', (e) => {
-        // If not in fullscreen, do nothing here; container already handles clicks.
-        if (!isInFullScreen()) return;
-
-        // Exclude clicks on fullscreen button (so that button behaviour stays as-is).
-        if (e.target.closest && e.target.closest('#fullscreen-btn')) return;
-
-        // Only toggle if click is on the video area (either the video element or the container).
-        // Allow clicks on control button to propagate if you want them to toggle too. Since control-btn stops propagation in its handler, this won't double fire.
-        if (e.target === video || e.target.closest && e.target.closest('#video-container')) {
-          // prevent accidental double-handling if some other handler already called stopPropagation (safe)
-          togglePlayPause();
-        }
-      });
-    }
 
     // Initial icon setup.
     updateControlIcon();
