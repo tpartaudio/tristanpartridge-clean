@@ -24,6 +24,17 @@
 
       /* Mobile video size (smaller) */
       --mobile-video-max-width: 320px;
+
+      /* ========================================= */
+      /* TEXT SIZE CONTROL (SMALLER ON MOBILE)     */
+      /* ========================================= */
+      --title-font-size: 2.4rem;     /* Desktop title */
+      --dash-font-size: 1.3rem;      /* Desktop dash */
+      --credit-font-size: 1.2rem;    /* Desktop credit */
+
+      --mobile-title-font-size: 1.8rem;
+      --mobile-dash-font-size: 1.1rem;
+      --mobile-credit-font-size: 1.0rem;
     }
 
     /* ============================================= */
@@ -77,21 +88,21 @@
 
     .video-title .title {
       font-weight: 700;
-      font-size: 2.4rem;
+      font-size: var(--title-font-size);
       letter-spacing: -0.03em;
     }
 
     .video-title .dash {
       display: block;
       margin: 0.9rem 0;
-      font-size: 1.3rem;
+      font-size: var(--dash-font-size);
       opacity: 0.5;
       font-weight: 300;
     }
 
     .video-title .credit {
       display: block;
-      font-size: 1.2rem;
+      font-size: var(--credit-font-size);
       font-weight: 400;
       opacity: 0.9;
     }
@@ -193,7 +204,7 @@
     }
 
     /* ============================================= */
-    /* 9. MOBILE & TABLET LAYOUT (STACKED, SMALLER VIDEOS) */
+    /* 9. MOBILE & TABLET LAYOUT (STACKED, SMALLER VIDEOS & TEXT) */
     /* ============================================= */
     @media (max-width: 1100px) {
       .page-wrapper {
@@ -214,6 +225,20 @@
         justify-content: center;
       }
 
+      /* Smaller text on mobile/tablet */
+      .video-title .title {
+        font-size: var(--mobile-title-font-size);
+      }
+
+      .video-title .dash {
+        font-size: var(--mobile-dash-font-size);
+        margin: 0.7rem 0;
+      }
+
+      .video-title .credit {
+        font-size: var(--mobile-credit-font-size);
+      }
+
       .video-container {
         order: 2;
         width: 100%;
@@ -223,13 +248,11 @@
         margin-bottom: 1.5rem;
       }
 
-      /* Ensure videos scale down nicely */
       video {
         max-width: 100%;
         height: auto;
       }
 
-      /* Enable scrolling on body */
       body {
         overflow-y: auto;
       }
@@ -238,7 +261,7 @@
     /* Extra polish for very small phones */
     @media (max-width: 480px) {
       .video-title .title {
-        font-size: 2rem;
+        font-size: 1.6rem;
       }
       .video-container {
         max-width: 280px;
@@ -355,13 +378,11 @@
        STEP 5: Initialize a single video player
        ------------------------------------------------- */
     function initVideo(video, btn, playIcon, pauseIcon, container, otherVideo) {
-      // Start paused
       video.pause();
       playIcon.style.display = 'block';
       pauseIcon.style.display = 'none';
       btn.classList.add('show');
 
-      // Click to play/pause
       container.addEventListener('click', () => {
         clearTimeout(window[`timer_${video.id}`]);
 
@@ -379,14 +400,12 @@
         }
       });
 
-      // Show button on hover (desktop only)
       container.addEventListener('mouseenter', () => {
         clearTimeout(window[`timer_${video.id}`]);
         btn.classList.add('show');
         window[`timer_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 1200);
       });
 
-      // Hide quickly when leaving (only if playing)
       container.addEventListener('mouseleave', () => {
         if (!video.paused) {
           window[`timer_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 300);
@@ -394,7 +413,6 @@
       });
     }
 
-    // Initialize both videos
     initVideo(video1, btn1, play1, pause1, cont1, video2);
     initVideo(video2, btn2, play2, pause2, cont2, video1);
   </script>
