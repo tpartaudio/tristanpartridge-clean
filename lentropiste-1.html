@@ -35,6 +35,13 @@
       --mobile-title-font-size: 1.8rem;
       --mobile-dash-font-size: 1.1rem;
       --mobile-credit-font-size: 1.0rem;
+
+      /* ========================================= */
+      /* CLOSE BUTTON POSITION (EASY TO ADJUST)    */
+      /* ========================================= */
+      --close-top: 1.5rem;   /* Distance from top */
+      --close-right: 1.5rem; /* Distance from right */
+      --close-font-size: 2.5rem;
     }
 
     /* ============================================= */
@@ -180,15 +187,15 @@
     }
 
     /* ============================================= */
-    /* 8. CLOSE BUTTON (TOP-RIGHT)                  */
+    /* 8. CLOSE BUTTON (TOP-RIGHT, EASY TO ADJUST)  */
     /* ============================================= */
     .close-btn {
       position: absolute;
-      top: 2rem;
-      right: 2rem;
+      top: var(--close-top);
+      right: var(--close-right);
       background: none;
       border: none;
-      font-size: 2.5rem;
+      font-size: var(--close-font-size);
       cursor: pointer;
       color: #000;
       z-index: 20;
