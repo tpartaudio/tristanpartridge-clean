@@ -18,7 +18,7 @@
 
       /* Title & short credit */
       --title: "Tie";
-      --credit: Visual by Quim Amat;
+      --credit: "Visual by Quim Amat";
 
       /* Video size */
       --video-width: 900px;
@@ -31,9 +31,7 @@
       --show-detailed-credits: true;
 
       /* Full detailed credits text (use \n for line breaks) */
-      --detailed-credit: Directed by: Quim Amat
-      Production: Studio XYZ
-      CGI & Animation: @artist_name;
+      --detailed-credit: "Directed by: Quim Amat\nProduction: Studio XYZ\nCGI & Animation: @artist_name";
 
       /* Font size for detailed credits */
       --credits-font-size: 0.7rem;
@@ -338,7 +336,7 @@
 
     let hideTimer;
     let isMobile = window.matchMedia("(max-width: 1024px)").matches;
-    let wasPlayingBeforeExit = false;  // Track playback state before exiting fullscreen
+    let wasPlayingBeforeExit = false;
 
     /* -------------------------------------------------
        STEP 6: Fullscreen helpers
@@ -351,9 +349,7 @@
 
     function toggleFullscreen() {
       if (isFullscreen()) {
-        // About to exit fullscreen → remember if video was playing
         wasPlayingBeforeExit = !video.paused;
-
         if (document.exitFullscreen) document.exitFullscreen();
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
         else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
@@ -447,7 +443,6 @@
       const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
       if (isTyping) return;
 
-      // Space: play/pause (only in fullscreen on mobile)
       if (e.code === 'Space' || e.key === ' ') {
         if (!isMobile || isFullscreen()) {
           e.preventDefault();
@@ -455,7 +450,6 @@
         }
       }
 
-      // F: enter fullscreen
       if (e.key.toLowerCase() === 'f' && !isFullscreen()) {
         e.preventDefault();
         toggleFullscreen();
@@ -475,15 +469,23 @@
       togglePlayPause();
     });
 
-    // Listen to fullscreen exit → resume playback if it was playing
+    /* ================================================= */
+    /* 10.5: FULLSCREEN EXIT → VIDEO KEEPS PLAYING (MOBILE/TABLET) */
+    /* ================================================= */
+    let wasFullscreen = false;
+
     ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt =>
       document.addEventListener(evt, () => {
-        updateFullscreenIcons();
+        const nowFullscreen = isFullscreen();
 
-        // If we just exited fullscreen and video was playing before → resume
-        if (!isFullscreen() && wasPlayingBeforeExit && video.paused) {
+        // We just exited fullscreen
+        if (wasFullscreen && !nowFullscreen && wasPlayingBeforeExit) {
+          // Resume playback immediately
           video.play().catch(() => {});
         }
+
+        wasFullscreen = nowFullscreen;
+        updateFullscreenIcons();
       })
     );
 
