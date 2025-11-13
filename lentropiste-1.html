@@ -28,9 +28,9 @@
       /* ========================================= */
       /* TEXT SIZE CONTROL (SMALLER ON MOBILE)     */
       /* ========================================= */
-      --title-font-size: 2.4rem;     /* Desktop title */
-      --dash-font-size: 1.3rem;      /* Desktop dash */
-      --credit-font-size: 1.2rem;    /* Desktop credit */
+      --title-font-size: 2.4rem;     
+      --dash-font-size: 1.3rem;      
+      --credit-font-size: 1.2rem;    
 
       --mobile-title-font-size: 1.8rem;
       --mobile-dash-font-size: 1.1rem;
@@ -39,14 +39,14 @@
       /* ========================================= */
       /* CLOSE BUTTON POSITION (EASY TO ADJUST)    */
       /* ========================================= */
-      --close-top: 1.5rem;   /* Distance from top */
-      --close-right: 1.5rem; /* Distance from right */
+      --close-top: 1.5rem;   
+      --close-right: 1.5rem; 
       --close-font-size: 2.5rem;
 
       /* ========================================= */
       /* NAVIGATION: GO TO INDEX PAGE (WORKS)      */
       /* ========================================= */
-      --index-page-url: index.html; /* Change this if your file is in a subfolder */
+      --index-page-url: index.html; 
     }
 
     /* ============================================= */
@@ -145,50 +145,12 @@
       flex-shrink: 0;
     }
 
-    video {
+    iframe {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       background: #000;
-    }
-
-    /* ============================================= */
-    /* 7. PLAY/PAUSE BUTTON (CENTER OF VIDEO)       */
-    /* ============================================= */
-    .control-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 52px;
-      height: 52px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      transition: transform 0.25s ease, opacity 0.25s ease;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .control-btn.show {
-      opacity: 1;
-      pointer-events: all;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .control-btn svg {
-      width: 24px;
-      height: 24px;
-      fill: #000;
-    }
-
-    .control-btn:hover {
-      transform: translate(-50%, -50%) scale(1.15);
+      border: 0;
     }
 
     /* ============================================= */
@@ -237,7 +199,6 @@
         justify-content: center;
       }
 
-      /* Smaller text on mobile/tablet */
       .video-title .title {
         font-size: var(--mobile-title-font-size);
       }
@@ -260,7 +221,7 @@
         margin-bottom: 1.5rem;
       }
 
-      video {
+      iframe {
         max-width: 100%;
         height: auto;
       }
@@ -270,7 +231,6 @@
       }
     }
 
-    /* Extra polish for very small phones */
     @media (max-width: 480px) {
       .video-title .title {
         font-size: 1.6rem;
@@ -282,12 +242,8 @@
   </style>
 </head>
 
-<!-- ============================================= -->
-<!-- 10. BODY CONTENT (HTML STRUCTURE)             -->
-<!-- ============================================= -->
 <body class="light">
 
-  <!-- Main layout: title + two vertical videos -->
   <div class="page-wrapper">
 
     <!-- Title and credit -->
@@ -297,39 +253,39 @@
       <div class="credit" id="credit-el"></div>
     </div>
 
-    <!-- First video (Part 1) -->
+    <!-- First video (YouTube Embed) -->
     <div class="video-container" id="video-container-1">
-      <video id="video-el-1" preload="metadata" playsinline>
-        <source src="https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/dorians-spleen-part1.mov" type="video/mp4">
-      </video>
-      <div class="control-btn" id="control-btn-1">
-        <svg id="play-icon-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="pause-icon-1" viewBox="0 0 24 24" style="display: none;"><path d="M14,19H18V5H14M6,19H10V5H6V19Z"/></svg>
-      </div>
+      <iframe
+        id="video-el-1"
+        src="https://www.youtube.com/embed/R4o4_nHw-OU?rel=0&modestbranding=1&controls=1"
+        title="YouTube video 1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="border-radius: 24px;"
+      ></iframe>
     </div>
 
-    <!-- Second video (Part 2) -->
+    <!-- Second video (YouTube Embed) -->
     <div class="video-container" id="video-container-2">
-      <video id="video-el-2" preload="metadata" playsinline>
-        <source src="https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/dorians-spleen-part2.mov" type="video/mp4">
-      </video>
-      <div class="control-btn" id="control-btn-2">
-        <svg id="play-icon-2" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="pause-icon-2" viewBox="0 0 24 24" style="display: none;"><path d="M14,19H18V5H14M6,19H10V5H6V19Z"/></svg>
-      </div>
+      <iframe
+        id="video-el-2"
+        src="https://www.youtube.com/embed/rmutO3MKelo?rel=0&modestbranding=1&controls=1"
+        title="YouTube video 2"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="border-radius: 24px;"
+      ></iframe>
     </div>
   </div>
 
-  <!-- Close button → goes to index.html (Works page) -->
+  <!-- Close button → goes to index.html -->
   <button class="close-btn" id="close-btn">×</button>
 
   <!-- ============================================= -->
-  <!-- 11. JAVASCRIPT (INTERACTIVE FEATURES)        -->
+  <!-- 11. JAVASCRIPT (TITLE, THEME, CLOSE BUTTON)  -->
   <!-- ============================================= -->
   <script>
-    /* -------------------------------------------------
-       STEP 1: Set title and credit from CSS variables
-       ------------------------------------------------- */
+    /* Set title and credit from CSS variables */
     const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
 
@@ -342,95 +298,12 @@
 
     document.title = "L'Entropiste - Tristan Partridge";
 
-    /* -------------------------------------------------
-       STEP 2: Apply saved theme (light/dark)
-       ------------------------------------------------- */
+    /* Apply saved theme (light/dark) */
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
 
-    /* -------------------------------------------------
-       STEP 3: Get all video elements
-       ------------------------------------------------- */
-    const video1 = document.getElementById('video-el-1');
-    const video2 = document.getElementById('video-el-2');
-    const btn1 = document.getElementById('control-btn-1');
-    const btn2 = document.getElementById('control-btn-2');
-    const play1 = document.getElementById('play-icon-1');
-    const pause1 = document.getElementById('pause-icon-1');
-    const play2 = document.getElementById('play-icon-2');
-    const pause2 = document.getElementById('pause-icon-2');
-    const cont1 = document.getElementById('video-container-1');
-    const cont2 = document.getElementById('video-container-2');
-
-    let hideTimer1, hideTimer2;
-
-    /* -------------------------------------------------
-       STEP 4: Pause the other video when one plays
-       ------------------------------------------------- */
-    function pauseOther(currentVideo) {
-      if (currentVideo === video1 && !video2.paused) {
-        video2.pause();
-        play2.style.display = 'block';
-        pause2.style.display = 'none';
-        btn2.classList.add('show');
-        clearTimeout(hideTimer2);
-        hideTimer2 = setTimeout(() => btn2.classList.remove('show'), 3000);
-      } else if (currentVideo === video2 && !video1.paused) {
-        video1.pause();
-        play1.style.display = 'block';
-        pause1.style.display = 'none';
-        btn1.classList.add('show');
-        clearTimeout(hideTimer1);
-        hideTimer1 = setTimeout(() => btn1.classList.remove('show'), 3000);
-      }
-    }
-
-    /* -------------------------------------------------
-       STEP 5: Initialize a single video player
-       ------------------------------------------------- */
-    function initVideo(video, btn, playIcon, pauseIcon, container, otherVideo) {
-      video.pause();
-      playIcon.style.display = 'block';
-      pauseIcon.style.display = 'none';
-      btn.classList.add('show');
-
-      container.addEventListener('click', () => {
-        clearTimeout(window[`timer_${video.id}`]);
-
-        if (video.paused) {
-          pauseOther(video);
-          video.play();
-          playIcon.style.display = 'none';
-          pauseIcon.style.display = 'block';
-          window[`timer_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 1800);
-        } else {
-          video.pause();
-          pauseIcon.style.display = 'none';
-          playIcon.style.display = 'block';
-          window[`timer_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 3000);
-        }
-      });
-
-      container.addEventListener('mouseenter', () => {
-        clearTimeout(window[`timer_${video.id}`]);
-        btn.classList.add('show');
-        window[`timer_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 1200);
-      });
-
-      container.addEventListener('mouseleave', () => {
-        if (!video.paused) {
-          window[`timer_${video.id}`] = setTimeout(() => btn.classList.remove('show'), 300);
-        }
-      });
-    }
-
-    initVideo(video1, btn1, play1, pause1, cont1, video2);
-    initVideo(video2, btn2, play2, pause2, cont2, video1);
-
-    /* -------------------------------------------------
-       STEP 6: Close button → go to index.html (Works page)
-       ------------------------------------------------- */
+    /* Close button → go to index.html (Works page) */
     const closeBtn = document.getElementById('close-btn');
     const indexUrl = getComputedStyle(document.documentElement)
                      .getPropertyValue('--index-page-url').trim();
@@ -439,5 +312,6 @@
       window.location.href = indexUrl;
     });
   </script>
+
 </body>
 </html>

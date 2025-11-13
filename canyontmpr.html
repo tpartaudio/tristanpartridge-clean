@@ -13,8 +13,8 @@
   <!-- ============================================= -->
   <style>
     :root {
-      /* Video */
-      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/canyontmpr.mov;
+      /* Video – YouTube or local MP4/MOV */
+      --video-src: https://youtu.be/LVirPyAuKpQ?si=Uk2Bv_WAf0ZhjOe7;
 
       /* Title & short credit */
       --title: "TMPR for Canyon";
@@ -26,8 +26,6 @@
       /* ========================================= */
       /* DETAILED CREDITS ACTIVATION               */
       /* ========================================= */
-      /* → Set to "true" to show detailed credits   */
-      /* → Set to "false" to hide them completely   */
       --show-detailed-credits: true;
 
       /* Full detailed credits text (use \n for line breaks) */
@@ -87,11 +85,12 @@ Prod assist / Mechanic: @whytelife;
       box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       cursor: pointer;
     }
-    video {
+    video, iframe {
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: #000;
+      border: none;
     }
 
     /* ============================================= */
@@ -208,7 +207,6 @@ Prod assist / Mechanic: @whytelife;
       max-height: 1200px;
     }
 
-    /* Hide widget if disabled */
     :root:not([data-credits-enabled]) .credits-widget {
       display: none !important;
     }
@@ -264,7 +262,8 @@ Prod assist / Mechanic: @whytelife;
 
     <!-- VIDEO PLAYER -->
     <div class="video-container" id="video-container">
-      <video id="video-el" preload="metadata" playsinline></video>
+      <video id="video-el" preload="metadata" playsinline style="display:none;"></video>
+      <div id="youtube-container" style="display:none; width:100%; height:100%;"></div>
 
       <!-- Play/Pause Button -->
       <div class="control-btn" id="control-btn">
@@ -283,6 +282,9 @@ Prod assist / Mechanic: @whytelife;
   <!-- Close button -->
   <button class="close-btn" onclick="window.location.href = 'index.html'">×</button>
 
+  <!-- YouTube Iframe API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
   <!-- ============================================= -->
   <!-- JAVASCRIPT (clean, beginner-friendly)        -->
   <!-- ============================================= -->
@@ -292,46 +294,75 @@ Prod assist / Mechanic: @whytelife;
        ------------------------------------------------- */
     const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
-
     const titleText = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
     const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
 
     titleEl.textContent = titleText;
-
     if (creditText.toLowerCase().includes('by')) {
       const [a, b] = creditText.split(/by/i);
       creditEl.innerHTML = (a ? a.trim() + ' by ' : 'by ') + '<strong>' + b.trim() + '</strong>';
     } else {
       creditEl.textContent = creditText;
     }
-
     document.title = titleText + ' - Tristan Partridge';
 
     /* -------------------------------------------------
-       STEP 2: Load video
+       STEP 2: Video source detection
        ------------------------------------------------- */
-    const video = document.getElementById('video-el');
-    video.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+    const videoSrc = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+    const videoEl = document.getElementById('video-el');
+    const youtubeContainer = document.getElementById('youtube-container');
+    let player, isYouTube = false;
+
+    if (videoSrc.includes('youtu.be') || videoSrc.includes('youtube.com')) {
+      isYouTube = true;
+      const videoId = videoSrc.split('youtu.be/')[1]?.split('?')[0] ||
+                      videoSrc.split('v=')[1]?.split('&')[0];
+      youtubeContainer.style.display = 'block';
+      videoEl.style.display = 'none';
+
+      window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player('youtube-container', {
+          height: '100%',
+          width: '100%',
+          videoId: videoId,
+          playerVars: {
+            autoplay: 0,
+            controls: 0,
+            modestbranding: 1,
+            rel: 0,
+            fs: 1,
+            disablekb: 1,
+            iv_load_policy: 3,
+            cc_load_policy: 0
+          },
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange
+          }
+        });
+      };
+    } else {
+      videoEl.src = videoSrc;
+      videoEl.style.display = 'block';
+    }
 
     /* -------------------------------------------------
-       STEP 3: Apply saved theme
+       STEP 3: Theme
        ------------------------------------------------- */
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
 
     /* -------------------------------------------------
-       STEP 4: Detailed credits – activation & content
+       STEP 4: Credits
        ------------------------------------------------- */
     const showCredits = getComputedStyle(document.documentElement)
       .getPropertyValue('--show-detailed-credits').trim() === 'true';
-
     if (showCredits) {
       document.documentElement.dataset.creditsEnabled = 'true';
-
       const fullText = getComputedStyle(document.documentElement)
         .getPropertyValue('--detailed-credit').trim().replace(/\\n/g, '\n');
-
       document.getElementById('detailed-credits').textContent = fullText;
     }
 
@@ -349,30 +380,68 @@ Prod assist / Mechanic: @whytelife;
     let hideTimer;
     let isMobile = window.matchMedia("(max-width: 1024px)").matches;
     let wasPlayingBeforeExit = false;
+    let wasFullscreen = false;
+    let ignoreNextPause = false;
 
     /* -------------------------------------------------
-       STEP 6: Fullscreen helpers
+       YouTube player callbacks
+       ------------------------------------------------- */
+    function onPlayerReady() {
+      showButtons();
+      updatePlayIcon();
+      updateFullscreenIcons();
+    }
+
+    function onPlayerStateChange(event) {
+      updatePlayIcon();
+    }
+
+    function getVideoElement() {
+      return isYouTube ? player?.getIframe() : videoEl;
+    }
+
+    function isPlaying() {
+      if (isYouTube) {
+        return player?.getPlayerState() === 1;
+      }
+      return !videoEl.paused;
+    }
+
+    function play() {
+      if (isYouTube) player.playVideo();
+      else videoEl.play();
+    }
+
+    function pause() {
+      if (isYouTube) player.pauseVideo();
+      else videoEl.pause();
+    }
+
+    /* -------------------------------------------------
+       STEP 6: Fullscreen
        ------------------------------------------------- */
     function isFullscreen() {
+      const el = getVideoElement();
       return !!(document.fullscreenElement || document.webkitFullscreenElement ||
                 document.mozFullScreenElement || document.msFullscreenElement ||
-                (video.webkitDisplayingFullscreen));
+                (el?.webkitDisplayingFullscreen));
     }
 
     function toggleFullscreen() {
+      const el = getVideoElement();
       if (isFullscreen()) {
-        wasPlayingBeforeExit = !video.paused;
+        wasPlayingBeforeExit = isPlaying();
         if (document.exitFullscreen) document.exitFullscreen();
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
         else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
         else if (document.msExitFullscreen) document.msExitFullscreen();
-        else if (video.webkitExitFullscreen) video.webkitExitFullscreen();
+        else if (el.webkitExitFullscreen) el.webkitExitFullscreen();
       } else {
-        if (video.requestFullscreen) video.requestFullscreen();
-        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-        else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
-        else if (video.msRequestFullscreen) video.msRequestFullscreen();
-        else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
+        else if (el.msRequestFullscreen) el.msRequestFullscreen();
+        else if (el.webkitEnterFullscreen) el.webkitEnterFullscreen();
       }
     }
 
@@ -382,20 +451,20 @@ Prod assist / Mechanic: @whytelife;
     }
 
     /* -------------------------------------------------
-       STEP 7: Play/Pause helpers
+       STEP 7: Play/Pause
        ------------------------------------------------- */
     function updatePlayIcon() {
-      playIcon.style.display = video.paused ? 'block' : 'none';
-      pauseIcon.style.display = video.paused ? 'none' : 'block';
+      playIcon.style.display = isPlaying() ? 'none' : 'block';
+      pauseIcon.style.display = isPlaying() ? 'block' : 'none';
     }
 
     function togglePlayPause() {
-      if (video.paused) {
-        video.play();
-        hideButtons(isMobile ? 800 : 1800);
-      } else {
-        video.pause();
+      if (isPlaying()) {
+        pause();
         hideButtons(3000);
+      } else {
+        play();
+        hideButtons(isMobile ? 800 : 1800);
       }
       updatePlayIcon();
     }
@@ -415,22 +484,14 @@ Prod assist / Mechanic: @whytelife;
     }
 
     /* -------------------------------------------------
-       STEP 8: Mouse & touch interactions
+       STEP 8: Interactions
        ------------------------------------------------- */
     function handleContainerClick(e) {
       if (e.target.closest('#fullscreen-btn')) return;
-      if (e.target.closest('#control-btn')) {
-        togglePlayPause();
-        return;
-      }
-
+      if (e.target.closest('#control-btn')) { togglePlayPause(); return; }
       if (isMobile) {
-        if (playBtn.classList.contains('show')) {
-          hideButtons(0);
-        } else {
-          showButtons();
-          if (!video.paused) hideButtons(3000);
-        }
+        if (playBtn.classList.contains('show')) hideButtons(0);
+        else { showButtons(); if (isPlaying()) hideButtons(3000); }
       } else {
         togglePlayPause();
       }
@@ -438,23 +499,21 @@ Prod assist / Mechanic: @whytelife;
 
     container.addEventListener('click', handleContainerClick);
     container.addEventListener('mouseenter', () => {
-      if (!isMobile) {
-        showButtons();
-        hideButtons(1200);
-      }
+      if (!isMobile) { showButtons(); hideButtons(1200); }
     });
     container.addEventListener('mouseleave', () => {
-      if (!isMobile && !video.paused) hideButtons(300);
+      if (!isMobile && isPlaying()) hideButtons(300);
     });
 
     /* -------------------------------------------------
-       STEP 9: Keyboard shortcuts (Space + F)
+       STEP 9: Keyboard – **F always toggles fullscreen on desktop**
        ------------------------------------------------- */
     document.addEventListener('keydown', (e) => {
       const active = document.activeElement;
       const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
       if (isTyping) return;
 
+      // Space = play / pause (mobile only when fullscreen)
       if (e.code === 'Space' || e.key === ' ') {
         if (!isMobile || isFullscreen()) {
           e.preventDefault();
@@ -462,74 +521,37 @@ Prod assist / Mechanic: @whytelife;
         }
       }
 
-      if (e.key.toLowerCase() === 'f' && !isFullscreen()) {
+      // **F = fullscreen (desktop only, any state)**
+      if ((e.key === 'f' || e.key === 'F') && !isMobile) {
         e.preventDefault();
         toggleFullscreen();
       }
     });
 
+    fsBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleFullscreen(); });
+    playBtn.addEventListener('click', (e) => { e.stopPropagation(); togglePlayPause(); });
+
     /* -------------------------------------------------
-       STEP 10: Fullscreen button & events
+       Fullscreen exit → keep playing
        ------------------------------------------------- */
-    fsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleFullscreen();
-    });
-
-    playBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      togglePlayPause();
-    });
-
-/* ================================================= */
-/* 10.5: FULLSCREEN EXIT → KEEP PLAYING ALWAYS */
-/* ================================================= */
-let wasFullscreen = false;
-let ignoreNextPause = false;
-
-['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt =>
-  document.addEventListener(evt, () => {
-    const nowFullscreen = isFullscreen();
-
-    // Entering fullscreen
-    if (nowFullscreen) {
-      wasPlayingBeforeExit = !video.paused;
-      ignoreNextPause = false;
-    }
-
-    // Exiting fullscreen
-    if (wasFullscreen && !nowFullscreen) {
-      if (wasPlayingBeforeExit) {
-        // Mark the next pause event as "expected" (triggered by fullscreen exit)
-        ignoreNextPause = true;
-
-        // Resume after the browser finishes the forced pause
-        setTimeout(() => {
-          if (video.paused) {
-            video.play().catch(() => {});
-          }
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt =>
+      document.addEventListener(evt, () => {
+        const nowFullscreen = isFullscreen();
+        if (nowFullscreen) {
+          wasPlayingBeforeExit = isPlaying();
           ignoreNextPause = false;
-        }, 300);
-      }
-    }
-
-    wasFullscreen = nowFullscreen;
-    updateFullscreenIcons();
-  })
-);
-
-// Intercept pause events caused by fullscreen exit
-video.addEventListener('pause', () => {
-  if (ignoreNextPause) {
-    // Immediately resume if pause came from fullscreen exit
-    setTimeout(() => {
-      video.play().catch(() => {});
-    }, 150);
-  }
-});
-
-
-
+        }
+        if (wasFullscreen && !nowFullscreen && wasPlayingBeforeExit) {
+          ignoreNextPause = true;
+          setTimeout(() => {
+            if (!isPlaying()) play();
+            ignoreNextPause = false;
+          }, 300);
+        }
+        wasFullscreen = nowFullscreen;
+        updateFullscreenIcons();
+      })
+    );
 
     // Initial state
     showButtons();
@@ -542,7 +564,6 @@ video.addEventListener('pause', () => {
     const creditsToggle = document.getElementById('credits-toggle');
     const creditsList = document.getElementById('detailed-credits');
     const arrow = creditsToggle?.querySelector('svg');
-
     if (creditsToggle) {
       creditsToggle.addEventListener('click', () => {
         creditsList.classList.toggle('show');
@@ -554,9 +575,7 @@ video.addEventListener('pause', () => {
        STEP 12: Mobile detection
        ------------------------------------------------- */
     const mediaQuery = window.matchMedia("(max-width: 1024px)");
-    mediaQuery.addEventListener('change', (e) => {
-      isMobile = e.matches;
-    });
+    mediaQuery.addEventListener('change', (e) => { isMobile = e.matches; });
   </script>
 </body>
 </html>
