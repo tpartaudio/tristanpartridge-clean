@@ -44,9 +44,9 @@
       --close-font-size: 2.5rem;
 
       /* ========================================= */
-      /* NAVIGATION: GO TO WORKS PAGE              */
+      /* NAVIGATION: GO TO INDEX PAGE (WORKS)      */
       /* ========================================= */
-      --works-page-url: "works.html"; /* Change this to your actual Works page */
+      --index-page-url: index.html; /* Change this if your file is in a subfolder */
     }
 
     /* ============================================= */
@@ -320,7 +320,7 @@
     </div>
   </div>
 
-  <!-- Close button → goes to Works page -->
+  <!-- Close button → goes to index.html (Works page) -->
   <button class="close-btn" id="close-btn">×</button>
 
   <!-- ============================================= -->
@@ -429,14 +429,14 @@
     initVideo(video2, btn2, play2, pause2, cont2, video1);
 
     /* -------------------------------------------------
-       STEP 6: Close button → go to Works page
+       STEP 6: Close button → go to index.html (Works page)
        ------------------------------------------------- */
     const closeBtn = document.getElementById('close-btn');
-    const worksUrl = getComputedStyle(document.documentElement)
-                     .getPropertyValue('--works-page-url').trim();
+    const indexUrl = getComputedStyle(document.documentElement)
+                     .getPropertyValue('--index-page-url').trim();
 
     closeBtn.addEventListener('click', () => {
-      window.location.href = worksUrl;
+      window.location.href = indexUrl;
     });
   </script>
 </body>
