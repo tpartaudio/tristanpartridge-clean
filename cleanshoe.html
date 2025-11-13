@@ -470,33 +470,34 @@
     });
 
 /* ================================================= */
-/* 10.5: FULLSCREEN EXIT → KEEP PLAYING RELIABLY */
+/* 10.5: FULLSCREEN EXIT → KEEP PLAYING ALWAYS */
 /* ================================================= */
 let wasFullscreen = false;
+let ignoreNextPause = false;
 
 ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt =>
-  document.addEventListener(evt, async () => {
+  document.addEventListener(evt, () => {
     const nowFullscreen = isFullscreen();
 
-    // Save playing state when entering fullscreen
+    // Entering fullscreen
     if (nowFullscreen) {
       wasPlayingBeforeExit = !video.paused;
+      ignoreNextPause = false;
     }
 
-    // On exit from fullscreen
+    // Exiting fullscreen
     if (wasFullscreen && !nowFullscreen) {
       if (wasPlayingBeforeExit) {
-        // Wait until browser finishes toggling fullscreen
-        // Some mobile browsers forcibly pause — retry until video resumes
-        let tries = 0;
-        const tryResume = () => {
-          if (video.paused && tries < 10) {
-            tries++;
+        // Mark the next pause event as "expected" (triggered by fullscreen exit)
+        ignoreNextPause = true;
+
+        // Resume after the browser finishes the forced pause
+        setTimeout(() => {
+          if (video.paused) {
             video.play().catch(() => {});
-            setTimeout(tryResume, 150);
           }
-        };
-        tryResume();
+          ignoreNextPause = false;
+        }, 300);
       }
     }
 
@@ -504,6 +505,17 @@ let wasFullscreen = false;
     updateFullscreenIcons();
   })
 );
+
+// Intercept pause events caused by fullscreen exit
+video.addEventListener('pause', () => {
+  if (ignoreNextPause) {
+    // Immediately resume if pause came from fullscreen exit
+    setTimeout(() => {
+      video.play().catch(() => {});
+    }, 150);
+  }
+});
+
 
 
 
