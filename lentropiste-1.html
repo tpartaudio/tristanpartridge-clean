@@ -15,8 +15,8 @@
     :root {
       /* Title and credits */
       --title: "Dorian's Spleen";
-      --credit-by: by;
-      --credit-name: L’Entropiste;
+      --credit-by: "by";
+      --credit-name: "L’Entropiste";
 
       /* Video size on desktop */
       --video-width: 380px;
@@ -42,6 +42,11 @@
       --close-top: 1.5rem;   /* Distance from top */
       --close-right: 1.5rem; /* Distance from right */
       --close-font-size: 2.5rem;
+
+      /* ========================================= */
+      /* NAVIGATION: GO TO WORKS PAGE              */
+      /* ========================================= */
+      --works-page-url: "works.html"; /* Change this to your actual Works page */
     }
 
     /* ============================================= */
@@ -315,8 +320,8 @@
     </div>
   </div>
 
-  <!-- Close button (goes back) -->
-  <button class="close-btn" onclick="history.back()">×</button>
+  <!-- Close button → goes to Works page -->
+  <button class="close-btn" id="close-btn">×</button>
 
   <!-- ============================================= -->
   <!-- 11. JAVASCRIPT (INTERACTIVE FEATURES)        -->
@@ -422,6 +427,17 @@
 
     initVideo(video1, btn1, play1, pause1, cont1, video2);
     initVideo(video2, btn2, play2, pause2, cont2, video1);
+
+    /* -------------------------------------------------
+       STEP 6: Close button → go to Works page
+       ------------------------------------------------- */
+    const closeBtn = document.getElementById('close-btn');
+    const worksUrl = getComputedStyle(document.documentElement)
+                     .getPropertyValue('--works-page-url').trim();
+
+    closeBtn.addEventListener('click', () => {
+      window.location.href = worksUrl;
+    });
   </script>
 </body>
 </html>
