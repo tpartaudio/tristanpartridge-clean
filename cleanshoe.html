@@ -470,26 +470,33 @@
     });
 
 /* ================================================= */
-/* 10.5: FULLSCREEN EXIT → VIDEO KEEPS PLAYING (MOBILE/TABLET) */
+/* 10.5: FULLSCREEN EXIT → KEEP PLAYING RELIABLY */
 /* ================================================= */
 let wasFullscreen = false;
 
 ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt =>
-  document.addEventListener(evt, () => {
+  document.addEventListener(evt, async () => {
     const nowFullscreen = isFullscreen();
 
-    // Entering fullscreen
+    // Save playing state when entering fullscreen
     if (nowFullscreen) {
       wasPlayingBeforeExit = !video.paused;
     }
 
-    // Exiting fullscreen
+    // On exit from fullscreen
     if (wasFullscreen && !nowFullscreen) {
       if (wasPlayingBeforeExit) {
-        // Wait a tick before resuming playback (prevents auto-pause issues)
-        setTimeout(() => {
-          video.play().catch(() => {});
-        }, 100);
+        // Wait until browser finishes toggling fullscreen
+        // Some mobile browsers forcibly pause — retry until video resumes
+        let tries = 0;
+        const tryResume = () => {
+          if (video.paused && tries < 10) {
+            tries++;
+            video.play().catch(() => {});
+            setTimeout(tryResume, 150);
+          }
+        };
+        tryResume();
       }
     }
 
@@ -497,6 +504,7 @@ let wasFullscreen = false;
     updateFullscreenIcons();
   })
 );
+
 
 
     // Initial state
