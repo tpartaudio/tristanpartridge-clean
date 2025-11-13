@@ -338,6 +338,7 @@
 
     let hideTimer;
     let isMobile = window.matchMedia("(max-width: 1024px)").matches;
+    let wasPlayingBeforeExit = false;  // Track playback state before exiting fullscreen
 
     /* -------------------------------------------------
        STEP 6: Fullscreen helpers
@@ -350,6 +351,9 @@
 
     function toggleFullscreen() {
       if (isFullscreen()) {
+        // About to exit fullscreen → remember if video was playing
+        wasPlayingBeforeExit = !video.paused;
+
         if (document.exitFullscreen) document.exitFullscreen();
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
         else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
@@ -471,8 +475,16 @@
       togglePlayPause();
     });
 
+    // Listen to fullscreen exit → resume playback if it was playing
     ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt =>
-      document.addEventListener(evt, updateFullscreenIcons)
+      document.addEventListener(evt, () => {
+        updateFullscreenIcons();
+
+        // If we just exited fullscreen and video was playing before → resume
+        if (!isFullscreen() && wasPlayingBeforeExit && video.paused) {
+          video.play().catch(() => {});
+        }
+      })
     );
 
     // Initial state
