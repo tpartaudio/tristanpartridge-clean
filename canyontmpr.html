@@ -9,7 +9,7 @@
   <title>Tie - Tristan Partridge</title>
 
   <!-- ============================================= -->
-  <!-- 2. CONFIGURATION (CHANGE HERE FOR EACH PROJECT) -->
+  <!-- 2. CONFIGURATION                             -->
   <!-- ============================================= -->
   <style>
     :root {
@@ -37,6 +37,9 @@ Cyclist: @joeholt1011
 Prod assist / Mechanic: @whytelife;
 
       --credits-font-size: 0.7rem;
+
+      /* Fully adjustable arrow size */
+      --credits-arrow-size: 0.9rem;
     }
 
     /* ============================================= */
@@ -53,7 +56,6 @@ Prod assist / Mechanic: @whytelife;
       backdrop-filter: blur(4px);
       overflow: auto;
     }
-    .dark body { background: rgba(0,0,0,0.96); }
 
     .page-wrapper {
       display: flex;
@@ -86,32 +88,9 @@ Prod assist / Mechanic: @whytelife;
     }
 
     /* ============================================= */
-    /* 5. PLAY/PAUSE BUTTON                         */
+    /* 5. PLAY/PAUSE REMOVED                         */
     /* ============================================= */
-    .control-btn {
-      position: absolute;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: all 0.25s ease;
-      z-index: 10;
-
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 52px; height: 52px;
-      opacity: 0; pointer-events: none;
-    }
-    .control-btn.show {
-      opacity: 1; pointer-events: all;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    .control-btn:hover { transform: translate(-50%, -50%) scale(1.15); }
-
-    .control-btn svg { width: 60%; height: 60%; fill: #000; }
+    .control-btn { display:none !important; }
 
     /* ============================================= */
     /* 6. CLOSE BUTTON                              */
@@ -122,30 +101,21 @@ Prod assist / Mechanic: @whytelife;
       background: none; border: none;
       font-size: 2.5rem; cursor: pointer;
       color: #000; z-index: 20;
-      transition: transform 0.2s;
     }
-    .dark .close-btn { color: #fff; }
-    .close-btn:hover { transform: scale(1.2); }
 
     /* ============================================= */
     /* 7. TITLE & CREDITS                           */
     /* ============================================= */
     .video-title {
       color: #000;
-      line-height: 1.2;
-      opacity: 0.95;
       text-align: center;
       max-width: 360px;
       margin: 0;
     }
     .video-title .title   { font-weight: 700; font-size: 2.2rem; letter-spacing: -0.03em; }
-    .video-title .dash    { display: block; margin: 0.9rem 0; font-size: 1.3rem; opacity: 0.5; font-weight: 300; }
-    .video-title .credit  { display: block; font-size: 1.2rem; font-weight: 400; opacity: 0.9; }
+    .video-title .dash    { display: block; margin: 0.9rem 0; font-size: 1.3rem; opacity: 0.5; }
+    .video-title .credit  { display: block; font-size: 1.2rem; opacity: 0.9; }
     .video-title .credit strong { font-weight: 700; }
-
-    .dark .video-title,
-    .dark .video-title .dash,
-    .dark .video-title .credit { color: #fff; }
 
     /* ============================================= */
     /* 8. DETAILED CREDITS WIDGET                   */
@@ -154,22 +124,33 @@ Prod assist / Mechanic: @whytelife;
       margin-top: 1.5rem;
       text-align: center;
     }
+
     .credits-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
       background: none;
       border: none;
       font-size: 0.9rem;
-      color: inherit;
       cursor: pointer;
       padding: 0.5rem;
-      transition: color 0.2s;
-    }
-    .credits-toggle:hover { color: #777; }
-    .dark .credits-toggle:hover { color: #ccc; }
 
-    .credits-toggle svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.3s ease; }
+      width: 100%;
+      text-align: center;
+
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .credits-toggle svg {
+      width: var(--credits-arrow-size);
+      height: var(--credits-arrow-size);
+      transition: transform 0.25s ease;
+      opacity: 0.75;
+    }
+
+    .credits-toggle svg path {
+      fill: currentColor;
+    }
 
     .detailed-credits {
       margin-top: 0.8rem;
@@ -177,14 +158,12 @@ Prod assist / Mechanic: @whytelife;
       overflow: hidden;
       transition: max-height 0.4s ease;
       font-size: var(--credits-font-size);
-      line-height: 1.5;
       white-space: pre-line;
-      opacity: 0.9;
       text-align: center;
     }
     .detailed-credits.show { max-height: 1200px; }
 
-    :root:not([data-credits-enabled]) .credits-widget { display: none !important; }
+    :root:not([data-credits-enabled]) .credits-widget { display:none!important; }
 
     /* ============================================= */
     /* 9. RESPONSIVE                                */
@@ -195,22 +174,7 @@ Prod assist / Mechanic: @whytelife;
         gap: 3rem;
         padding: 5vw;
       }
-      .video-title { order: 2; max-width: 90vw; }
-      .video-container { order: 1; width: 90vw; max-width: none; }
-    }
-
-    @media (orientation: landscape) and (max-width: 1024px) {
-      .page-wrapper {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 2rem;
-      }
-      .video-container {
-        width: 70vw;
-        max-width: 700px;
-      }
+      .video-container { width:90vw; }
     }
   </style>
 </head>
@@ -227,7 +191,7 @@ Prod assist / Mechanic: @whytelife;
 
       <div class="credits-widget">
         <button class="credits-toggle" id="credits-toggle">
-          Credits
+          <span>Credits</span>
           <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
         </button>
         <div class="detailed-credits" id="detailed-credits"></div>
@@ -238,18 +202,9 @@ Prod assist / Mechanic: @whytelife;
     <div class="video-container" id="video-container">
       <video id="video-el" preload="metadata" playsinline style="display:none;"></video>
       <div id="youtube-container" style="display:none; width:100%; height:100%;"></div>
-
-      <!-- Play/Pause Button -->
-      <div class="control-btn" id="control-btn">
-        <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="pause-icon" viewBox="0 0 24 24" style="display:none;"><path d="M14,19H18V5H14M6,19H10V5H6V19Z"/></svg>
-      </div>
-
-      <!-- REMOVED CUSTOM FULLSCREEN BUTTON -->
     </div>
   </div>
 
-  <!-- Close button -->
   <button class="close-btn" onclick="window.location.href = 'index.html'">×</button>
 
   <script src="https://www.youtube.com/iframe_api"></script>
@@ -257,31 +212,35 @@ Prod assist / Mechanic: @whytelife;
   <script>
     /* -------------------------------------------------
        TITLE & CREDIT
-       ------------------------------------------------- */
+    ------------------------------------------------- */
     const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
+
     const titleText = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
     const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
 
     titleEl.textContent = titleText;
+    document.title = titleText + ' - Tristan Partridge';
+
     if (creditText.toLowerCase().includes('by')) {
       const [a, b] = creditText.split(/by/i);
       creditEl.innerHTML = (a ? a.trim() + ' by ' : 'by ') + '<strong>' + b.trim() + '</strong>';
     } else {
       creditEl.textContent = creditText;
     }
-    document.title = titleText + ' - Tristan Partridge';
 
     /* -------------------------------------------------
        VIDEO SOURCE
-       ------------------------------------------------- */
+    ------------------------------------------------- */
     const videoSrc = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
     const videoEl = document.getElementById('video-el');
     const youtubeContainer = document.getElementById('youtube-container');
+
     let player, isYouTube = false;
 
-    if (videoSrc.includes('youtu.be') || videoSrc.includes('youtube.com')) {
+    if (videoSrc.includes('youtube')) {
       isYouTube = true;
+
       const videoId =
         videoSrc.split('youtu.be/')[1]?.split('?')[0] ||
         videoSrc.split('v=')[1]?.split('&')[0];
@@ -298,14 +257,7 @@ Prod assist / Mechanic: @whytelife;
             controls: 1,
             modestbranding: 1,
             rel: 0,
-            fs: 1,
-            disablekb: 0,
-            iv_load_policy: 3,
-            cc_load_policy: 0
-          },
-          events: {
-            onReady: onPlayerReady,
-            onStateChange: onPlayerStateChange
+            fs: 1
           }
         });
       };
@@ -315,141 +267,21 @@ Prod assist / Mechanic: @whytelife;
     }
 
     /* -------------------------------------------------
-       PLAY / PAUSE
-       ------------------------------------------------- */
-    const playBtn = document.getElementById('control-btn');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
-    const container = document.getElementById('video-container');
-
-    let hideTimer;
-    let isMobile = window.matchMedia("(max-width: 1024px)").matches;
-
-    function onPlayerReady() {
-      showButtons();
-      updatePlayIcon();
-    }
-
-    function onPlayerStateChange() {
-      updatePlayIcon();
-    }
-
-    function isPlaying() {
-      return isYouTube
-        ? player?.getPlayerState() === 1
-        : !videoEl.paused;
-    }
-
-    function play() {
-      if (isYouTube) player.playVideo();
-      else videoEl.play();
-    }
-
-    function pause() {
-      if (isYouTube) player.pauseVideo();
-      else videoEl.pause();
-    }
-
-    function updatePlayIcon() {
-      const playing = isPlaying();
-      playIcon.style.display = playing ? "none" : "block";
-      pauseIcon.style.display = playing ? "block" : "none";
-    }
-
-    function togglePlayPause() {
-      if (isPlaying()) {
-        pause();
-        hideButtons(3000);
-      } else {
-        play();
-        hideButtons(isMobile ? 800 : 1800);
-      }
-      updatePlayIcon();
-    }
-
-    function showButtons() {
-      clearTimeout(hideTimer);
-      playBtn.classList.add('show');
-    }
-
-    function hideButtons(delay = 1500) {
-      clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => {
-        playBtn.classList.remove('show');
-      }, delay);
-    }
-
-    /* -------------------------------------------------
-       USER INTERACTION
-       ------------------------------------------------- */
-    function handleContainerClick(e) {
-      if (e.target.closest('#control-btn')) { togglePlayPause(); return; }
-
-      if (isMobile) {
-        if (playBtn.classList.contains('show')) hideButtons(0);
-        else { showButtons(); if (isPlaying()) hideButtons(3000); }
-      } else {
-        togglePlayPause();
-      }
-    }
-
-    container.addEventListener('click', handleContainerClick);
-
-    container.addEventListener('mouseenter', () => {
-      if (!isMobile) { showButtons(); hideButtons(1200); }
-    });
-    container.addEventListener('mouseleave', () => {
-      if (!isMobile && isPlaying()) hideButtons(300);
-    });
-
-    /* -------------------------------------------------
-       KEYBOARD
-       ------------------------------------------------- */
-    document.addEventListener('keydown', (e) => {
-      const active = document.activeElement;
-      const isTyping =
-        active &&
-        (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
-      if (isTyping) return;
-
-      if (e.code === 'Space' || e.key === ' ') {
-        if (!isMobile) {
-          e.preventDefault();
-          togglePlayPause();
-        }
-      }
-    });
-
-    playBtn.addEventListener('click', (e) => { e.stopPropagation(); togglePlayPause(); });
-
-    /* -------------------------------------------------
        CREDITS TOGGLE
-       ------------------------------------------------- */
+    ------------------------------------------------- */
     const creditsToggle = document.getElementById('credits-toggle');
     const creditsList = document.getElementById('detailed-credits');
     const arrow = creditsToggle?.querySelector('svg');
 
-    if (creditsToggle) {
-      creditsToggle.addEventListener('click', () => {
-        creditsList.classList.toggle('show');
-        arrow.style.transform =
-          creditsList.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-      });
-    }
+    creditsToggle?.addEventListener('click', () => {
+      creditsList.classList.toggle('show');
+      arrow.style.transform =
+        creditsList.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
 
     /* -------------------------------------------------
-       MOBILE DETECTION
-       ------------------------------------------------- */
-    const mediaQuery = window.matchMedia("(max-width: 1024px)");
-    mediaQuery.addEventListener('change', (e) => { isMobile = e.matches; });
-
-    /* -------------------------------------------------
-       INIT
-       ------------------------------------------------- */
-    showButtons();
-    updatePlayIcon();
-    
-    // Inject the detailed credits text
+       DETAILED CREDITS TEXT
+    ------------------------------------------------- */
     document.getElementById("detailed-credits").textContent =
       getComputedStyle(document.documentElement).getPropertyValue("--detailed-credit").trim();
   </script>
