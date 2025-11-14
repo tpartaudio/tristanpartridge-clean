@@ -15,8 +15,8 @@
     :root {
       /* Title and credits */
       --title: "Dorian's Spleen";
-      --credit-by: "by";
-      --credit-name: "L’Entropiste";
+      --credit-by: by;
+      --credit-name: L’Entropiste;
 
       /* Video size on desktop */
       --video-width: 380px;
@@ -257,7 +257,7 @@
     <div class="video-container" id="video-container-1">
       <iframe
         id="video-el-1"
-        src="https://youtube.com/shorts/1Kgrm146N-A?feature=share"
+        src="https://www.youtube.com/embed/1Kgrm146N-A?enablejsapi=1"
         title="YouTube video 1"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
@@ -269,7 +269,7 @@
     <div class="video-container" id="video-container-2">
       <iframe
         id="video-el-2"
-        src="https://youtube.com/shorts/Uc-KAnqY6R4?feature=share"
+        src="https://www.youtube.com/embed/Uc-KAnqY6R4?enablejsapi=1"
         title="YouTube video 2"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
@@ -311,6 +311,35 @@
     closeBtn.addEventListener('click', () => {
       window.location.href = indexUrl;
     });
+
+    /* YouTube API for controlling videos */
+    let player1, player2;
+
+    function onPlayerStateChange1(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        player2.pauseVideo();
+      }
+    }
+
+    function onPlayerStateChange2(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        player1.pauseVideo();
+      }
+    }
+
+    window.onYouTubeIframeAPIReady = function() {
+      player1 = new YT.Player('video-el-1', {
+        events: {
+          'onStateChange': onPlayerStateChange1
+        }
+      });
+
+      player2 = new YT.Player('video-el-2', {
+        events: {
+          'onStateChange': onPlayerStateChange2
+        }
+      });
+    };
   </script>
 
 </body>
