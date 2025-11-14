@@ -1,39 +1,74 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+  <!-- ============================================= -->
+  <!-- 1. META & TITLE                              -->
+  <!-- ============================================= -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> - Tristan Partridge</title>
+  <title>Tie - Tristan Partridge</title>
+
+  <!-- ============================================= -->
+  <!-- 2. CONFIGURATION                             -->
+  <!-- ============================================= -->
   <style>
     :root {
-      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/jadecropper-brickland.mov; /* Path to your video file */
+      --video-src: https://www.youtube.com/watch?v=T6Fa2bPaE5U;
+
       --title: "Jade Cropper";
       --credit: Visual by Brickland;
-      --video-width: 900px; /* Adjust this value to change the video frame size */
+
+      --video-width: 900px;
+
+      --show-detailed-credits: false;
+
+      --detailed-credit: TEMPR for @Canyon
+Directed and Designed by: @__everythingmoves
+Canyon CD: @ultc
+Producer: @itsdanielanotdaniel
+nDoP: @williamevans
+nCGI: @charlie__jeffries & n@sai1ey for @__everythingmoves
+Editor: @andredenervaux
+Photography: @roofowler
+Grade: @hansquires
+Sound Design: @tristanpartridge
+Bike SFX: @willberridgesound
+Cyclist: @joeholt1011
+Prod assist / Mechanic: @whytelife;
+
+      --credits-font-size: 0.7rem;
+
+      /* NEW: arrow size (adjust freely) */
+      --credits-arrow-size: 0.9rem;
     }
 
-    body { 
-      margin: 0; 
+    /* ============================================= */
+    /* 3. GENERAL STYLE                             */
+    /* ============================================= */
+    body {
+      margin: 0;
       background: rgba(255,255,255,0.96);
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      min-height: 100vh; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      overflow: hidden;
       backdrop-filter: blur(4px);
+      overflow: auto;
     }
-    .dark body { background: rgba(0,0,0,0.96); }
 
     .page-wrapper {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 7.5rem;
       max-width: 95vw;
-      padding-left: 8vw;
-      padding-right: 15vw;
+      padding: 5rem 10vw;
     }
 
+    /* ============================================= */
+    /* 4. VIDEO                                     */
+    /* ============================================= */
     .video-container {
       position: relative;
       width: var(--video-width);
@@ -44,311 +79,237 @@
       box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       cursor: pointer;
     }
-
-    video {
+    video, iframe {
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: #000;
-    }
-
-    .control-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 52px;
-      height: 52px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .control-btn.show {
-      opacity: 1;
-      pointer-events: all;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .control-btn svg {
-      width: 24px;
-      height: 24px;
-      fill: #000;
-    }
-
-    .control-btn:hover {
-      transform: translate(-50%, -50%) scale(1.15);
-    }
-
-    .fullscreen-btn {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .fullscreen-btn.show {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .fullscreen-btn:hover {
-      transform: scale(1.1);
-    }
-
-    .fullscreen-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: #000;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
-      background: none;
       border: none;
-      font-size: 2.5rem;
-      cursor: pointer;
-      color: #000;
-      z-index: 20;
-      transition: transform 0.2s ease;
     }
 
-    .dark .close-btn { color: #fff; }
+    /* ============================================= */
+    /* 5. PLAY/PAUSE REMOVED                         */
+    /* ============================================= */
+    .control-btn { display:none !important; }
 
-    .close-btn:hover {
-      transform: scale(1.2);
+    /* ============================================= */
+    /* 6. CLOSE BUTTON                              */
+    /* ============================================= */
+    .close-btn {
+      position: fixed;
+      top: 2rem; right: 2rem;
+      background: none; border: none;
+      font-size: 2.5rem; cursor: pointer;
+      color: #000; z-index: 20;
     }
 
+    /* ============================================= */
+    /* 7. TITLE & CREDITS                           */
+    /* ============================================= */
     .video-title {
       color: #000;
-      line-height: 1.2;
-      opacity: 0.95;
-      margin: 0;
       text-align: center;
       max-width: 360px;
+      margin: 0;
     }
-    .video-title .title {
-      font-weight: 700;
-      font-size: 2.2rem;
-      letter-spacing: -0.03em;
+    .video-title .title   { font-weight: 700; font-size: 2.2rem; letter-spacing: -0.03em; }
+    .video-title .dash    { display: block; margin: 0.9rem 0; font-size: 1.3rem; opacity: 0.5; }
+    .video-title .credit  { display: block; font-size: 1.2rem; opacity: 0.9; }
+    .video-title .credit strong { font-weight: 700; }
+
+    /* ============================================= */
+    /* 8. DETAILED CREDITS WIDGET (toggleable)      */
+    /* ============================================= */
+    .credits-widget {
+      margin-top: 1.5rem;
+      text-align: center;
     }
-    .video-title .dash {
-      display: block;
-      margin: 0.9rem 0;
-      font-size: 1.3rem;
-      opacity: 0.5;
-      font-weight: 300;
+    .credits-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: inherit;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s;
     }
-    .video-title .credit {
-      display: block;
-      font-size: 1.2rem;
-      font-weight: 400;
+    .credits-toggle:hover { color: #777; }
+    .dark .credits-toggle:hover { color: #ccc; }
+
+    .credits-toggle svg {
+      width: 16px; height: 16px;
+      fill: currentColor;
+      transition: transform 0.3s ease;
+    }
+
+    .detailed-credits {
+      margin-top: 0.8rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      font-size: var(--credits-font-size);
+      line-height: 1.5;
+      white-space: pre-line;
       opacity: 0.9;
+      text-align: center;
     }
-    .video-title .credit strong {
-      font-weight: 700;
+    .detailed-credits.show {
+      max-height: 1200px;
     }
 
-    .dark .video-title,
-    .dark .video-title .dash,
-    .dark .video-title .credit { color: #fff; }
+    /* Hide widget if disabled */
+    :root:not([data-credits-enabled]) .credits-widget {
+      display: none !important;
+    }
 
+    /* ============================================= */
+    /* 9. RESPONSIVE                                */
+    /* ============================================= */
     @media (max-width: 1024px) {
       .page-wrapper {
         flex-direction: column;
         gap: 3rem;
         padding: 5vw;
       }
-      .video-title {
-        order: 2;
-        max-width: 90vw;
+      .video-container {
+        width:90vw;
+        order: -1;
+      }
+    }
+
+    @media (orientation: landscape) and (max-width: 1024px) {
+      .page-wrapper {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
       }
       .video-container {
-        order: 1;
-        width: 90vw;
-        max-width: none;
+        width: 70vw;
+        max-width: 700px;
       }
     }
   </style>
 </head>
+
 <body class="light">
+
   <div class="page-wrapper">
+
+    <!-- TITLE + SHORT CREDIT -->
     <div class="video-title">
       <div class="title" id="title-el"></div>
       <div class="dash">-</div>
       <div class="credit" id="credit-el"></div>
+
+      <div class="credits-widget">
+        <button class="credits-toggle" id="credits-toggle">
+          Credits
+          <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+        <div class="detailed-credits" id="detailed-credits"></div>
+      </div>
     </div>
 
+    <!-- VIDEO PLAYER -->
     <div class="video-container" id="video-container">
-      <video id="video-el" src="" preload="metadata" playsinline type="video/mp4"></video>
-      
-      <div class="control-btn" id="control-btn">
-        <svg id="play-icon" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-        <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;">
-          <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
-        </svg>
-      </div>
-
-      <div class="fullscreen-btn" id="fullscreen-btn">
-        <svg id="enter-fullscreen" viewBox="0 0 24 24">
-          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-        </svg>
-        <svg id="exit-fullscreen" viewBox="0 0 24 24" style="display: none;">
-          <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm1-8V7h-3V5h5v5h-2z"/>
-        </svg>
-      </div>
+      <video id="video-el" preload="metadata" playsinline style="display:none;"></video>
+      <div id="youtube-container" style="display:none; width:100%; height:100%;"></div>
     </div>
   </div>
 
-  <button class="close-btn" onclick="history.back()">×</button>
+  <button class="close-btn" onclick="window.location.href = 'index.html'">×</button>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
-    // TITLE + CREDIT
-    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
-
-    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+    /* -------------------------------------------------
+       TITLE & CREDIT
+    ------------------------------------------------- */
+    const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
 
+    const titleText = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+
+    titleEl.textContent = titleText;
+    document.title = titleText + ' - Tristan Partridge';
+
     if (creditText.toLowerCase().includes('by')) {
-      const parts = creditText.split(/by/i);
-      creditEl.innerHTML = (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
+      const [a, b] = creditText.split(/by/i);
+      creditEl.innerHTML = (a ? a.trim() + ' by ' : 'by ') + '<strong>' + b.trim() + '</strong>';
     } else {
       creditEl.textContent = creditText;
     }
 
-    // VIDEO
+    /* -------------------------------------------------
+       VIDEO SOURCE
+    ------------------------------------------------- */
+    const videoSrc = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
     const videoEl = document.getElementById('video-el');
-    videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+    const youtubeContainer = document.getElementById('youtube-container');
 
-    // Removed buggy line that tried to access nonexistent <a>
-    // videoEl.nextElementSibling.querySelector('a').href = videoEl.src;
+    let player, isYouTube = false;
 
-    document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
+    if (videoSrc.includes('youtube')) {
+      isYouTube = true;
 
-    const video = videoEl;
-    const btn = document.getElementById('control-btn');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
-    const container = document.getElementById('video-container');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    const enterIcon = document.getElementById('enter-fullscreen');
-    const exitIcon = document.getElementById('exit-fullscreen');
+      const videoId =
+        videoSrc.split('youtu.be/')[1]?.split('?')[0] ||
+        videoSrc.split('v=')[1]?.split('&')[0];
 
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
+      youtubeContainer.style.display = 'block';
+
+      window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player('youtube-container', {
+          height: '100%',
+          width: '100%',
+          videoId,
+          playerVars: {
+            autoplay: 0,
+            controls: 1,
+            modestbranding: 1,
+            rel: 0,
+            fs: 1
+          }
+        });
+      };
+    } else {
+      videoEl.src = videoSrc;
+      videoEl.style.display = 'block';
     }
 
-    video.pause();
-    btn.classList.add('show');
+    /* -------------------------------------------------
+       CREDITS TOGGLE
+    ------------------------------------------------- */
+    const creditsToggle = document.getElementById('credits-toggle');
+    const creditsList = document.getElementById('detailed-credits');
+    const arrow = creditsToggle?.querySelector('svg');
 
-    let hideTimeout;
+    creditsToggle?.addEventListener('click', () => {
+      creditsList.classList.toggle('show');
+      arrow.style.transform =
+        creditsList.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
 
-    function toggleFullScreen() {
-      if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        if (video.requestFullscreen) {
-          video.requestFullscreen();
-        } else if (video.mozRequestFullScreen) {
-          video.mozRequestFullScreen();
-        } else if (video.webkitRequestFullscreen) {
-          video.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (video.msRequestFullscreen) {
-          video.msRequestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      }
+    /* -------------------------------------------------
+       DETAILED CREDITS TEXT
+    ------------------------------------------------- */
+    const showCredits = getComputedStyle(document.documentElement)
+      .getPropertyValue('--show-detailed-credits').trim() === 'true';
+
+    if (showCredits) {
+      document.documentElement.dataset.creditsEnabled = 'true';
+
+      const fullText = getComputedStyle(document.documentElement)
+        .getPropertyValue('--detailed-credit').trim().replace(/\\n/g, '\n');
+
+      document.getElementById('detailed-credits').textContent = fullText;
     }
-
-    function updateIcons() {
-      if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
-        enterIcon.style.display = 'none';
-        exitIcon.style.display = 'block';
-      } else {
-        enterIcon.style.display = 'block';
-        exitIcon.style.display = 'none';
-      }
-    }
-
-    document.addEventListener('fullscreenchange', updateIcons);
-    document.addEventListener('mozfullscreenchange', updateIcons);
-    document.addEventListener('webkitfullscreenchange', updateIcons);
-    document.addEventListener('MSFullscreenChange', updateIcons);
-
-    fullscreenBtn.addEventListener('click', toggleFullScreen);
-
-    container.addEventListener('click', (e) => {
-      if (e.target === fullscreenBtn || fullscreenBtn.contains(e.target)) return; // Prevent triggering play/pause on fullscreen click
-      clearTimeout(hideTimeout);
-
-      if (video.paused) {
-        video.play();
-        playIcon.style.display = 'none';
-        pauseIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 1800);
-      } else {
-        video.pause();
-        pauseIcon.style.display = 'none';
-        playIcon.style.display = 'block';
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 3000);
-      }
-    });
-
-    container.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimeout);
-      btn.classList.add('show');
-      fullscreenBtn.classList.add('show');
-      hideTimeout = setTimeout(() => {
-        btn.classList.remove('show');
-        fullscreenBtn.classList.remove('show');
-      }, 1200);
-    });
-
-    container.addEventListener('mouseleave', () => {
-      if (!video.paused) {
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 300);
-      }
-    });
   </script>
 </body>
 </html>
