@@ -1,17 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+  <!-- ============================================= -->
+  <!-- 1. META & TITLE                              -->
+  <!-- ============================================= -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> - Tristan Partridge</title>
+  <title>Tie - Tristan Partridge</title>
+
+  <!-- ============================================= -->
+  <!-- 2. CONFIGURATION                             -->
+  <!-- ============================================= -->
   <style>
     :root {
-      --video-src: https://wocyyrc2hiwuxrzt.public.blob.vercel-storage.com/cactus.mov;
+      --video-src: https://www.youtube.com/watch?v=G7DiiJA9_YU;
+
       --title: "Cacto";
       --credit: Visual by Quim Amat;
+
       --video-width: 900px;
+
+      --show-detailed-credits: false;
+
+      --detailed-credit: TEMPR for @Canyon
+Directed and Designed by: @__everythingmoves
+Canyon CD: @ultc
+Producer: @itsdanielanotdaniel
+nDoP: @williamevans
+nCGI: @charlie__jeffries & n@sai1ey for @__everythingmoves
+Editor: @andredenervaux
+Photography: @roofowler
+Grade: @hansquires
+Sound Design: @tristanpartridge
+Bike SFX: @willberridgesound
+Cyclist: @joeholt1011
+Prod assist / Mechanic: @whytelife;
+
+      --credits-font-size: 0.7rem;
+
+      /* NEW: arrow size (adjust freely) */
+      --credits-arrow-size: 0.9rem;
     }
-    /* ===== BASE LAYOUT ===== */
+
+    /* ============================================= */
+    /* 3. GENERAL STYLE                             */
+    /* ============================================= */
     body {
       margin: 0;
       background: rgba(255,255,255,0.96);
@@ -21,8 +54,9 @@
       min-height: 100vh;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       backdrop-filter: blur(4px);
+      overflow: auto;
     }
-    .dark body { background: rgba(0,0,0,0.96); }
+
     .page-wrapper {
       display: flex;
       align-items: center;
@@ -31,7 +65,10 @@
       max-width: 95vw;
       padding: 5rem 10vw;
     }
-    /* ===== VIDEO CONTAINER ===== */
+
+    /* ============================================= */
+    /* 4. VIDEO                                     */
+    /* ============================================= */
     .video-container {
       position: relative;
       width: var(--video-width);
@@ -42,139 +79,107 @@
       box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       cursor: pointer;
     }
-    video {
+    video, iframe {
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: #000;
+      border: none;
     }
-    /* ===== CONTROL BUTTON ===== */
-    .control-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 52px;
-      height: 52px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: transform 0.25s, opacity 0.25s ease;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-    .control-btn.show {
-      opacity: 1;
-      pointer-events: all;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    .control-btn svg {
-      width: 24px;
-      height: 24px;
-      fill: #000;
-    }
-    .control-btn:hover {
-      transform: translate(-50%, -50%) scale(1.15);
-    }
-    /* ===== FULLSCREEN BUTTON ===== */
-    .fullscreen-btn {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: opacity 0.25s ease, transform 0.25s;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-    .fullscreen-btn.show {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .fullscreen-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: #000;
-    }
-    .fullscreen-btn:hover {
-      transform: scale(1.1);
-    }
-    /* ===== CLOSE BUTTON ===== */
+
+    /* ============================================= */
+    /* 5. PLAY/PAUSE REMOVED                         */
+    /* ============================================= */
+    .control-btn { display:none !important; }
+
+    /* ============================================= */
+    /* 6. CLOSE BUTTON                              */
+    /* ============================================= */
     .close-btn {
       position: fixed;
-      top: 2rem;
-      right: 2rem;
-      background: none;
-      border: none;
-      font-size: 2.5rem;
-      cursor: pointer;
-      color: #000;
-      z-index: 20;
-      transition: transform 0.2s ease;
+      top: 2rem; right: 2rem;
+      background: none; border: none;
+      font-size: 2.5rem; cursor: pointer;
+      color: #000; z-index: 20;
     }
-    .dark .close-btn { color: #fff; }
-    .close-btn:hover { transform: scale(1.2); }
-    /* ===== TITLE AND CREDITS ===== */
+
+    /* ============================================= */
+    /* 7. TITLE & CREDITS                           */
+    /* ============================================= */
     .video-title {
       color: #000;
-      line-height: 1.2;
-      opacity: 0.95;
       text-align: center;
-      margin: 0;
       max-width: 360px;
+      margin: 0;
     }
-    .video-title .title {
-      font-weight: 700;
-      font-size: 2.2rem;
-      letter-spacing: -0.03em;
+    .video-title .title   { font-weight: 700; font-size: 2.2rem; letter-spacing: -0.03em; }
+    .video-title .dash    { display: block; margin: 0.9rem 0; font-size: 1.3rem; opacity: 0.5; }
+    .video-title .credit  { display: block; font-size: 1.2rem; opacity: 0.9; }
+    .video-title .credit strong { font-weight: 700; }
+
+    /* ============================================= */
+    /* 8. DETAILED CREDITS WIDGET (toggleable)      */
+    /* ============================================= */
+    .credits-widget {
+      margin-top: 1.5rem;
+      text-align: center;
     }
-    .video-title .dash {
-      display: block;
-      margin: 0.9rem 0;
-      font-size: 1.3rem;
-      opacity: 0.5;
-      font-weight: 300;
+    .credits-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: inherit;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s;
     }
-    .video-title .credit {
-      display: block;
-      font-size: 1.2rem;
-      font-weight: 400;
+    .credits-toggle:hover { color: #777; }
+    .dark .credits-toggle:hover { color: #ccc; }
+
+    .credits-toggle svg {
+      width: 16px; height: 16px;
+      fill: currentColor;
+      transition: transform 0.3s ease;
+    }
+
+    .detailed-credits {
+      margin-top: 0.8rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      font-size: var(--credits-font-size);
+      line-height: 1.5;
+      white-space: pre-line;
       opacity: 0.9;
+      text-align: center;
     }
-    .dark .video-title,
-    .dark .video-title .dash,
-    .dark .video-title .credit { color: #fff; }
-    /* ===== RESPONSIVE QUERIES ===== */
+    .detailed-credits.show {
+      max-height: 1200px;
+    }
+
+    /* Hide widget if disabled */
+    :root:not([data-credits-enabled]) .credits-widget {
+      display: none !important;
+    }
+
+    /* ============================================= */
+    /* 9. RESPONSIVE                                */
+    /* ============================================= */
     @media (max-width: 1024px) {
       .page-wrapper {
         flex-direction: column;
         gap: 3rem;
         padding: 5vw;
       }
-      .video-title {
-        order: 2;
-        max-width: 90vw;
-      }
       .video-container {
-        order: 1;
-        width: 90vw;
-        max-width: none;
+        width:90vw;
+        order: -1;
       }
     }
-    /* ===== 📱 LANDSCAPE (90°) MODE FIX ===== */
+
     @media (orientation: landscape) and (max-width: 1024px) {
       .page-wrapper {
         flex-direction: column;
@@ -183,223 +188,128 @@
         text-align: center;
         padding: 2rem;
       }
-      /* ✅ Make it super easy: just edit these two values */
       .video-container {
-        width: 70vw; /* reduce video size when tilted, try 65–75vw */
+        width: 70vw;
         max-width: 700px;
-      }
-      .video-title {
-        margin: 1rem auto 0 auto;
-        text-align: center;
-        transform: translateX(0rem); /* easy manual tweak: use px/rem */
       }
     }
   </style>
 </head>
+
 <body class="light">
+
   <div class="page-wrapper">
+
+    <!-- TITLE + SHORT CREDIT -->
     <div class="video-title">
       <div class="title" id="title-el"></div>
       <div class="dash">-</div>
       <div class="credit" id="credit-el"></div>
+
+      <div class="credits-widget">
+        <button class="credits-toggle" id="credits-toggle">
+          Credits
+          <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+        <div class="detailed-credits" id="detailed-credits"></div>
+      </div>
     </div>
+
+    <!-- VIDEO PLAYER -->
     <div class="video-container" id="video-container">
-      <video id="video-el" src="" preload="metadata" playsinline type="video/mp4"></video>
-      <div class="control-btn" id="control-btn">
-        <svg id="play-icon" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-        <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;">
-          <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
-        </svg>
-      </div>
-      <div class="fullscreen-btn" id="fullscreen-btn">
-        <svg id="enter-fullscreen" viewBox="0 0 24 24">
-          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-        </svg>
-        <svg id="exit-fullscreen" viewBox="0 0 24 24" style="display: none;">
-          <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm1-8V7h-3V5h5v5h-2z"/>
-        </svg>
-      </div>
+      <video id="video-el" preload="metadata" playsinline style="display:none;"></video>
+      <div id="youtube-container" style="display:none; width:100%; height:100%;"></div>
     </div>
   </div>
-  <button class="close-btn" onclick="window.location.href = 'index.html';">×</button>
+
+  <button class="close-btn" onclick="window.location.href = 'index.html'">×</button>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
   <script>
-    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
-    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+    /* -------------------------------------------------
+       TITLE & CREDIT
+    ------------------------------------------------- */
+    const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
+
+    const titleText = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+
+    titleEl.textContent = titleText;
+    document.title = titleText + ' - Tristan Partridge';
+
     if (creditText.toLowerCase().includes('by')) {
-      const parts = creditText.split(/by/i);
-      creditEl.innerHTML = (parts[0] ? parts[0] + 'by ' : 'by ') + '<strong>' + parts[1].trim() + '</strong>';
+      const [a, b] = creditText.split(/by/i);
+      creditEl.innerHTML = (a ? a.trim() + ' by ' : 'by ') + '<strong>' + b.trim() + '</strong>';
     } else {
       creditEl.textContent = creditText;
     }
+
+    /* -------------------------------------------------
+       VIDEO SOURCE
+    ------------------------------------------------- */
+    const videoSrc = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
     const videoEl = document.getElementById('video-el');
-    videoEl.src = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
-    document.title = getComputedStyle(document.documentElement).getPropertyValue('--title').trim() + ' - Tristan Partridge';
-    const video = videoEl;
-    const btn = document.getElementById('control-btn');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
-    const container = document.getElementById('video-container');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    const enterIcon = document.getElementById('enter-fullscreen');
-    const exitIcon = document.getElementById('exit-fullscreen');
-    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-    video.pause();
-    btn.classList.add('show');
-    fullscreenBtn.classList.add('show');
-    let hideTimeout;
-    const mediaQuery = window.matchMedia("(max-width: 1024px)");
-    let isMobile = mediaQuery.matches;
-    function setupListeners() {
-      container.removeEventListener('click', handleContainerClick);
-      container.removeEventListener('mouseenter', handleMouseEnter);
-      container.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('keydown', handleKeydown);
-      document.removeEventListener('click', handleDocumentClick);
-      if (isMobile) {
-        container.addEventListener('click', handleContainerClick);
-      } else {
-        container.addEventListener('click', handleContainerClick);
-        container.addEventListener('mouseenter', handleMouseEnter);
-        container.addEventListener('mouseleave', handleMouseLeave);
-        document.addEventListener('keydown', handleKeydown);
-        document.addEventListener('click', handleDocumentClick);
-      }
-    }
-    function handleContainerClick(e) {
-      if (isMobile) {
-        if (e.target.closest('#control-btn') || e.target.closest('#fullscreen-btn')) return;
-        clearTimeout(hideTimeout);
-        if (btn.classList.contains('show')) {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        } else {
-          btn.classList.add('show');
-          fullscreenBtn.classList.add('show');
-          updateControlIcon();
-          if (!video.paused) {
-            hideTimeout = setTimeout(() => {
-              btn.classList.remove('show');
-              fullscreenBtn.classList.remove('show');
-            }, 3000);
+    const youtubeContainer = document.getElementById('youtube-container');
+
+    let player, isYouTube = false;
+
+    if (videoSrc.includes('youtube')) {
+      isYouTube = true;
+
+      const videoId =
+        videoSrc.split('youtu.be/')[1]?.split('?')[0] ||
+        videoSrc.split('v=')[1]?.split('&')[0];
+
+      youtubeContainer.style.display = 'block';
+
+      window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player('youtube-container', {
+          height: '100%',
+          width: '100%',
+          videoId,
+          playerVars: {
+            autoplay: 0,
+            controls: 1,
+            modestbranding: 1,
+            rel: 0,
+            fs: 1
           }
-        }
-      } else {
-        if (e.target.closest('#fullscreen-btn')) return;
-        clearTimeout(hideTimeout);
-        togglePlayPause();
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, video.paused ? 3000 : 1800);
-      }
+        });
+      };
+    } else {
+      videoEl.src = videoSrc;
+      videoEl.style.display = 'block';
     }
-    function handleMouseEnter() {
-      clearTimeout(hideTimeout);
-      btn.classList.add('show');
-      fullscreenBtn.classList.add('show');
-      updateControlIcon();
-      hideTimeout = setTimeout(() => {
-        btn.classList.remove('show');
-        fullscreenBtn.classList.remove('show');
-      }, 1200);
+
+    /* -------------------------------------------------
+       CREDITS TOGGLE
+    ------------------------------------------------- */
+    const creditsToggle = document.getElementById('credits-toggle');
+    const creditsList = document.getElementById('detailed-credits');
+    const arrow = creditsToggle?.querySelector('svg');
+
+    creditsToggle?.addEventListener('click', () => {
+      creditsList.classList.toggle('show');
+      arrow.style.transform =
+        creditsList.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    /* -------------------------------------------------
+       DETAILED CREDITS TEXT
+    ------------------------------------------------- */
+    const showCredits = getComputedStyle(document.documentElement)
+      .getPropertyValue('--show-detailed-credits').trim() === 'true';
+
+    if (showCredits) {
+      document.documentElement.dataset.creditsEnabled = 'true';
+
+      const fullText = getComputedStyle(document.documentElement)
+        .getPropertyValue('--detailed-credit').trim().replace(/\\n/g, '\n');
+
+      document.getElementById('detailed-credits').textContent = fullText;
     }
-    function handleMouseLeave() {
-      if (!video.paused) {
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, 300);
-      }
-    }
-    function handleKeydown(e) {
-      const active = document.activeElement;
-      const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
-      if (isTyping) return;
-      if (e.code === 'Space' || e.key === ' ') {
-        if (isInFullScreen()) {
-          e.preventDefault();
-          togglePlayPause();
-        }
-      }
-      if (e.key && e.key.toLowerCase() === 'f') {
-        if (!isInFullScreen()) {
-          e.preventDefault();
-          toggleFullScreen();
-        }
-      }
-    }
-    function handleDocumentClick(e) {
-      if (!isInFullScreen()) return;
-      if (e.target.closest && e.target.closest('#fullscreen-btn')) return;
-      if (e.target === video || (e.target.closest && e.target.closest('#video-container'))) {
-        togglePlayPause();
-      }
-    }
-    setupListeners();
-    mediaQuery.addEventListener('change', (e) => { isMobile = e.matches; setupListeners(); });
-    function isInFullScreen() {
-      return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement || (video && video.webkitDisplayingFullscreen));
-    }
-    function toggleFullScreen() {
-      if (isInFullScreen()) {
-        if (video.webkitDisplayingFullscreen) {
-          video.webkitExitFullscreen();
-        } else if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      } else {
-        if (video.requestFullscreen) {
-          video.requestFullscreen();
-        } else if (video.webkitEnterFullscreen) {
-          video.webkitEnterFullscreen();
-        } else if (video.mozRequestFullScreen) {
-          video.mozRequestFullScreen();
-        } else if (video.msRequestFullscreen) {
-          video.msRequestFullscreen();
-        }
-      }
-    }
-    function updateIcons() {
-      const isFull = isInFullScreen();
-      enterIcon.style.display = isFull ? 'none' : 'block';
-      exitIcon.style.display = isFull ? 'block' : 'none';
-    }
-    function updateControlIcon() {
-      playIcon.style.display = video.paused ? 'block' : 'none';
-      pauseIcon.style.display = video.paused ? 'none' : 'block';
-    }
-    function togglePlayPause() {
-      clearTimeout(hideTimeout);
-      if (video.paused) {
-        video.play();
-        updateControlIcon();
-        hideTimeout = setTimeout(() => {
-          btn.classList.remove('show');
-          fullscreenBtn.classList.remove('show');
-        }, isMobile ? 800 : 1800);
-      } else {
-        video.pause();
-        updateControlIcon();
-      }
-    }
-    document.addEventListener('fullscreenchange', updateIcons);
-    document.addEventListener('webkitfullscreenchange', updateIcons);
-    document.addEventListener('mozfullscreenchange', updateIcons);
-    document.addEventListener('MSFullscreenChange', updateIcons);
-    video.addEventListener('webkitbeginfullscreen', updateIcons);
-    video.addEventListener('webkitendfullscreen', updateIcons);
-    fullscreenBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleFullScreen(); });
-    btn.addEventListener('click', (e) => { e.stopPropagation(); togglePlayPause(); });
-    updateControlIcon();
   </script>
 </body>
 </html>
