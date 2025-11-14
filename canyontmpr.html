@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth" data-credits-enabled>
+<html lang="en" class="scroll-smooth">
 <head>
   <!-- ============================================= -->
   <!-- 1. META & TITLE                              -->
@@ -118,51 +118,52 @@ Prod assist / Mechanic: @whytelife;
     .video-title .credit strong { font-weight: 700; }
 
     /* ============================================= */
-    /* 8. DETAILED CREDITS WIDGET                   */
+    /* 8. DETAILED CREDITS WIDGET (toggleable)      */
     /* ============================================= */
     .credits-widget {
       margin-top: 1.5rem;
       text-align: center;
     }
     .credits-toggle {
-      background:none;
-      border:none;
-      font-size:0.9rem;
-      cursor:pointer;
-      padding:0.5rem;
-      display:flex;
-      align-items:center;
-      gap:0.35rem;
-      justify-content:center;
-      color: #000;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: inherit;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s;
     }
+    .credits-toggle:hover { color: #777; }
+    .dark .credits-toggle:hover { color: #ccc; }
 
     .credits-toggle svg {
-      width: var(--credits-arrow-size);
-      height: var(--credits-arrow-size);
-      transition: transform 0.25s ease;
-      opacity: 0.75;
-    }
-
-    .credits-toggle svg path {
+      width: 16px; height: 16px;
       fill: currentColor;
+      transition: transform 0.3s ease;
     }
 
     .detailed-credits {
-      margin: 0 auto;
-      margin-top:0.8rem;
-      max-height:0;
-      overflow:hidden;
-      transition:max-height 0.4s ease;
-      font-size:var(--credits-font-size);
-      white-space:pre-line;
-      text-align:left;
-      max-width: 20rem;
-      color: #000;
+      margin-top: 0.8rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      font-size: var(--credits-font-size);
+      line-height: 1.5;
+      white-space: pre-line;
+      opacity: 0.9;
+      text-align: center;
     }
-    .detailed-credits.show { max-height:1200px; }
+    .detailed-credits.show {
+      max-height: 1200px;
+    }
 
-    :root:not([data-credits-enabled]) .credits-widget { display:none!important; }
+    /* Hide widget if disabled */
+    :root:not([data-credits-enabled]) .credits-widget {
+      display: none !important;
+    }
 
     /* ============================================= */
     /* 9. RESPONSIVE                                */
@@ -284,8 +285,17 @@ Prod assist / Mechanic: @whytelife;
     /* -------------------------------------------------
        DETAILED CREDITS TEXT
     ------------------------------------------------- */
-    document.getElementById("detailed-credits").textContent =
-      getComputedStyle(document.documentElement).getPropertyValue("--detailed-credit").trim();
+    const showCredits = getComputedStyle(document.documentElement)
+      .getPropertyValue('--show-detailed-credits').trim() === 'true';
+
+    if (showCredits) {
+      document.documentElement.dataset.creditsEnabled = 'true';
+
+      const fullText = getComputedStyle(document.documentElement)
+        .getPropertyValue('--detailed-credit').trim().replace(/\\n/g, '\n');
+
+      document.getElementById('detailed-credits').textContent = fullText;
+    }
   </script>
 </body>
 </html>
