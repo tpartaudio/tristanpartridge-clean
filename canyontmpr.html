@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" data-credits-enabled>
 <head>
   <!-- ============================================= -->
   <!-- 1. META & TITLE                              -->
@@ -295,10 +295,10 @@ Prod assist / Mechanic: @whytelife;
           videoId,
           playerVars: {
             autoplay: 0,
-            controls: 1,      // Default YouTube controls (fullscreen included)
+            controls: 1,
             modestbranding: 1,
             rel: 0,
-            fs: 1,            // FULLSCREEN ENABLED
+            fs: 1,
             disablekb: 0,
             iv_load_policy: 3,
             cc_load_policy: 0
@@ -448,6 +448,10 @@ Prod assist / Mechanic: @whytelife;
        ------------------------------------------------- */
     showButtons();
     updatePlayIcon();
+    
+    // Inject the detailed credits text
+    document.getElementById("detailed-credits").textContent =
+      getComputedStyle(document.documentElement).getPropertyValue("--detailed-credit").trim();
   </script>
 </body>
 </html>
