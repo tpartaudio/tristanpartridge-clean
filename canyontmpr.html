@@ -13,22 +13,15 @@
   <!-- ============================================= -->
   <style>
     :root {
-      /* Video – YouTube or local MP4/MOV */
       --video-src: https://www.youtube.com/watch?v=fFV1UFdzihI;
 
-      /* Title & short credit */
       --title: "TMPR for Canyon";
       --credit: Visual by EverythingMoves;
 
-      /* Video size */
       --video-width: 900px;
 
-      /* ========================================= */
-      /* DETAILED CREDITS ACTIVATION               */
-      /* ========================================= */
       --show-detailed-credits: true;
 
-      /* Full detailed credits text (use \n for line breaks) */
       --detailed-credit: TEMPR for @Canyon
 Directed and Designed by: @__everythingmoves
 Canyon CD: @ultc
@@ -43,7 +36,6 @@ Bike SFX: @willberridgesound
 Cyclist: @joeholt1011
 Prod assist / Mechanic: @whytelife;
 
-      /* Font size for detailed credits */
       --credits-font-size: 0.7rem;
     }
 
@@ -94,9 +86,9 @@ Prod assist / Mechanic: @whytelife;
     }
 
     /* ============================================= */
-    /* 5. PLAY/PAUSE & FULLSCREEN BUTTONS           */
+    /* 5. PLAY/PAUSE BUTTON                         */
     /* ============================================= */
-    .control-btn, .fullscreen-btn {
+    .control-btn {
       position: absolute;
       background: rgba(255,255,255,0.95);
       border-radius: 50%;
@@ -107,8 +99,7 @@ Prod assist / Mechanic: @whytelife;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
       transition: all 0.25s ease;
       z-index: 10;
-    }
-    .control-btn {
+
       top: 50%; left: 50%;
       transform: translate(-50%, -50%) scale(0);
       width: 52px; height: 52px;
@@ -120,15 +111,7 @@ Prod assist / Mechanic: @whytelife;
     }
     .control-btn:hover { transform: translate(-50%, -50%) scale(1.15); }
 
-    .fullscreen-btn {
-      bottom: 10px; right: 10px;
-      width: 32px; height: 32px;
-      opacity: 0; pointer-events: none;
-    }
-    .fullscreen-btn.show { opacity: 1; pointer-events: all; }
-    .fullscreen-btn:hover { transform: scale(1.1); }
-
-    .control-btn svg, .fullscreen-btn svg { width: 60%; height: 60%; fill: #000; }
+    .control-btn svg { width: 60%; height: 60%; fill: #000; }
 
     /* ============================================= */
     /* 6. CLOSE BUTTON                              */
@@ -165,7 +148,7 @@ Prod assist / Mechanic: @whytelife;
     .dark .video-title .credit { color: #fff; }
 
     /* ============================================= */
-    /* 8. DETAILED CREDITS WIDGET (toggleable)      */
+    /* 8. DETAILED CREDITS WIDGET                   */
     /* ============================================= */
     .credits-widget {
       margin-top: 1.5rem;
@@ -186,11 +169,7 @@ Prod assist / Mechanic: @whytelife;
     .credits-toggle:hover { color: #777; }
     .dark .credits-toggle:hover { color: #ccc; }
 
-    .credits-toggle svg {
-      width: 16px; height: 16px;
-      fill: currentColor;
-      transition: transform 0.3s ease;
-    }
+    .credits-toggle svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.3s ease; }
 
     .detailed-credits {
       margin-top: 0.8rem;
@@ -203,13 +182,9 @@ Prod assist / Mechanic: @whytelife;
       opacity: 0.9;
       text-align: center;
     }
-    .detailed-credits.show {
-      max-height: 1200px;
-    }
+    .detailed-credits.show { max-height: 1200px; }
 
-    :root:not([data-credits-enabled]) .credits-widget {
-      display: none !important;
-    }
+    :root:not([data-credits-enabled]) .credits-widget { display: none !important; }
 
     /* ============================================= */
     /* 9. RESPONSIVE                                */
@@ -250,7 +225,6 @@ Prod assist / Mechanic: @whytelife;
       <div class="dash">-</div>
       <div class="credit" id="credit-el"></div>
 
-      <!-- DETAILED CREDITS WIDGET -->
       <div class="credits-widget">
         <button class="credits-toggle" id="credits-toggle">
           Credits
@@ -271,26 +245,18 @@ Prod assist / Mechanic: @whytelife;
         <svg id="pause-icon" viewBox="0 0 24 24" style="display:none;"><path d="M14,19H18V5H14M6,19H10V5H6V19Z"/></svg>
       </div>
 
-      <!-- Fullscreen Button -->
-      <div class="fullscreen-btn" id="fullscreen-btn">
-        <svg id="enter-fs" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-        <svg id="exit-fs" viewBox="0 0 24 24" style="display:none;"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm1-8V7h-3V5h5v5h-2z"/></svg>
-      </div>
+      <!-- REMOVED CUSTOM FULLSCREEN BUTTON -->
     </div>
   </div>
 
   <!-- Close button -->
   <button class="close-btn" onclick="window.location.href = 'index.html'">×</button>
 
-  <!-- YouTube Iframe API -->
   <script src="https://www.youtube.com/iframe_api"></script>
 
-  <!-- ============================================= -->
-  <!-- JAVASCRIPT (clean, beginner-friendly)        -->
-  <!-- ============================================= -->
   <script>
     /* -------------------------------------------------
-       STEP 1: Load title & short credit
+       TITLE & CREDIT
        ------------------------------------------------- */
     const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
@@ -307,7 +273,7 @@ Prod assist / Mechanic: @whytelife;
     document.title = titleText + ' - Tristan Partridge';
 
     /* -------------------------------------------------
-       STEP 2: Video source detection
+       VIDEO SOURCE
        ------------------------------------------------- */
     const videoSrc = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
     const videoEl = document.getElementById('video-el');
@@ -316,23 +282,24 @@ Prod assist / Mechanic: @whytelife;
 
     if (videoSrc.includes('youtu.be') || videoSrc.includes('youtube.com')) {
       isYouTube = true;
-      const videoId = videoSrc.split('youtu.be/')[1]?.split('?')[0] ||
-                      videoSrc.split('v=')[1]?.split('&')[0];
+      const videoId =
+        videoSrc.split('youtu.be/')[1]?.split('?')[0] ||
+        videoSrc.split('v=')[1]?.split('&')[0];
+
       youtubeContainer.style.display = 'block';
-      videoEl.style.display = 'none';
 
       window.onYouTubeIframeAPIReady = function() {
         player = new YT.Player('youtube-container', {
           height: '100%',
           width: '100%',
-          videoId: videoId,
+          videoId,
           playerVars: {
             autoplay: 0,
-            controls: 0,
+            controls: 1,      // Default YouTube controls (fullscreen included)
             modestbranding: 1,
             rel: 0,
-            fs: 1,
-            disablekb: 1,
+            fs: 1,            // FULLSCREEN ENABLED
+            disablekb: 0,
             iv_load_policy: 3,
             cc_load_policy: 0
           },
@@ -348,63 +315,29 @@ Prod assist / Mechanic: @whytelife;
     }
 
     /* -------------------------------------------------
-       STEP 3: Theme
-       ------------------------------------------------- */
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-    }
-
-    /* -------------------------------------------------
-       STEP 4: Credits
-       ------------------------------------------------- */
-    const showCredits = getComputedStyle(document.documentElement)
-      .getPropertyValue('--show-detailed-credits').trim() === 'true';
-    if (showCredits) {
-      document.documentElement.dataset.creditsEnabled = 'true';
-      const fullText = getComputedStyle(document.documentElement)
-        .getPropertyValue('--detailed-credit').trim().replace(/\\n/g, '\n');
-      document.getElementById('detailed-credits').textContent = fullText;
-    }
-
-    /* -------------------------------------------------
-       STEP 5: Elements & state
+       PLAY / PAUSE
        ------------------------------------------------- */
     const playBtn = document.getElementById('control-btn');
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
-    const fsBtn = document.getElementById('fullscreen-btn');
-    const enterIcon = document.getElementById('enter-fs');
-    const exitIcon = document.getElementById('exit-fs');
     const container = document.getElementById('video-container');
 
     let hideTimer;
     let isMobile = window.matchMedia("(max-width: 1024px)").matches;
-    let wasPlayingBeforeExit = false;
-    let wasFullscreen = false;
-    let ignoreNextPause = false;
 
-    /* -------------------------------------------------
-       YouTube player callbacks
-       ------------------------------------------------- */
     function onPlayerReady() {
       showButtons();
       updatePlayIcon();
-      updateFullscreenIcons();
     }
 
-    function onPlayerStateChange(event) {
+    function onPlayerStateChange() {
       updatePlayIcon();
     }
 
-    function getVideoElement() {
-      return isYouTube ? player?.getIframe() : videoEl;
-    }
-
     function isPlaying() {
-      if (isYouTube) {
-        return player?.getPlayerState() === 1;
-      }
-      return !videoEl.paused;
+      return isYouTube
+        ? player?.getPlayerState() === 1
+        : !videoEl.paused;
     }
 
     function play() {
@@ -417,45 +350,10 @@ Prod assist / Mechanic: @whytelife;
       else videoEl.pause();
     }
 
-    /* -------------------------------------------------
-       STEP 6: Fullscreen
-       ------------------------------------------------- */
-    function isFullscreen() {
-      const el = getVideoElement();
-      return !!(document.fullscreenElement || document.webkitFullscreenElement ||
-                document.mozFullScreenElement || document.msFullscreenElement ||
-                (el?.webkitDisplayingFullscreen));
-    }
-
-    function toggleFullscreen() {
-      const el = getVideoElement();
-      if (isFullscreen()) {
-        wasPlayingBeforeExit = isPlaying();
-        if (document.exitFullscreen) document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-        else if (document.msExitFullscreen) document.msExitFullscreen();
-        else if (el.webkitExitFullscreen) el.webkitExitFullscreen();
-      } else {
-        if (el.requestFullscreen) el.requestFullscreen();
-        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-        else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
-        else if (el.msRequestFullscreen) el.msRequestFullscreen();
-        else if (el.webkitEnterFullscreen) el.webkitEnterFullscreen();
-      }
-    }
-
-    function updateFullscreenIcons() {
-      enterIcon.style.display = isFullscreen() ? 'none' : 'block';
-      exitIcon.style.display = isFullscreen() ? 'block' : 'none';
-    }
-
-    /* -------------------------------------------------
-       STEP 7: Play/Pause
-       ------------------------------------------------- */
     function updatePlayIcon() {
-      playIcon.style.display = isPlaying() ? 'none' : 'block';
-      pauseIcon.style.display = isPlaying() ? 'block' : 'none';
+      const playing = isPlaying();
+      playIcon.style.display = playing ? "none" : "block";
+      pauseIcon.style.display = playing ? "block" : "none";
     }
 
     function togglePlayPause() {
@@ -472,23 +370,21 @@ Prod assist / Mechanic: @whytelife;
     function showButtons() {
       clearTimeout(hideTimer);
       playBtn.classList.add('show');
-      fsBtn.classList.add('show');
     }
 
     function hideButtons(delay = 1500) {
       clearTimeout(hideTimer);
       hideTimer = setTimeout(() => {
         playBtn.classList.remove('show');
-        fsBtn.classList.remove('show');
       }, delay);
     }
 
     /* -------------------------------------------------
-       STEP 8: Interactions
+       USER INTERACTION
        ------------------------------------------------- */
     function handleContainerClick(e) {
-      if (e.target.closest('#fullscreen-btn')) return;
       if (e.target.closest('#control-btn')) { togglePlayPause(); return; }
+
       if (isMobile) {
         if (playBtn.classList.contains('show')) hideButtons(0);
         else { showButtons(); if (isPlaying()) hideButtons(3000); }
@@ -498,6 +394,7 @@ Prod assist / Mechanic: @whytelife;
     }
 
     container.addEventListener('click', handleContainerClick);
+
     container.addEventListener('mouseenter', () => {
       if (!isMobile) { showButtons(); hideButtons(1200); }
     });
@@ -506,76 +403,51 @@ Prod assist / Mechanic: @whytelife;
     });
 
     /* -------------------------------------------------
-       STEP 9: Keyboard – **F always toggles fullscreen on desktop**
+       KEYBOARD
        ------------------------------------------------- */
     document.addEventListener('keydown', (e) => {
       const active = document.activeElement;
-      const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+      const isTyping =
+        active &&
+        (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
       if (isTyping) return;
 
-      // Space = play / pause (mobile only when fullscreen)
       if (e.code === 'Space' || e.key === ' ') {
-        if (!isMobile || isFullscreen()) {
+        if (!isMobile) {
           e.preventDefault();
           togglePlayPause();
         }
       }
-
-      // **F = fullscreen (desktop only, any state)**
-      if ((e.key === 'f' || e.key === 'F') && !isMobile) {
-        e.preventDefault();
-        toggleFullscreen();
-      }
     });
 
-    fsBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleFullscreen(); });
     playBtn.addEventListener('click', (e) => { e.stopPropagation(); togglePlayPause(); });
 
     /* -------------------------------------------------
-       Fullscreen exit → keep playing
-       ------------------------------------------------- */
-    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt =>
-      document.addEventListener(evt, () => {
-        const nowFullscreen = isFullscreen();
-        if (nowFullscreen) {
-          wasPlayingBeforeExit = isPlaying();
-          ignoreNextPause = false;
-        }
-        if (wasFullscreen && !nowFullscreen && wasPlayingBeforeExit) {
-          ignoreNextPause = true;
-          setTimeout(() => {
-            if (!isPlaying()) play();
-            ignoreNextPause = false;
-          }, 300);
-        }
-        wasFullscreen = nowFullscreen;
-        updateFullscreenIcons();
-      })
-    );
-
-    // Initial state
-    showButtons();
-    updatePlayIcon();
-    updateFullscreenIcons();
-
-    /* -------------------------------------------------
-       STEP 11: Credits toggle
+       CREDITS TOGGLE
        ------------------------------------------------- */
     const creditsToggle = document.getElementById('credits-toggle');
     const creditsList = document.getElementById('detailed-credits');
     const arrow = creditsToggle?.querySelector('svg');
+
     if (creditsToggle) {
       creditsToggle.addEventListener('click', () => {
         creditsList.classList.toggle('show');
-        arrow.style.transform = creditsList.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+        arrow.style.transform =
+          creditsList.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
       });
     }
 
     /* -------------------------------------------------
-       STEP 12: Mobile detection
+       MOBILE DETECTION
        ------------------------------------------------- */
     const mediaQuery = window.matchMedia("(max-width: 1024px)");
     mediaQuery.addEventListener('change', (e) => { isMobile = e.matches; });
+
+    /* -------------------------------------------------
+       INIT
+       ------------------------------------------------- */
+    showButtons();
+    updatePlayIcon();
   </script>
 </body>
 </html>
