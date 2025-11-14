@@ -16,91 +16,96 @@
     .dark { background:#000; color:#fff; }
 
     /* ================================
-       NAVBAR DESKTOP 
+       NAVBAR (GSAP yPercent pour slide fluide)
        ================================ */
-    .nav-container { backdrop-filter: blur(60px) saturate(180%); background: rgba(255,255,255,0.85); transition: transform 0.6s cubic-bezier(.22,1,.36,1); padding: 1.5rem 2rem; display:flex; align-items:center; gap:1rem; position:fixed; top:0; left:0; right:0; z-index:50; }
+    .nav-container {
+      backdrop-filter: blur(60px) saturate(180%);
+      background: rgba(255,255,255,0.85);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      will-change: transform;
+    }
     .dark .nav-container { background: rgba(0,0,0,0.85); }
 
-    .logo-container { position:absolute; left:2rem; top:1.5rem; }
-    #logo { height: var(--logo-height); cursor:pointer; transition: transform .2s; transform: translateY(-18px); }
+    .logo-container { position: absolute; left: 2rem; top: 1.5rem; z-index: 55; }
+    #logo { height: var(--logo-height); cursor: pointer; transition: transform 0.2s ease-out; transform: translateY(-18px); }
     #logo:hover { transform: scale(1.08) translateY(-18px); }
 
-      /* Copyright bottom */
-      #bottom-copyright {
-        left: 2rem;
-        bottom: 1.5rem;
-        font-size: 12px;
-      }
+    .nav-links { position: relative; display: flex; gap: 40px; margin-left: auto; }
+    .nav-link { font-weight: 600; padding: 8px 0; position: relative; z-index: 2; }
+    .underline { position: absolute; bottom: 4px; left: 0; height: 2px; background: #000; transition: all .22s cubic-bezier(.4,0,.2,1); }
+    .dark .underline { background: #fff; }
 
-    .nav-links { position:relative; display:flex; gap:40px; margin-left:auto; }
-    .nav-link { font-weight:600; padding:8px 0; position:relative; z-index:2; }
-    .underline { position:absolute; bottom:4px; left:0; height:2px; background:#000; }
-    .dark .underline { background:#fff; }
+    /* Copyright */
+    #bottom-copyright {
+      position: fixed;
+      left: 2rem;
+      bottom: 1.5rem;
+      font-size: 12px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: 50;
+    }
 
     /* ================================
        ABOUT PAGE CONTENT
        ================================ */
-    .about-content { max-width:1300px; margin:0 auto; padding:2rem; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2rem; }
-    .about-statement { text-align:right; font-weight:700; font-size:1.9rem; line-height:1.25; letter-spacing:-0.03em; opacity:0.95; max-width:720px; margin-left:auto; padding-right:2rem; }
-    .about-header { display:flex; align-items:flex-end; justify-content:flex-start; gap:5rem; width:100%; margin-top:-3rem; margin-left:3.2rem; }
-    .about-photo { width:190px; height:260px; border-radius:32px; object-fit:cover; box-shadow:0 20px 40px rgba(0,0,0,0.15); flex-shrink:0; }
-    .about-intro { font-size:1.35rem; line-height:1.55; letter-spacing:-0.02em; opacity:0.92; font-weight:500; max-width:540px; margin-bottom:0.8rem; }
-    .tags-container { display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:flex-start; margin-top:1rem; margin-left:3.2rem; }
-    .tag-box { border:1.5px solid rgba(0,0,0,0.12); border-radius:20px; padding:0.7rem 1.4rem; background: rgba(255,255,255,0.5); backdrop-filter: blur(6px); font-size:0.95rem; font-weight:600; letter-spacing:0.02em; opacity:0; transform: translateY(20px); }
+    .about-content { max-width: 1300px; margin: 0 auto; padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 2rem; }
+    .about-statement { text-align: right; font-weight: 700; font-size: 1.9rem; line-height: 1.25; letter-spacing: -0.03em; opacity: 0.95; max-width: 720px; margin-left: auto; padding-right: 2rem; }
+    .about-header { display: flex; align-items: flex-end; justify-content: flex-start; gap: 5rem; width: 100%; margin-top: -3rem; margin-left: 3.2rem; }
+    .about-photo { width: 190px; height: 260px; border-radius: 32px; object-fit: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.15); flex-shrink: 0; }
+    .about-intro { font-size: 1.35rem; line-height: 1.55; letter-spacing: -，曾0.02em; opacity: 0.92; font-weight: 500; max-width: 540px; margin-bottom: 0.8rem; }
+    .tags-container { display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: flex-start; margin-top: 1rem; margin-left: 3.2rem; }
+    .tag-box { border: 1.5px solid rgba(0,0,0,0.12); border-radius: 20px; padding: 0.7rem 1.4rem; background: rgba(255,255,255,0.5); backdrop-filter: blur(6px); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.02em; opacity: 0; transform: translateY(20px); }
     .dark .tag-box { border-color: rgba(255,255,255,0.18); background: rgba(0,0,0,0.35); }
 
     /* ================================
-       MOBILE NAV + ABOUT PAGE
+       MOBILE
        ================================ */
     @media (max-width: 767px) {
-      .nav-container { padding:1.2rem 1rem; backdrop-filter: blur(20px) saturate(150%); height:64px; align-items:center; }
-      .logo-container { left:1.25rem; top:0.8rem; }
-      #logo { height:50px; transform: translateY(0); }
+      .nav-container { padding: 1.2rem 1rem; backdrop-filter: blur(20px) saturate(150%); height: 64px; align-items: center; }
+      .logo-container { left: 1.25rem; top: 0.8rem; }
+      #logo { height: 50px; transform: translateY(0); }
       #logo:hover { transform: scale(1.05); }
 
-      /* Hamburger */
-      #hamburger { display:flex; right:1rem; top:0.9rem; padding:0.35rem; width:44px; height:44px; gap:6px; opacity:1; visibility:visible; align-items:center; justify-content:center; position:absolute; z-index:60; }
-      #hamburger span { height:3px; width:28px; background-color:#000; border-radius:2px; transition:all 0.3s ease; }
-      .dark #hamburger span { background-color:#fff; }
+      #hamburger { display: flex; right: 1rem; top: 0.9rem; padding: 0.35rem; width: 44px; height: 44px; gap: 6px; align-items: center; justify-content: center; position: absolute; z-index: 60; }
+      #hamburger span { height: 3px; width: 28px; background-color: #000; border-radius: 2px; transition: all 0.3s ease; }
+      .dark #hamburger span { background-color: #fff; }
 
-      /* Mobile menu */
-      #mobile-menu { display:flex; flex-direction:column; align-items:center; justify-content:center; background: rgba(255,255,255,0.98); gap:2.5rem; font-size:1.9rem; font-weight:600; position:fixed; inset:0; z-index:55; opacity:0; visibility:hidden; transition:opacity 0.4s, visibility 0.4s; }
-      #mobile-menu:not(.hidden) { opacity:1; visibility:visible; pointer-events:auto; }
-      #mobile-menu a { opacity:0; transform:translateY(20px); transition:opacity 0.28s ease, transform 0.28s ease; }
-      #mobile-menu:not(.hidden) a { opacity:1; transform:translateY(0); }
+      #mobile-menu { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.98); gap: 2.5rem; font-size: 1.9rem; font-weight: 600; position: fixed; inset: 0; z-index: 55; opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
+      #mobile-menu:not(.hidden) { opacity: 1; visibility: visible; pointer-events: auto; }
+      #mobile-menu a { opacity: 0; transform: translateY(20px); transition: opacity 0.28s ease, transform 0.28s ease; }
+      #mobile-menu:not(.hidden) a { opacity: 1; transform: translateY(0); }
+      #mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
+      #mobile-menu a:nth-child(2) { transition-delay: 0.12s; }
+      #mobile-menu a:nth-child(3) { transition-delay: 0.18s; }
 
-      #mobile-menu a:nth-child(1) { transition-delay:0.06s; }
-      #mobile-menu a:nth-child(2) { transition-delay:0.12s; }
-      #mobile-menu a:nth-child(3) { transition-delay:0.18s; }
-
-      /* About mobile style */
-      main { padding-top:5.25rem; }
-      .about-content { padding:1rem; gap:1.5rem; }
-      .about-statement { font-size:1.4rem; text-align:center; padding:0; margin:0 auto; max-width:95%; }
-      .about-header { flex-direction:column; align-items:center; margin-left:0; margin-top:1rem; gap:1.5rem; width:100%; }
-      .about-photo { width:140px; height:200px; border-radius:24px; }
-      .about-intro { font-size:1rem; max-width:90%; text-align:center; margin:0; }
-      .tags-container { margin-left:0; justify-content:center; gap:0.8rem; }
-      .tag-box { padding:0.6rem 1rem; font-size:0.85rem; border-radius:16px; }
-      footer .flex { gap:2rem; }
-      footer img { width:36px; height:36px; }
+      main { padding-top: 5.25rem; }
+      .about-content { padding: 1rem; gap: 1.5rem; }
+      .about-statement { font-size: 1.4rem; text-align: center; padding: 0; margin: 0 auto; max-width: 95%; }
+      .about-header { flex-direction: column; align-items: center; margin-left: 0; margin-top: 1rem; gap: 1.5rem; width: 100%; }
+      .about-photo { width: 140px; height: 200px; border-radius: 24px; }
+      .about-intro { font-size: 1rem; max-width: 90%; text-align: center; margin: 0; }
+      .tags-container { margin-left: 0; justify-content: center; gap: 0.8rem; }
+      .tag-box { padding: 0.6rem 1rem; font-size: 0.85rem; border-radius: 16px; }
     }
   </style>
 </head>
 
 <body class="light min-h-screen flex flex-col">
 
-  <!-- ================================================
-       ✅ NAVBAR SECTION — CLEAN / COPY-PASTE READY
-       ================================================= -->
+  <!-- NAVBAR -->
   <nav class="nav-container">
-    
-    <!-- LOGO -->
     <div class="logo-container">
       <img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'">
     </div>
 
-    <!-- NAV LINKS DESKTOP -->
     <div class="hidden md:flex nav-links text-lg font-medium">
       <a href="index.html" class="nav-link" data-page="works">Works</a>
       <a href="about.html" class="nav-link active" data-page="about">About</a>
@@ -108,15 +113,12 @@
       <div class="underline" id="underline"></div>
     </div>
 
-    <!-- HAMBURGER MOBILE -->
     <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </nav>
-  
-  <!-- ✅ END NAVBAR SECTION -->
 
   <!-- MOBILE MENU -->
   <nav id="mobile-menu" class="hidden" aria-hidden="true">
@@ -157,163 +159,142 @@
     </div>
   </footer>
 
-  <!-- Bottom-left copyright (appears only when near bottom) -->
-  <div id="bottom-copyright"
-       class="fixed bottom-6 left-8 text-xs text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none"
-       style="opacity:0; visibility:hidden;">
+  <!-- COPYRIGHT -->
+  <div id="bottom-copyright" class="text-gray-500 select-none font-light tracking-wider">
     © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
   </div>
 
-
-  <!-- ================================
-       SCRIPTS
-       ================================ -->
+  <!-- SCRIPTS -->
   <script>
     gsap.registerPlugin(ScrollTrigger);
-    const sound = new Howl({ src:['https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'], volume:0.3 });
+    const sound = new Howl({ src: ['https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'], volume: 0.3 });
 
     /* =================================================================
-       LOGO + CONFIG.JSON
+       CONFIG LOGOS
        ================================================================= */
-    fetch('config.json').then(r=>r.json()).then(cfg=>{
-      const logoEl=document.getElementById('logo');
-      const instaEl=document.getElementById('insta-logo');
-      const behanceEl=document.getElementById('behance-logo');
-      if(cfg.logo) logoEl.src=cfg.logo;
-      if(cfg.instagram_logo) instaEl.src=cfg.instagram_logo;
-      if(cfg.behance_logo) behanceEl.src=cfg.behance_logo;
+    fetch('config.json').then(r => r.json()).then(cfg => {
+      const logoEl = document.getElementById('logo');
+      const instaEl = document.getElementById('insta-logo');
+      const behanceEl = document.getElementById('behance-logo');
+      if (cfg.logo) logoEl.src = cfg.logo;
+      if (cfg.instagram_logo) instaEl.src = cfg.instagram_logo;
+      if (cfg.behance_logo) behanceEl.src = cfg.behance_logo;
+    }).catch(() => {});
+
+    /* =================================================================
+       NAVBAR SLIDE (GSAP yPercent - COMME DANS CONTACT)
+       ================================================================= */
+    let lastY = 0;
+    const nav = document.querySelector(".nav-container");
+
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      const d = y - lastY;
+      if (d > 8 && y > 100) {
+        gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
+      } else if (d < -8) {
+        gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
+      }
+      lastY = y;
     });
 
     /* =================================================================
-       DESKTOP NAV UNDERLINE
+       UNDERLINE
        ================================================================= */
-    const underline=document.getElementById('underline');
-    const links=document.querySelectorAll('.nav-link');
-    let currentTarget=document.querySelector('[data-page="about"]');
+    const underline = document.getElementById('underline');
+    const links = document.querySelectorAll('.nav-link');
+    let currentTarget = document.querySelector('[data-page="about"]');
 
-    function setUnderlineInstant(target){
-      if(!target) return;
-      const linkRect=target.getBoundingClientRect();
-      const containerRect=target.parentElement.getBoundingClientRect();
-      underline.style.left=(linkRect.left-containerRect.left)+"px";
-      underline.style.width=linkRect.width+"px";
+    function setUnderlineInstant(target) {
+      if (!target || !underline) return;
+      const linkRect = target.getBoundingClientRect();
+      const containerRect = target.parentElement.getBoundingClientRect();
+      underline.style.left = (linkRect.left - containerRect.left) + 'px';
+      underline.style.width = linkRect.width + 'px';
     }
 
-    function moveUnderline(target){
-      const linkRect=target.getBoundingClientRect();
-      const containerRect=target.parentElement.getBoundingClientRect();
-      gsap.to(underline,{left:(linkRect.left-containerRect.left)+"px", width:linkRect.width, duration:0.02});
-    }
-
-    window.addEventListener('load',()=>setUnderlineInstant(currentTarget));
-
-    links.forEach(link=>{
-      link.addEventListener('mouseenter',()=>moveUnderline(link));
-      link.addEventListener('mouseleave',()=>moveUnderline(currentTarget));
-      link.addEventListener('click',()=>{
-        currentTarget=link;
-      });
+    window.addEventListener('load', () => setUnderlineInstant(currentTarget));
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => setUnderlineInstant(link));
+      link.addEventListener('mouseleave', () => setUnderlineInstant(currentTarget));
+      link.addEventListener('click', () => currentTarget = link);
     });
 
     /* =================================================================
-       MOBILE MENU BEHAVIOR
+       MOBILE MENU
        ================================================================= */
-    const hamburger=document.getElementById("hamburger");
-    const mobileMenu=document.getElementById("mobile-menu");
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-    function lockBody(locked){
+    function lockBody(locked) {
       document.body.style.overflow = locked ? 'hidden' : '';
     }
 
-    function closeMenu(){
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden','true');
-      hamburger.classList.remove("active");
-      hamburger.setAttribute('aria-expanded','false');
-      lockBody(false);
-
-      gsap.to(hamburger.children[0],{rotate:0,y:0,duration:0.28});
-      gsap.to(hamburger.children[1],{opacity:1,duration:0.18});
-      gsap.to(hamburger.children[2],{rotate:0,y:0,duration:0.28});
-    }
-
-    // Toggle
-    hamburger.addEventListener("click",()=>{
-      const isHidden=mobileMenu.classList.contains("hidden");
-      if(isHidden){
-        mobileMenu.classList.remove("hidden");
-        mobileMenu.setAttribute('aria-hidden','false');
-        hamburger.setAttribute('aria-expanded','true');
+    hamburger.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        hamburger.setAttribute('aria-expanded', 'true');
         lockBody(true);
       } else {
-        closeMenu();
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
       }
       sound.play();
-    });
-  // ✅ FULL MOBILE MENU CLICK HANDLER WITH OUTSIDE-CLOSE
-  mobileMenu.addEventListener("click", (e) => {
-
-    // 1. User clicks on a link
-    if (e.target.tagName === "A") {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      hamburger.classList.remove("active");
-      hamburger.setAttribute('aria-expanded', 'false');
-      lockBody(false);
-      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
-      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
-      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
-      sound.play();
-      return; // allow navigation
-    }
-
-    // ✅ 2. ADDED — user clicks the black background (outside the menu links)
-    if (e.target === mobileMenu) {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      hamburger.classList.remove("active");
-      hamburger.setAttribute('aria-expanded', 'false');
-      lockBody(false);
-      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
-      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
-      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
-    }
-  });
-
-  // Close mobile menu on escape
-  window.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      hamburger.classList.remove("active");
-      hamburger.setAttribute('aria-expanded', 'false');
-      lockBody(false);
-    }
-  });
-    // NEW: Close menu when tapping outside ANYWHERE
-    document.addEventListener("click", (e)=>{
-      if (!mobileMenu.classList.contains("hidden") &&
-          !mobileMenu.contains(e.target) &&
-          !hamburger.contains(e.target)) {
-        closeMenu();
+      hamburger.classList.toggle('active');
+      if (hamburger.classList.contains('active')) {
+        gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
+      } else {
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
       }
     });
 
-    // Close on link tap
-    mobileMenu.addEventListener("click",e=>{
-      if(e.target.tagName==="A") closeMenu();
+    mobileMenu.addEventListener('click', e => {
+      if (e.target.tagName === 'A' || e.target === mobileMenu) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+        sound.play();
+      }
     });
 
-    // ESC key
-    window.addEventListener('keydown',ev=>{
-      if(ev.key==='Escape' && !mobileMenu.classList.contains('hidden')) closeMenu();
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+      }
     });
 
     /* =================================================================
        TAGS ANIMATION
        ================================================================= */
-    gsap.fromTo('.tag-box',{opacity:0,y:30},{opacity:1,y:0,duration:0.9,stagger:0.1,delay:0.8});
+    gsap.fromTo('.tag-box', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, delay: 0.8 });
 
+    /* =================================================================
+       COPYRIGHT
+       ================================================================= */
     (function () {
       const el = document.getElementById('bottom-copyright');
       let shown = false;
@@ -322,23 +303,16 @@
         if (nearBottom && !shown) {
           shown = true;
           el.style.visibility = 'visible';
-          gsap.to(el, { opacity: 1, duration: 0.8, ease: "power2.out" });
+          gsap.to(el, { opacity: 1, duration: 0.8, ease: 'power2.out' });
         } else if (!nearBottom && shown) {
           shown = false;
-          gsap.to(el, {
-            opacity: 0,
-            duration: 0.1,
-            ease: "power2.in",
-            onComplete: () => el.style.visibility = 'hidden'
-          });
+          gsap.to(el, { opacity: 0, duration: 0.1, ease: 'power2.in', onComplete: () => el.style.visibility = 'hidden' });
         }
       };
       window.addEventListener('scroll', check);
       window.addEventListener('load', check);
       requestAnimationFrame(check);
     })();
-    
-
   </script>
 </body>
 </html>
