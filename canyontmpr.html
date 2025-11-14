@@ -130,11 +130,11 @@ Prod assist / Mechanic: @whytelife;
       font-size:0.9rem;
       cursor:pointer;
       padding:0.5rem;
-
       display:flex;
       align-items:center;
       gap:0.35rem;
       justify-content:center;
+      color: #000;
     }
 
     .credits-toggle svg {
@@ -149,13 +149,16 @@ Prod assist / Mechanic: @whytelife;
     }
 
     .detailed-credits {
+      margin: 0 auto;
       margin-top:0.8rem;
       max-height:0;
       overflow:hidden;
       transition:max-height 0.4s ease;
       font-size:var(--credits-font-size);
       white-space:pre-line;
-      text-align:center;
+      text-align:left;
+      max-width: 20rem;
+      color: #000;
     }
     .detailed-credits.show { max-height:1200px; }
 
@@ -170,7 +173,10 @@ Prod assist / Mechanic: @whytelife;
         gap: 3rem;
         padding: 5vw;
       }
-      .video-container { width:90vw; }
+      .video-container {
+        width:90vw;
+        order: -1;
+      }
     }
   </style>
 </head>
