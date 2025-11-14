@@ -38,7 +38,7 @@ Prod assist / Mechanic: @whytelife;
 
       --credits-font-size: 0.7rem;
 
-      /* Fully adjustable arrow size */
+      /* NEW: arrow size (adjust freely) */
       --credits-arrow-size: 0.9rem;
     }
 
@@ -124,21 +124,17 @@ Prod assist / Mechanic: @whytelife;
       margin-top: 1.5rem;
       text-align: center;
     }
-
     .credits-toggle {
-      background: none;
-      border: none;
-      font-size: 0.9rem;
-      cursor: pointer;
-      padding: 0.5rem;
+      background:none;
+      border:none;
+      font-size:0.9rem;
+      cursor:pointer;
+      padding:0.5rem;
 
-      width: 100%;
-      text-align: center;
-
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.35rem;
+      display:flex;
+      align-items:center;
+      gap:0.35rem;
+      justify-content:center;
     }
 
     .credits-toggle svg {
@@ -153,15 +149,15 @@ Prod assist / Mechanic: @whytelife;
     }
 
     .detailed-credits {
-      margin-top: 0.8rem;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-      font-size: var(--credits-font-size);
-      white-space: pre-line;
-      text-align: center;
+      margin-top:0.8rem;
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.4s ease;
+      font-size:var(--credits-font-size);
+      white-space:pre-line;
+      text-align:center;
     }
-    .detailed-credits.show { max-height: 1200px; }
+    .detailed-credits.show { max-height:1200px; }
 
     :root:not([data-credits-enabled]) .credits-widget { display:none!important; }
 
@@ -191,7 +187,7 @@ Prod assist / Mechanic: @whytelife;
 
       <div class="credits-widget">
         <button class="credits-toggle" id="credits-toggle">
-          <span>Credits</span>
+          Credits
           <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
         </button>
         <div class="detailed-credits" id="detailed-credits"></div>
