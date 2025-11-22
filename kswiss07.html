@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <!-- ============================================= -->
+  <!-- 1. META & TITLE                              -->
+  <!-- ============================================= -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tie - Tristan Partridge</title>
+
+  <!-- ============================================= -->
+  <!-- 2. CONFIGURATION                             -->
+  <!-- ============================================= -->
+  <style>
+    :root {
+      --video-src: https://www.youtube.com/watch?v=wpDrBfda8XI;
+
+      --title: "KSWISS 07";
+      --credit: Visual by 37RECORDME;
+
+      --video-width: 900px;
+
+      --show-detailed-credits: true;
+
+      --detailed-credit: Director : @37recordme
+Creative director brand : @carrotsbyanwarcarrots
+Productrice : @barbaras_production
+Executive Producer /DA : @_nicolasoares
+1st AD : @m_xlina
+2nd AD : Lenny Alpou
+Dop : @mariusponsdop
+Color grading: @malograndbouche
+Photographer : Le Petit Cooper
+Stylist : @perledess
+Casting : @pakdejus
+Muah : @maldonne_fx
+
+Model : @amaysz
+@anwarcarrotsjp
+
+Jewels stylism : @hadassah.g @starehstudio
+Location manager : @_.kinsee._
+
+Animator 3D : @fifalafly
+Comp vfx : @leonard_mb
+Comp vfx : @ax_smn
+Artist 3D : @matteo_vfx_
+
+Sound designer : @tristanpartridge
+Compo: @frokhaha
+
+Editor : @37recordme
+
+Productions company: @tdt_production
+CoProductions : @humanity7ink;
+
+      --credits-font-size: 0.7rem;
+
+      /* NEW: arrow size (adjust freely) */
+      --credits-arrow-size: 0.9rem;
+    }
+
+    /* ============================================= */
+    /* 3. GENERAL STYLE                             */
+    /* ============================================= */
+    body {
+      margin: 0;
+      background: rgba(255,255,255,0.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      backdrop-filter: blur(4px);
+      overflow: auto;
+    }
+
+    .page-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7.5rem;
+      max-width: 95vw;
+      padding: 5rem 10vw;
+    }
+
+    /* ============================================= */
+    /* 4. VIDEO                                     */
+    /* ============================================= */
+    .video-container {
+      position: relative;
+      width: var(--video-width);
+      max-width: 90vw;
+      aspect-ratio: 16 / 9;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+      cursor: pointer;
+    }
+    video, iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+      border: none;
+    }
+
+    /* ============================================= */
+    /* 5. PLAY/PAUSE REMOVED                         */
+    /* ============================================= */
+    .control-btn { display:none !important; }
+
+    /* ============================================= */
+    /* 6. CLOSE BUTTON                              */
+    /* ============================================= */
+    .close-btn {
+      position: fixed;
+      top: 2rem; right: 2rem;
+      background: none; border: none;
+      font-size: 2.5rem; cursor: pointer;
+      color: #000; z-index: 20;
+    }
+
+    /* ============================================= */
+    /* 7. TITLE & CREDITS                           */
+    /* ============================================= */
+    .video-title {
+      color: #000;
+      text-align: center;
+      max-width: 360px;
+      margin: 0;
+    }
+    .video-title .title   { font-weight: 700; font-size: 2.2rem; letter-spacing: -0.03em; }
+    .video-title .dash    { display: block; margin: 0.9rem 0; font-size: 1.3rem; opacity: 0.5; }
+    .video-title .credit  { display: block; font-size: 1.2rem; opacity: 0.9; }
+    .video-title .credit strong { font-weight: 700; }
+
+    /* ============================================= */
+    /* 8. DETAILED CREDITS WIDGET (toggleable)      */
+    /* ============================================= */
+    .credits-widget {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+    .credits-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: inherit;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s;
+    }
+    .credits-toggle:hover { color: #777; }
+    .dark .credits-toggle:hover { color: #ccc; }
+
+    .credits-toggle svg {
+      width: 16px; height: 16px;
+      fill: currentColor;
+      transition: transform 0.3s ease;
+    }
+
+    .detailed-credits {
+      margin-top: 0.8rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      font-size: var(--credits-font-size);
+      line-height: 1.5;
+      white-space: pre-line;
+      opacity: 0.9;
+      text-align: center;
+    }
+    .detailed-credits.show {
+      max-height: 1200px;
+    }
+
+    /* Hide widget if disabled */
+    :root:not([data-credits-enabled]) .credits-widget {
+      display: none !important;
+    }
+
+    /* ============================================= */
+    /* 9. RESPONSIVE                                */
+    /* ============================================= */
+    @media (max-width: 1024px) {
+      .page-wrapper {
+        flex-direction: column;
+        gap: 3rem;
+        padding: 5vw;
+      }
+      .video-container {
+        width:90vw;
+        order: -1;
+      }
+    }
+
+    @media (orientation: landscape) and (max-width: 1024px) {
+      .page-wrapper {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      .video-container {
+        width: 70vw;
+        max-width: 700px;
+      }
+    }
+  </style>
+</head>
+
+<body class="light">
+
+  <div class="page-wrapper">
+
+    <!-- TITLE + SHORT CREDIT -->
+    <div class="video-title">
+      <div class="title" id="title-el"></div>
+      <div class="dash">-</div>
+      <div class="credit" id="credit-el"></div>
+
+      <div class="credits-widget">
+        <button class="credits-toggle" id="credits-toggle">
+          Credits
+          <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+        <div class="detailed-credits" id="detailed-credits"></div>
+      </div>
+    </div>
+
+    <!-- VIDEO PLAYER -->
+    <div class="video-container" id="video-container">
+      <video id="video-el" preload="metadata" playsinline style="display:none;"></video>
+      <div id="youtube-container" style="display:none; width:100%; height:100%;"></div>
+    </div>
+  </div>
+
+  <button class="close-btn" onclick="window.location.href = 'index.html'">×</button>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+    /* -------------------------------------------------
+       TITLE & CREDIT
+    ------------------------------------------------- */
+    const titleEl = document.getElementById('title-el');
+    const creditEl = document.getElementById('credit-el');
+
+    const titleText = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+
+    titleEl.textContent = titleText;
+    document.title = titleText + ' - Tristan Partridge';
+
+    if (creditText.toLowerCase().includes('by')) {
+      const [a, b] = creditText.split(/by/i);
+      creditEl.innerHTML = (a ? a.trim() + ' by ' : 'by ') + '<strong>' + b.trim() + '</strong>';
+    } else {
+      creditEl.textContent = creditText;
+    }
+
+    /* -------------------------------------------------
+       VIDEO SOURCE
+    ------------------------------------------------- */
+    const videoSrc = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+    const videoEl = document.getElementById('video-el');
+    const youtubeContainer = document.getElementById('youtube-container');
+
+    let player, isYouTube = false;
+
+    if (videoSrc.includes('youtube')) {
+      isYouTube = true;
+
+      const videoId =
+        videoSrc.split('youtu.be/')[1]?.split('?')[0] ||
+        videoSrc.split('v=')[1]?.split('&')[0];
+
+      youtubeContainer.style.display = 'block';
+
+      window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player('youtube-container', {
+          height: '100%',
+          width: '100%',
+          videoId,
+          playerVars: {
+            autoplay: 0,
+            controls: 1,
+            modestbranding: 1,
+            rel: 0,
+            fs: 1
+          }
+        });
+      };
+    } else {
+      videoEl.src = videoSrc;
+      videoEl.style.display = 'block';
+    }
+
+    /* -------------------------------------------------
+       CREDITS TOGGLE
+    ------------------------------------------------- */
+    const creditsToggle = document.getElementById('credits-toggle');
+    const creditsList = document.getElementById('detailed-credits');
+    const arrow = creditsToggle?.querySelector('svg');
+
+    creditsToggle?.addEventListener('click', () => {
+      creditsList.classList.toggle('show');
+      arrow.style.transform =
+        creditsList.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    /* -------------------------------------------------
+       DETAILED CREDITS TEXT
+    ------------------------------------------------- */
+    const showCredits = getComputedStyle(document.documentElement)
+      .getPropertyValue('--show-detailed-credits').trim() === 'true';
+
+    if (showCredits) {
+      document.documentElement.dataset.creditsEnabled = 'true';
+
+      const fullText = getComputedStyle(document.documentElement)
+        .getPropertyValue('--detailed-credit').trim().replace(/\\n/g, '\n');
+
+      document.getElementById('detailed-credits').textContent = fullText;
+    }
+  </script>
+</body>
+</html>
