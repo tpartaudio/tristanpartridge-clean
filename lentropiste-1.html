@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <!-- ============================================= -->
-  <!-- 1. META INFORMATION (SEO & BROWSER)          -->
-  <!-- ============================================= -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>L'Entropiste - Tristan Partridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dorian's Spleen - L'Entropiste - Tristan Partridge</title>
 
-  <!-- ============================================= -->
-  <!-- 2. CSS VARIABLES (EASY TO CHANGE)            -->
-  <!-- ============================================= -->
   <style>
+    /* ============================================ */
+    /* SECTION 1: VARIABLES PERSONNALISABLES        */
+    /* ============================================ */
     :root {
-      /* Title and credits */
       --title: "Dorian's Spleen";
       --credit-by: by;
       --credit-name: L’Entropiste;
 
-      /* Video size on desktop */
-      --video-width: 380px;
-      --video-height: 677px; /* 9:16 ratio */
+      /* ========== SOUND ROLE – PERFECTLY CONSISTENT ========== */
+      --sound-role: Music + Sound Design + Mix;
+      --sound-role-size: 0.65rem;
+      --sound-role-offset: -2.2rem;
+      --sound-role-opacity: 0.75;
+      --sound-role-color: #000;
+      /* ======================================================= */
 
-      /* Mobile video size (smaller) */
+      --video-width: 380px;
+      --video-height: 677px;
       --mobile-video-max-width: 320px;
 
-      /* ========================================= */
-      /* TEXT SIZE CONTROL (SMALLER ON MOBILE)     */
-      /* ========================================= */
       --title-font-size: 2.4rem;     
       --dash-font-size: 1.3rem;      
       --credit-font-size: 1.2rem;    
@@ -36,25 +34,37 @@
       --mobile-dash-font-size: 1.1rem;
       --mobile-credit-font-size: 1.0rem;
 
-      /* ========================================= */
-      /* CLOSE BUTTON POSITION (EASY TO ADJUST)    */
-      /* ========================================= */
       --close-top: 1.5rem;   
       --close-right: 1.5rem; 
       --close-font-size: 2.5rem;
 
-      /* ========================================= */
-      /* NAVIGATION: GO TO INDEX PAGE (WORKS)      */
-      /* ========================================= */
       --index-page-url: index.html; 
     }
 
-    /* ============================================= */
-    /* 3. GENERAL PAGE STYLES                       */
-    /* ============================================= */
+    /* SOUND ROLE – bulletproof & consistent */
+    .sound-role {
+      display: block;
+      position: relative;
+      top: var(--sound-role-offset, -2rem);
+      margin-bottom: 1rem;
+      font-size: var(--sound-role-size, 0.78rem);
+      font-weight: 500;
+      color: var(--sound-role-color, #000);
+      opacity: var(--sound-role-opacity, 0.75);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .dark .sound-role { color: #fff; }
+
+    /* ============================================ */
+    /* SECTION 2: GENERAL PAGE STYLES               */
+    /* ============================================ */
     body {
       margin: 0;
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(255,255,255,0.96);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -63,14 +73,8 @@
       overflow: hidden;
       backdrop-filter: blur(4px);
     }
+    .dark body { background: rgba(0,0,0,0.96); }
 
-    .dark body {
-      background: rgba(0, 0, 0, 0.96);
-    }
-
-    /* ============================================= */
-    /* 4. MAIN LAYOUT (DESKTOP: SIDE BY SIDE)       */
-    /* ============================================= */
     .page-wrapper {
       display: flex;
       align-items: center;
@@ -81,9 +85,6 @@
       height: 100vh;
     }
 
-    /* ============================================= */
-    /* 5. TITLE & CREDITS (CENTERED TEXT)           */
-    /* ============================================= */
     .video-title {
       color: #000;
       line-height: 1.2;
@@ -129,9 +130,6 @@
       color: #fff;
     }
 
-    /* ============================================= */
-    /* 6. VIDEO CONTAINER (VERTICAL 9:16)           */
-    /* ============================================= */
     .video-container {
       position: relative;
       width: var(--video-width);
@@ -140,7 +138,7 @@
       aspect-ratio: 9 / 16;
       border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       cursor: pointer;
       flex-shrink: 0;
     }
@@ -153,9 +151,6 @@
       border: 0;
     }
 
-    /* ============================================= */
-    /* 8. CLOSE BUTTON (TOP-RIGHT, EASY TO ADJUST)  */
-    /* ============================================= */
     .close-btn {
       position: absolute;
       top: var(--close-top);
@@ -169,17 +164,10 @@
       transition: transform 0.2s ease;
     }
 
-    .dark .close-btn {
-      color: #fff;
-    }
+    .dark .close-btn { color: #fff; }
+    .close-btn:hover { transform: scale(1.2); }
 
-    .close-btn:hover {
-      transform: scale(1.2);
-    }
-
-    /* ============================================= */
-    /* 9. MOBILE & TABLET LAYOUT (STACKED, SMALLER VIDEOS & TEXT) */
-    /* ============================================= */
+    /* RESPONSIVE */
     @media (max-width: 1100px) {
       .page-wrapper {
         flex-direction: column;
@@ -199,18 +187,9 @@
         justify-content: center;
       }
 
-      .video-title .title {
-        font-size: var(--mobile-title-font-size);
-      }
-
-      .video-title .dash {
-        font-size: var(--mobile-dash-font-size);
-        margin: 0.7rem 0;
-      }
-
-      .video-title .credit {
-        font-size: var(--mobile-credit-font-size);
-      }
+      .video-title .title   { font-size: var(--mobile-title-font-size); }
+      .video-title .dash    { font-size: var(--mobile-dash-font-size); }
+      .video-title .credit  { font-size: var(--mobile-credit-font-size); }
 
       .video-container {
         order: 2;
@@ -220,24 +199,11 @@
         aspect-ratio: 9 / 16;
         margin-bottom: 1.5rem;
       }
-
-      iframe {
-        max-width: 100%;
-        height: auto;
-      }
-
-      body {
-        overflow-y: auto;
-      }
     }
 
     @media (max-width: 480px) {
-      .video-title .title {
-        font-size: 1.6rem;
-      }
-      .video-container {
-        max-width: 280px;
-      }
+      .video-title .title { font-size: 1.6rem; }
+      .video-container { max-width: 280px; }
     }
   </style>
 </head>
@@ -246,46 +212,32 @@
 
   <div class="page-wrapper">
 
-    <!-- Title and credit -->
     <div class="video-title">
+      <!-- SOUND ROLE BADGE – perfectly integrated -->
+      <span class="sound-role" id="sound-role-el"></span>
+
       <div class="title" id="title-el"></div>
       <div class="dash">-</div>
       <div class="credit" id="credit-el"></div>
     </div>
 
-    <!-- First video (YouTube Embed) -->
     <div class="video-container" id="video-container-1">
-      <iframe
-        id="video-el-1"
-        src="https://www.youtube.com/embed/1Kgrm146N-A?enablejsapi=1"
-        title="YouTube video 1"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        style="border-radius: 24px;"
-      ></iframe>
+      <iframe id="video-el-1" src="https://www.youtube.com/embed/1Kgrm146N-A?enablejsapi=1" title="YouTube video 1"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
 
-    <!-- Second video (YouTube Embed) -->
     <div class="video-container" id="video-container-2">
-      <iframe
-        id="video-el-2"
-        src="https://www.youtube.com/embed/Uc-KAnqY6R4?enablejsapi=1"
-        title="YouTube video 2"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        style="border-radius: 24px;"
-      ></iframe>
+      <iframe id="video-el-2" src="https://www.youtube.com/embed/Uc-KAnqY6R4?enablejsapi=1" title="YouTube video 2"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
 
-  <!-- Close button → goes to index.html -->
   <button class="close-btn" id="close-btn">×</button>
 
-  <!-- ============================================= -->
-  <!-- 11. JAVASCRIPT (TITLE, THEME, CLOSE BUTTON)  -->
-  <!-- ============================================= -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
   <script>
-    /* Set title and credit from CSS variables */
+    // Title & Credit
     const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
 
@@ -295,52 +247,39 @@
 
     titleEl.textContent = titleText;
     creditEl.innerHTML = `${byText} <strong>${nameText}</strong>`;
+    document.title = "Dorian's Spleen - L'Entropiste - Tristan Partridge";
 
-    document.title = "L'Entropiste - Tristan Partridge";
-
-    /* Apply saved theme (light/dark) */
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
+    // SOUND ROLE – inject from CSS variable
+    const soundRoleEl = document.getElementById('sound-role-el');
+    const soundRoleText = getComputedStyle(document.documentElement).getPropertyValue('--sound-role').trim();
+    if (soundRoleText) {
+      soundRoleEl.textContent = soundRoleText;
+    } else {
+      soundRoleEl.style.display = 'none';
     }
 
-    /* Close button → go to index.html (Works page) */
+    // Close button
     const closeBtn = document.getElementById('close-btn');
-    const indexUrl = getComputedStyle(document.documentElement)
-                     .getPropertyValue('--index-page-url').trim();
+    const indexUrl = getComputedStyle(document.documentElement).getPropertyValue('--index-page-url').trim();
+    closeBtn.addEventListener('click', () => window.location.href = indexUrl);
 
-    closeBtn.addEventListener('click', () => {
-      window.location.href = indexUrl;
-    });
+    // Theme
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
 
-    /* YouTube API for controlling videos */
+    // YouTube players (play one → pause the other)
     let player1, player2;
 
     function onPlayerStateChange1(event) {
-      if (event.data === YT.PlayerState.PLAYING) {
-        player2.pauseVideo();
-      }
+      if (event.data === YT.PlayerState.PLAYING) player2?.pauseVideo();
     }
-
     function onPlayerStateChange2(event) {
-      if (event.data === YT.PlayerState.PLAYING) {
-        player1.pauseVideo();
-      }
+      if (event.data === YT.PlayerState.PLAYING) player1?.pauseVideo();
     }
 
     window.onYouTubeIframeAPIReady = function() {
-      player1 = new YT.Player('video-el-1', {
-        events: {
-          'onStateChange': onPlayerStateChange1
-        }
-      });
-
-      player2 = new YT.Player('video-el-2', {
-        events: {
-          'onStateChange': onPlayerStateChange2
-        }
-      });
+      player1 = new YT.Player('video-el-1', { events: { 'onStateChange': onPlayerStateChange1 } });
+      player2 = new YT.Player('video-el-2', { events: { 'onStateChange': onPlayerStateChange2 } });
     };
   </script>
-
 </body>
 </html>
