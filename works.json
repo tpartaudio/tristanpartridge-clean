@@ -1,10 +1,10 @@
 [ {
-    "title": "Canyon TMPR",
+    "title": "TMPR for Canyon",
     "thumb": "canyontmpr.jpg",
     "video": "canyontmpr.html"
   },
   {
-    "title": "Clean Shoe",
+    "title": "Tie",
     "thumb": "cleanshoe.jpg",
     "video": "cleanshoe.html"
   },
@@ -14,17 +14,17 @@
     "video": "diorsauvage.html"
   },
  {
-    "title": "KJ Documentary",
+    "title": "KJ",
     "thumb": "kj-documentary.jpg",
     "video": "kj-documentary.html"
   },
   {
-    "title": "Flip Flow",
+    "title": "Texture Drag Velocity Flip",
     "thumb": "flipflow.jpg",
     "video": "flipflow.html"
   },
   {
-    "title": "Hublot Ny",
+    "title": "RND for Hublot",
     "thumb": "hublotny.jpg",
     "video": "hublotny.html"
   },
@@ -44,12 +44,12 @@
     "video": "effaclar.html"
   },
   {
-    "title": "Jellyfish",
+    "title": "Toca",
     "thumb": "jellyfish.jpg",
     "video": "jellyfish.html"
   },
   {
-    "title": "Xku React",
+    "title": "XKU React",
     "thumb": "xkreact.jpg",
     "video": "xkreact.html"
   },
@@ -59,34 +59,34 @@
     "video": "jumper.html"
   },
     {
-    "title": "Pixelkj",
+    "title": "KJ-PIXEL-01",
     "thumb": "pixelkj.jpg",
     "video": "pixelkj.html"
   },
   {
-  "title": "Aimedion Laptop",
+  "title": "AI Medion Laptop",
   "thumb": "aimedionlaptop.jpg",
   "video": "aimedionlaptop.html",
   "disabled": false
 },
   {
-    "title": "Brdiver",
+    "title": "Bell&Ross Diver",
     "thumb": "brdiver.jpg",
     "video": "brdiver.html"
   },
   {
-    "title": "Cactus",
+    "title": "Cacto",
     "thumb": "cactus.jpg",
     "video": "cactus.html",
     "disabled": false
   },
   {
-    "title": "Canyon Helmets",
+    "title": "Canyon CFR Helmets",
     "thumb": "canyonhelmets.jpg",
     "video": "canyonhelmets.html"
   },
   {
-    "title": "Everything Moves Reel",
+    "title": "EverythingMoves Reel",
     "thumb": "everythingmovesreel.jpg",
     "video": "everythingmovesreel.html"
   },
@@ -101,12 +101,12 @@
     "video": "bonne-mere.html"
   },
   {
-    "title": "Dove Men",
+    "title": "Dove Unbrainwashed",
     "thumb": "dovemen.jpg",
     "video": "dovemen.html"
   },
   {
-    "title": "Canyon Bike",
+    "title": "Introducing MyCanyon",
     "thumb": "canyonbike.jpg",
     "video": "canyonbike.html",
     "disabled": false
@@ -137,17 +137,17 @@
     "video": "scent-tray.html"
   },
     {
-    "title": "Nayslpr",
+    "title": "Nays LPR",
     "thumb": "nayslpr.jpg",
     "video": "nayslpr.html"
   },
   {
-    "title": "Eucerin Zorba",
+    "title": "Eucerin Oil Control",
     "thumb": "eucerin-zorba.jpg",
     "video": "eucerin-zorba.html"
   },
   {
-    "title": "Jadecropper Brickland",
+    "title": "Jadecropper",
     "thumb": "jadecropper-brickland.jpg",
     "video": "jadecropper-brickland.html"
   }

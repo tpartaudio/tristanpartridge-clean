@@ -7,29 +7,23 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-N6M59NP4');</script>
-<!-- Vercel Web Analytics -->
-<script defer src="/_vercel/insights/script.js"></script>
-<!-- End Vercel Web Analytics -->
-<!-- End Google Tag Manager -->
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
   <title>Tristan Partridge - Music & Sound Design</title>
 
-  <!-- SEO Metadata -->
+  <!-- SEO + Open Graph -->
   <meta name="description" content="Original Music & Sound Design for creative visuals. Custom audio work for visuals, spaces, and experiences. Explore Tristan Partridge's portfolio.">
   <meta name="keywords" content="sound design, original music, sfx, immersive audio, visual media, professional, portfolio, Tristan Partridge">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Tristan Partridge">
-
-  <!-- Open Graph for Social Sharing -->
   <meta property="og:title" content="Tristan Partridge - Original Music & Sound Design">
-  <meta property="og:description" content="Original Music & Sound Design for creative visuals. Custom audio work for visuals, spaces, and experiences. Discover immersive audio projects and collaborations.">
+  <meta property="og:description" content="Original Music & Sound Design for creative visuals. Custom audio work for visuals, spaces, and experiences.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tristanpartridge.eu/">
   <meta property="og:site_name" content="Tristan Partridge Sound Design">
 
-  <!-- Favicon (optional but recommended for professionalism) -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
   <!-- Libraries -->
@@ -41,627 +35,378 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <style>
     :root {
       --logo-height: 85px;
+
+      /* === CONTROL TITLE CURSOR SIZE HERE === */
+      --cursor-title-size: 0.88rem;
+      --cursor-title-padding: 8px 14px;
+      /* ====================================== */
     }
 
-    /* ========================= NAVBAR STYLES ========================= */
-    /* All styles that affect the nav are grouped here so you can copy them */
+    /* NAVBAR – EXACTLY FROM CONTACT/ABOUT (WITH UNDERLINE ANIMATION) */
     .nav-container {
       backdrop-filter: blur(60px) saturate(180%);
-      background: rgba(255, 255, 255, 0.85);
-      transition: transform 0.6s cubic-bezier(.22,1,.36,1);
+      background: rgba(255,255,255,0.85);
       padding: 1.5rem 2rem;
       display: flex;
-      align-items: center; /* help mobile alignment */
+      align-items: center;
       gap: 1rem;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      will-change: transform;
     }
+    .dark .nav-container { background: rgba(0,0,0,0.85); }
 
-    .logo-container {
-      position: absolute;
-      left: 2rem;
-      top: 1.5rem;
-    }
-
-    #logo {
-      height: var(--logo-height);
-      cursor: pointer;
-      transition: transform .2s;
-      transform: translateY(-18px);
-    }
-
+    .logo-container { position: absolute; left: 2rem; top: 1.5rem; z-index: 55; }
+    #logo { height: var(--logo-height); cursor: pointer; transition: transform 0.2s ease-out; transform: translateY(-18px); }
     #logo:hover { transform: scale(1.08) translateY(-18px); }
 
-    .nav-links {
-      position: relative;
-      display: flex;
-      gap: 40px;
-      margin-left: auto;
+    .nav-links { position: relative; display: flex; gap: 40px; margin-left: auto; }
+    .nav-link { font-weight: 600; padding: 8px 0; position: relative; z-index: 2; }
+    .underline { position: absolute; bottom: 4px; left: 0; height: 2px; background: #000; transition: all .22s cubic-bezier(.4,0,.2,1); }
+    .dark .underline { background: #fff; }
+
+    #hamburger { position: absolute; right: 2rem; top: 1.8rem; z-index: 60; background: transparent; border: none; display: none; align-items: center; justify-content: center; }
+    #hamburger span { height: 4px; width: 32px; background-color: #000; transition: all 0.3s ease; display: block; border-radius: 2px; }
+    .dark #hamburger span { background-color: #fff; }
+
+    #mobile-menu { 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+      background: rgba(255,255,255,0.98); gap: 2.5rem; font-size: 1.9rem; font-weight: 600; 
+      position: fixed; inset: 0; z-index: 55; opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; 
     }
+    #mobile-menu:not(.hidden) { opacity: 1; visibility: visible; pointer-events: auto; }
+    #mobile-menu a { opacity: 0; transform: translateY(20px); transition: opacity 0.28s ease, transform 0.28s ease; }
+    #mobile-menu:not(.hidden) a { opacity: 1; transform: translateY(0); }
+    #mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
+    #mobile-menu a:nth-child(2) { transition-delay: 0.12s; }
+    #mobile-menu a:nth-child(3) { transition-delay: 0.18s; }
 
-    .nav-link {
-      font-weight: 600;
-      padding: 8px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .underline {
-      position: absolute;
-      bottom: 4px;
-      left: 0;
-      height: 2px;
-      background: #000;
-      transition: all .22s cubic-bezier(.4,0,.2,1);
-    }
-
-    /* Hamburger + mobile menu */
-    #hamburger {
-      position: absolute; /* Hides with nav-container */
-      right: 2rem;
-      top: 1.8rem; /* Aligned for visibility */
-      z-index: 60;
-      background: transparent;
-      border: none;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #hamburger[aria-expanded="true"] span:first-child {
-      transform-origin: center;
-    }
-
-    #hamburger span {
-      height: 4px;
-      width: 32px;
-      background-color: #000;
-      transition: all 0.3s ease;
-      display: block;
-      border-radius: 2px;
-    }
-
-    #mobile-menu {
-      transition: opacity 0.4s cubic-bezier(.22,1,.36,1), visibility 0.4s;
-      position: fixed;
-      inset: 0;
-      z-index: 55;
-    }
-
-    #mobile-menu.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    #mobile-menu:not(.hidden) {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    /* ========================= END NAVBAR STYLES ========================= */
-
-    /* ---------- Base / Desktop (unchanged intent) ---------- */
+    /* PAGE STYLES */
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       background: #fff;
       color: #111;
       transition: all 0.6s;
-      font-size: 16px; /* Prevent iOS zoom issues */
+      font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overscroll-behavior-y: contain;
+      cursor: default;
     }
 
-    .works-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    /* === DESKTOP GRID (UNCHANGED) === */
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 3rem;
-    }
+    .works-container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+    .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
 
     .project-thumb {
-      width: 100%;
-      max-width: 320px;
-      margin: 0 auto;
-      aspect-ratio: 4/5;
-      overflow: hidden;
-      border-radius: 28px;
-      cursor: pointer;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.18);
-      background: #000;
+      width: 100%; max-width: 320px; margin: 0 auto; aspect-ratio: 4/5; overflow: hidden; border-radius: 28px;
+      cursor: none;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.18); background: #000;
       transition: transform .7s cubic-bezier(.22,1,.36,1), box-shadow .7s cubic-bezier(.22,1,.36,1);
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
+    }
+    .project-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.22,1,.36,1); }
+    .project-thumb:hover { transform: translateY(-12px) scale(1.03); box-shadow: 0 60px 120px rgba(0,0,0,0.38); }
+    .project-thumb:hover img { transform: scale(1.10); }
+
+    /* TITLE AS CURSOR */
+    #title-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      padding: var(--cursor-title-padding);
+      background: rgba(0,0,0,0.88);
+      color: white;
+      font-size: var(--cursor-title-size);
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      border-radius: 10px;
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      white-space: nowrap;
+      mix-blend-mode: difference;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+      user-select: none;
     }
 
-    .project-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .9s cubic-bezier(.22,1,.36,1);
-      display: block;
+    .dark #title-cursor {
+      background: rgba(255,255,255,0.92);
+      color: #000;
     }
 
-    .project-thumb:hover {
-      transform: translateY(-12px) scale(1.03);
-      box-shadow: 0 60px 120px rgba(0,0,0,0.38);
+    @media (hover: none) {
+      #title-cursor, .project-thumb { cursor: default !important; }
     }
-
-    .project-thumb:hover img {
-      transform: scale(1.10);
-    }
-
-    .project-thumb.active {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.25);
-    }
-
-    /* ---------- MOBILE ONLY (≤767px) ---------- */
-    @media (max-width: 767px) {
-      /* Nav adjustments for mobile */
-      .nav-container {
-        padding: 1.2rem 1rem; /* reduce bulk */
-        backdrop-filter: blur(20px) saturate(150%);
-        height: 64px;
-        align-items: center;
-      }
-
-      .logo-container {
-        left: 1.25rem;
-        top: 0.8rem;
-        position: absolute;
-      }
-
-      #logo {
-        height: 50px; /* Smaller logo */
-        transform: translateY(0);
-      }
-
-      #logo:hover { transform: scale(1.05); }
-
-      /* show hamburger on mobile */
-      #hamburger {
-        display: flex;
-        right: 1rem;
-        top: 0.9rem;
-        padding: 0.35rem;
-        width: 44px;
-        height: 44px;
-        gap: 6px;
-        opacity: 1;
-        visibility: visible;
-      }
-
-      /* Slightly thinner lines on smaller devices */
-      #hamburger span {
-        height: 3px;
-        width: 28px;
-      }
-
-      /* Menu content (centered) */
-      #mobile-menu {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255,255,255,0.98);
-        gap: 2.5rem;
-        font-size: 1.9rem;
-        font-weight: 600;
-        padding-top: 0;
-      }
-
-      #mobile-menu a {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.28s ease, transform 0.28s ease;
-      }
-
-      #mobile-menu:not(.hidden) a {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      #mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
-      #mobile-menu a:nth-child(2) { transition-delay: 0.12s; }
-      #mobile-menu a:nth-child(3) { transition-delay: 0.18s; }
-
-      #mobile-menu a:active {
-        transform: scale(0.97);
-      }
-
-      /* MAIN CONTENT - make room for nav */
-      main { padding-top: 5.25rem; }
-
-      /* Grid -> single column with comfortable gutters */
-      .works-container { padding: 0 1rem; }
-      .works-grid {
-        grid-template-columns: 1fr;
-        gap: 2.1rem;
-        padding: 0;
-      }
-
-      /* PROJECT THUMB - mobile-friendly sizing & consistent shadows */
-      .project-thumb {
-        width: min(520px, 94%);
-        max-width: 520px;
-        margin: 0 auto;
-        aspect-ratio: 4/5;
-        border-radius: 20px;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-        transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s cubic-bezier(.22,1,.36,1);
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      .project-thumb:active, .project-thumb.active {
-        transform: translateY(-4px);
-        box-shadow: 0 18px 36px rgba(0,0,0,0.14);
-      }
-
-      .project-thumb img {
-        border-radius: 20px;
-        transition: transform .6s cubic-bezier(.22,1,.36,1);
-        transform: none;
-      }
-
-      /* Footer icon sizes */
-      footer .flex { gap: 2rem; }
-      footer img { width: 36px; height: 36px; }
-
-      /* Copyright bottom */
-      #bottom-copyright {
-        left: 1rem;
-        bottom: 1rem;
-        font-size: 10px;
-      }
-    }
-
-    /* small accessibility focus outlines */
-    a:focus, button:focus {
-      outline: 3px solid rgba(0,0,0,0.08);
-      outline-offset: 3px;
-    }
-
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col">
 
-  <!-- ========================= SITE NAVBAR (COPY/PASTE THIS SECTION) ========================= -->
-  <section id="site-navbar">
-    <!-- NAVBAR -->
-    <nav class="nav-container fixed top-0 left-0 right-0 z-50 flex items-center justify-between">
-      <div class="logo-container">
-        <img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'">
-      </div>
+  <!-- NAVBAR – EXACTLY FROM CONTACT PAGE (WITH UNDERLINE ANIMATION) -->
+  <nav class="nav-container">
+    <div class="logo-container">
+      <img id="logo" src="4.png" alt="logo" onclick="window.location.href='index.html'">
+    </div>
 
-      <div class="hidden md:flex nav-links text-lg font-medium" aria-label="Primary">
-        <a href="index.html" class="nav-link active" data-page="works">Works</a>
-        <a href="about.html" class="nav-link" data-page="about">About</a>
-        <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
-        <div class="underline" id="underline"></div>
-      </div>
+    <div class="hidden md:flex nav-links text-lg font-medium">
+      <a href="index.html" class="nav-link active" data-page="works">Works</a>
+      <a href="about.html" class="nav-link" data-page="about">About</a>
+      <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
+      <div class="underline" id="underline"></div>
+    </div>
 
-      <!-- Hamburger (mobile) -->
-      <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
-        <span class="block"></span>
-        <span class="block"></span>
-        <span class="block"></span>
-      </button>
-    </nav>
+    <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
 
-    <!-- MOBILE MENU -->
-    <nav id="mobile-menu" class="hidden" aria-hidden="true" role="navigation">
-      <a href="index.html">Works</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </section>
-  <!-- ========================= END SITE NAVBAR ========================= -->
+  <!-- MOBILE MENU -->
+  <nav id="mobile-menu" class="hidden" aria-hidden="true">
+    <a href="index.html">Works</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
-  <!-- CONTENT -->
   <main class="flex-1 pt-40">
     <div class="works-container">
       <div class="works-grid" id="projects"></div>
     </div>
   </main>
 
+  <!-- TITLE CURSOR -->
+  <div id="title-cursor">
+    <span id="title-cursor-text"></span>
+  </div>
+
   <!-- FOOTER -->
   <footer class="py-20 px-6 text-center">
     <div class="flex justify-center gap-12">
-      <a href="https://www.instagram.com/tristanpartridge/" target="_blank" rel="noopener noreferrer">
-        <img id="insta-logo" src="insta logo.png" class="w-11 h-11 hover:scale-110 transition" alt="Instagram">
-      </a>
-      <a href="https://www.behance.net/tristanpartrid1" target="_blank" rel="noopener noreferrer">
-        <img id="behance-logo" src="behance logo.png" class="w-11 h-11 hover:scale-110 transition" alt="Behance">
-      </a>
+      <a href="https://www.instagram.com/tristanpartridge/" target="_blank"><img id="insta-logo" src="insta logo.png" class="w-11 h-11 hover:scale-110 transition" alt="Instagram"></a>
+      <a href="https://www.behance.net/tristanpartrid1" target="_blank"><img id="behance-logo" src="behance logo.png" class="w-11 h-11 hover:scale-110 transition" alt="Behance"></a>
     </div>
   </footer>
 
-  <!-- ========================= NAVBAR JAVASCRIPT (COPY/PASTE THIS TOO IF NEEDED) ========================= -->
- <script id="navbar-script">
-  // NAVBAR behaviour grouped in one place.
-  gsap.registerPlugin(ScrollTrigger);
-
-  const sound = new Howl({
-    src: ["https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"],
-    volume: 0.3
-  });
-
-  // Load minimal config used by navbar (logo + social icons)
-  fetch("config.json")
-    .then(r => r.json())
-    .then(cfg => {
-      if (cfg.logo) document.getElementById("logo").src = cfg.logo;
-      if (cfg.instagram_logo) document.getElementById("insta-logo").src = cfg.instagram_logo;
-      if (cfg.behance_logo) document.getElementById("behance-logo").src = cfg.behance_logo;
-    }).catch(()=>{/* silent fail if missing */});
-
-  // NAVBAR UNDERLINE ANIMATION
-  const underline = document.getElementById('underline');
-  const links = document.querySelectorAll('.nav-link');
-  let currentTarget = document.querySelector('[data-page="works"]') || links[0];
-  links.forEach(l => l.classList.remove('active'));
-  if (currentTarget) currentTarget.classList.add('active');
-
-  function setUnderlineInstant(target) {
-    if (!target || !underline) return;
-    underline.style.transform = 'none';
-    underline.style.transition = 'none';
-    const linkRect = target.getBoundingClientRect();
-    const containerRect = target.parentElement.getBoundingClientRect();
-    underline.style.left = (linkRect.left - containerRect.left) + 'px';
-    underline.style.width = linkRect.width + 'px';
-    void underline.offsetHeight;
-    underline.style.transition = '';
-  }
-
-  function moveUnderline(target, animate = true) {
-    if (!target || !underline) return;
-    gsap.set(underline, { clearProps: "transform, x, xPercent" });
-    const linkRect = target.getBoundingClientRect();
-    const containerRect = target.parentElement.getBoundingClientRect();
-    const leftPx = linkRect.left - containerRect.left;
-    const widthPx = linkRect.width;
-    if (!animate) {
-      underline.style.left = leftPx + 'px';
-      underline.style.width = widthPx + 'px';
-    } else {
-      gsap.to(underline, {
-        left: leftPx + 'px',
-        width: widthPx,
-        duration: 0.02,
-        ease: "power2.out",
-        overwrite: "auto"
-      });
-    }
-  }
-
-  window.addEventListener('load', () => {
-    setUnderlineInstant(currentTarget);
-    if (underline) {
-      gsap.fromTo(underline,
-        { scaleX: 0.98, transformOrigin: "center center" },
-        {
-          scaleX: 1,
-          duration: 0.05,
-          ease: "elastic.out(1, 0.5)",
-          onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
-        }
-      );
-    }
-  });
-
-  links.forEach(link => {
-    link.addEventListener('mouseenter', () => moveUnderline(link, true));
-    link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
-    link.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      links.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-      currentTarget = link;
-      setUnderlineInstant(currentTarget);
-      sound.play();
-      // navigate
-      window.location.href = link.getAttribute('href');
-    });
-  });
-
-  window.addEventListener('resize', () => {
-    clearTimeout(window._navResizeTimer);
-    window._navResizeTimer = setTimeout(() => setUnderlineInstant(currentTarget), 80);
-  });
-
-  // MOBILE MENU + HAMBURGER
-  const hamburger = document.getElementById("hamburger");
-  const mobileMenu = document.getElementById("mobile-menu");
-
-  function lockBody(locked) {
-    if (locked) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    }
-  }
-
-  hamburger.addEventListener("click", () => {
-    const isHidden = mobileMenu.classList.contains("hidden");
-    if (isHidden) {
-      mobileMenu.classList.remove("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'false');
-      hamburger.setAttribute('aria-expanded', 'true');
-      lockBody(true);
-    } else {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      hamburger.setAttribute('aria-expanded', 'false');
-      lockBody(false);
-    }
-
-    // sound + animate hamburger → cross
-    sound.play();
-    hamburger.classList.toggle("active");
-    if (hamburger.classList.contains("active")) {
-      gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
-      gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
-      gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
-    } else {
-      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
-      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
-      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
-    }
-  });
-
-  // ✅ FULL MOBILE MENU CLICK HANDLER WITH OUTSIDE-CLOSE
-  mobileMenu.addEventListener("click", (e) => {
-
-    // 1. User clicks on a link
-    if (e.target.tagName === "A") {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      hamburger.classList.remove("active");
-      hamburger.setAttribute('aria-expanded', 'false');
-      lockBody(false);
-      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
-      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
-      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
-      sound.play();
-      return; // allow navigation
-    }
-
-    // ✅ 2. ADDED — user clicks the black background (outside the menu links)
-    if (e.target === mobileMenu) {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      hamburger.classList.remove("active");
-      hamburger.setAttribute('aria-expanded', 'false');
-      lockBody(false);
-      gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
-      gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
-      gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
-    }
-  });
-
-  // Close mobile menu on escape
-  window.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      hamburger.classList.remove("active");
-      hamburger.setAttribute('aria-expanded', 'false');
-      lockBody(false);
-    }
-  });
-
-  // NAVBAR HIDE/SHOW ON SCROLL
-  let lastY = 0;
-  const nav = document.querySelector(".nav-container");
-  window.addEventListener("scroll", () => {
-    const y = window.scrollY;
-    const d = y - lastY;
-    if (d > 8 && y > 100) {
-      gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
-    } else if (d < -8) {
-      gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
-    }
-    lastY = y;
-  });
-</script>
-
-
-  <!-- ========================= PROJECTS + OTHER SCRIPTS (UNCHANGED) ========================= -->
   <script>
-    // -----------------------------
-    // LOAD PROJECTS + SMOOTH ANIMATION
-    // -----------------------------
+    const cursor = document.getElementById('title-cursor');
+    const cursorText = document.getElementById('title-cursor-text');
+    let isHovering = false;
+    let wasScrolling = false;
+
+    // On scroll → hide everything
+    window.addEventListener('scroll', () => {
+      wasScrolling = true;
+      cursor.style.opacity = '0';
+      document.body.style.cursor = 'default';
+      isHovering = false;
+    });
+
+    // pointermove — the most sensitive event
+    document.addEventListener('pointermove', (e) => {
+      if (wasScrolling) {
+        wasScrolling = false;
+      }
+
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const thumb = el?.closest('.project-thumb');
+
+      if (thumb) {
+        if (!isHovering) {
+          cursorText.textContent = thumb.querySelector('img')?.alt || 'Project';
+          cursor.style.opacity = '1';
+          document.body.style.cursor = 'none';
+          isHovering = true;
+        }
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      } else {
+        if (isHovering) {
+          cursor.style.opacity = '0';
+          document.body.style.cursor = 'default';
+          isHovering = false;
+        }
+      }
+    });
+
+    // First load — enable hover immediately
+    document.addEventListener('DOMContentLoaded', () => {
+      wasScrolling = false;
+    });
+
     fetch("works.json")
       .then(r => r.json())
       .then(projects => {
         const grid = document.getElementById("projects");
-        const visible = Array.isArray(projects) ? projects.filter(p => !p.disabled) : [];
+        const visible = projects.filter(p => !p.disabled);
         visible.forEach(p => {
           if (!p.thumb) return;
           const div = document.createElement("div");
           div.className = "project-thumb opacity-0 translate-y-16";
-          div.innerHTML = `<img src="images/${p.thumb}" alt="${(p.title||'project').replace(/"/g,'')}" loading="lazy">`;
+          div.innerHTML = `<img src="images/${p.thumb}" alt="${p.title}" loading="lazy">`;
 
-          // Mobile tap handling to prevent accidental clicks during scroll or hold
-          let touchStartY = 0;
-          let touchStartTime = 0;
-          div.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-            touchStartTime = Date.now();
-            div.classList.add('active');
-          }, {passive: true});
-          div.addEventListener('touchmove', (e) => {
-            const touchMoveY = e.touches[0].clientY;
-            if (Math.abs(touchMoveY - touchStartY) > 20) {
-              div.classList.remove('active');
-            }
-          }, {passive: true});
-          div.addEventListener('touchend', (e) => {
-            const touchEndY = e.changedTouches[0].clientY;
-            const touchDuration = Date.now() - touchStartTime;
-            if (Math.abs(touchEndY - touchStartY) <= 20 && touchDuration < 350) { // Short tap only
-              // small delay so the tap scale is visible on mobile
-              setTimeout(() => {
-                try { sessionStorage.setItem('scrollPosition', window.scrollY); } catch(e){}
-                window.location.href = p.video || p.url || 'index.html';
-              }, 120);
-            }
-            div.classList.remove('active');
-          });
-
-          // Desktop click (unchanged)
           div.addEventListener('click', () => {
-            try { sessionStorage.setItem('scrollPosition', window.scrollY); } catch(e){}
-            window.location.href = p.video || p.url || 'index.html';
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+            window.location.href = p.video;
           });
 
           grid.appendChild(div);
         });
 
-        const scrollPosition = sessionStorage.getItem('scrollPosition');
-        if (scrollPosition) {
-          document.querySelectorAll('.project-thumb').forEach(el => {
-            el.classList.remove('opacity-0', 'translate-y-16');
-          });
-          // 'instant' isn't standard; use auto
-          window.scrollTo({ top: parseInt(scrollPosition, 10) || 0, behavior: 'auto' });
-          try { sessionStorage.removeItem('scrollPosition'); } catch(e){}
-        } else {
-          gsap.fromTo(
-            ".project-thumb",
-            { opacity: 0, y: 70 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.55,
-              ease: "power2.out",
-              stagger: 0.08,
-              scrollTrigger: {
-                trigger: grid,
-                start: "top 85%",
-                toggleActions: "play none none none"
-              }
-            }
-          );
+        gsap.fromTo(".project-thumb", { opacity: 0, y: 70 }, {
+          opacity: 1, y: 0, duration: 0.55, ease: "power2.out", stagger: 0.08,
+          scrollTrigger: { trigger: grid, start: "top 85%" }
+        });
+      });
+
+    // NAVBAR SLIDE ANIMATION – FROM CONTACT PAGE
+    let lastY = 0;
+    let hasScrolled = false;
+    const nav = document.querySelector(".nav-container");
+
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      const d = y - lastY;
+
+      if (y > 100) hasScrolled = true;
+
+      if (hasScrolled) {
+        if (d > 8) {
+          gsap.to(nav, { yPercent: -100, duration: 0.6, ease: "power4.out" });
+        } else if (d < -8) {
+          gsap.to(nav, { yPercent: 0, duration: 0.6, ease: "power4.out" });
         }
-      }).catch(()=>{/* silent if no works.json during dev */});
+      }
+
+      lastY = y;
+    });
+
+    // Ensure navbar is visible on load
+    window.addEventListener('load', () => {
+      gsap.set(nav, { yPercent: 0 });
+    });
+
+    // UNDERLINE ANIMATION – EXACTLY FROM CONTACT PAGE
+    const underline = document.getElementById('underline');
+    const links = document.querySelectorAll('.nav-link');
+    let currentTarget = document.querySelector('[data-page="works"]');
+
+    function setUnderlineInstant(target) {
+      if (!target || !underline) return;
+      underline.style.transform = 'none';
+      underline.style.transition = 'none';
+      const linkRect = target.getBoundingClientRect();
+      const containerRect = target.parentElement.getBoundingClientRect();
+      underline.style.left = (linkRect.left - containerRect.left) + 'px';
+      underline.style.width = linkRect.width + 'px';
+      void underline.offsetHeight;
+      underline.style.transition = '';
+    }
+
+    function moveUnderline(target, animate = true) {
+      if (!target || !underline) return;
+      gsap.set(underline, { clearProps: "transform, x, xPercent" });
+      const linkRect = target.getBoundingClientRect();
+      const containerRect = target.parentElement.getBoundingClientRect();
+      const leftPx = linkRect.left - containerRect.left;
+      const widthPx = linkRect.width;
+      if (!animate) {
+        underline.style.left = leftPx + 'px';
+        underline.style.width = widthPx + 'px';
+      } else {
+        gsap.to(underline, {
+          left: leftPx + 'px',
+          width: widthPx,
+          duration: 0.02,
+          ease: "power2.out",
+          overwrite: "auto"
+        });
+      }
+    }
+
+    window.addEventListener('load', () => {
+      setUnderlineInstant(currentTarget);
+      if (underline) {
+        gsap.fromTo(underline,
+          { scaleX: 0.98, transformOrigin: "center center" },
+          {
+            scaleX: 1,
+            duration: 0.05,
+            ease: "elastic.out(1, 0.5)",
+            onComplete: () => gsap.set(underline, { clearProps: "transform, scaleX" })
+          }
+        );
+      }
+    });
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => moveUnderline(link, true));
+      link.addEventListener('mouseleave', () => moveUnderline(currentTarget, true));
+      link.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        links.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        currentTarget = link;
+        setUnderlineInstant(currentTarget);
+        window.location.href = link.getAttribute('href');
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      clearTimeout(window._navResizeTimer);
+      window._navResizeTimer = setTimeout(() => setUnderlineInstant(currentTarget), 80);
+    });
+
+    // Mobile menu + hamburger (from Contact page)
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    function lockBody(locked) {
+      document.body.style.overflow = locked ? 'hidden' : '';
+    }
+
+    hamburger.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        hamburger.setAttribute('aria-expanded', 'true');
+        lockBody(true);
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+      }
+      hamburger.classList.toggle('active');
+      if (hamburger.classList.contains('active')) {
+        gsap.to(hamburger.children[0], { rotate: 45, y: 6, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 0, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: -45, y: -6, duration: 0.28 });
+      } else {
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.28 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.18 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.28 });
+      }
+    });
+
+    mobileMenu.addEventListener('click', e => {
+      if (e.target.tagName === 'A' || e.target === mobileMenu) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        lockBody(false);
+        gsap.to(hamburger.children[0], { rotate: 0, y: 0, duration: 0.2 });
+        gsap.to(hamburger.children[1], { opacity: 1, duration: 0.2 });
+        gsap.to(hamburger.children[2], { rotate: 0, y: 0, duration: 0.2 });
+      }
+    });
   </script>
 
-  <!-- Bottom-left copyright (appears only when near bottom) -->
-  <div id="bottom-copyright"
-       class="fixed bottom-6 left-8 text-xs text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none"
-       style="opacity:0; visibility:hidden;">
+  <!-- Bottom copyright -->
+  <div id="bottom-copyright" class="fixed bottom-6 left-8 text-xs text-gray-500 select-none font-light tracking-wider z-50 pointer-events-none" style="opacity:0; visibility:hidden;">
     © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
   </div>
 
@@ -671,45 +416,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       let shown = false;
       const check = () => {
         const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
-        if (nearBottom && !shown) {
-          shown = true;
-          el.style.visibility = 'visible';
-          gsap.to(el, { opacity: 1, duration: 0.8, ease: "power2.out" });
-        } else if (!nearBottom && shown) {
-          shown = false;
-          gsap.to(el, {
-            opacity: 0,
-            duration: 0.1,
-            ease: "power2.in",
-            onComplete: () => el.style.visibility = 'hidden'
-          });
-        }
+        if (nearBottom && !shown) { shown = true; el.style.visibility = 'visible'; gsap.to(el, { opacity: 1, duration: 0.8 }); }
+        else if (!nearBottom && shown) { shown = false; gsap.to(el, { opacity: 0, duration: 0.1, onComplete: () => el.style.visibility = 'hidden' }); }
       };
       window.addEventListener('scroll', check);
       window.addEventListener('load', check);
-      requestAnimationFrame(check);
     })();
   </script>
-
-  <!-- Schema.org JSON-LD for better search result appearance -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Tristan Partridge",
-      "jobTitle": "Composer and Sound Designer",
-      "url": "https://tristanpartridge.eu/",
-      "sameAs": [
-        "https://www.instagram.com/tristanpartridge/",
-        "https://www.behance.net/tristanpartrid1"
-      ],
-      "description": "Original Music & Sound Design for creative visuals. Custom audio work for visuals, spaces, and experiences."
-    }
-  </script>
-
 </body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6M59NP4"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 </html>
