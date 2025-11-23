@@ -234,18 +234,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     const cursor = document.getElementById('title-cursor');
     const cursorText = document.getElementById('title-cursor-text');
     let isHovering = false;
-    let wasScrolling = false;
+    let cursorHidden = false;
+    let scrollTimeout = null;
 
+    // Only activate custom cursor on real desktop (mouse/trackpad)
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+
+      // Hide cursor on any scroll
       window.addEventListener('scroll', () => {
-        wasScrolling = true;
         cursor.style.opacity = '0';
         document.body.style.cursor = 'default';
         isHovering = false;
+        cursorHidden = true;
+
+        // Clear any pending "show cursor" timeout
+        clearTimeout(scrollTimeout);
       });
 
+      // Show cursor again ONLY when user moves pointer (mouse or single-finger trackpad gesture)
       document.addEventListener('pointermove', e => {
-        if (wasScrolling) wasScrolling = false;
+        if (cursorHidden) {
+          cursorHidden = false;
+          document.body.style.cursor = 'default'; // will be overridden when hovering project
+        }
+
         const thumb = e.target.closest('.project-thumb');
         if (thumb) {
           if (!isHovering) {
@@ -302,14 +314,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           grid.appendChild(card);
         });
 
-        // FADE IN: first visit OR logo click (but NOT when returning from project)
         if (!isReturningFromProject && !hasSeenAnimation) {
           triggerFadeIn();
         } else {
           gsap.set(".project-card", { opacity: 1, y: 0 });
         }
 
-        // Restore scroll if returning from project
         if (isReturningFromProject) {
           requestAnimationFrame(() => {
             const y = parseInt(sessionStorage.getItem('returnScroll'), 10) || 0;
@@ -329,10 +339,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       }
     });
 
-    // Rest of your perfect script (navbar, mobile menu, etc.) unchanged...
-    // [Everything below this point is 100% your original working code]
-    // (navbar, mobile menu, underline, copyright fade, etc.)
-
+    // === ALL YOUR ORIGINAL SCRIPT BELOW (unchanged) ===
     let lastY = 0;
     let hasScrolled = false;
     const nav = document.querySelector(".nav-container");
