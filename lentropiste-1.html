@@ -6,21 +6,15 @@
   <title>Dorian's Spleen - L'Entropiste - Tristan Partridge</title>
 
   <style>
-    /* ============================================ */
-    /* SECTION 1: VARIABLES PERSONNALISABLES        */
-    /* ============================================ */
     :root {
       --title: "Dorian's Spleen";
       --credit-by: by;
       --credit-name: L’Entropiste;
-
-      /* ========== SOUND ROLE – PERFECTLY CONSISTENT ========== */
       --sound-role: Music + Sound Design + Mix;
       --sound-role-size: 0.65rem;
-      --sound-role-offset: -2.2rem;
+      --sound-role-offset: 0rem;
       --sound-role-opacity: 0.75;
       --sound-role-color: #000;
-      /* ======================================================= */
 
       --video-width: 380px;
       --video-height: 677px;
@@ -41,16 +35,15 @@
       --index-page-url: index.html; 
     }
 
-    /* SOUND ROLE – bulletproof & consistent */
     .sound-role {
       display: block;
       position: relative;
-      top: var(--sound-role-offset, -2rem);
+      top: var(--sound-role-offset);
       margin-bottom: 1rem;
-      font-size: var(--sound-role-size, 0.78rem);
+      font-size: var(--sound-role-size);
       font-weight: 500;
-      color: var(--sound-role-color, #000);
-      opacity: var(--sound-role-opacity, 0.75);
+      color: var(--sound-role-color);
+      opacity: var(--sound-role-opacity);
       letter-spacing: 0.06em;
       text-transform: uppercase;
       text-align: center;
@@ -59,30 +52,43 @@
     }
     .dark .sound-role { color: #fff; }
 
-    /* ============================================ */
-    /* SECTION 2: GENERAL PAGE STYLES               */
-    /* ============================================ */
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       background: rgba(255,255,255,0.96);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      overflow: hidden;
-      backdrop-filter: blur(4px);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior-y: contain;
+      overflow-x: hidden;
     }
-    .dark body { background: rgba(0,0,0,0.96); }
+    .dark { background: rgba(0,0,0,0.96); color: #fff; }
 
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Scrollable container */
     .page-wrapper {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6rem;
-      max-width: 98vw;
-      padding: 0 6vw;
-      height: 100vh;
+      padding: 8vh 5vw;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .content {
+      display: flex;
+      align-items: center;
+      gap: 6rem;
+      max-width: 1400px;
+      width: 100%;
     }
 
     .video-title {
@@ -90,13 +96,12 @@
       line-height: 1.2;
       opacity: 0.95;
       margin: 0;
-      max-width: 360px;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
       text-align: center;
-      height: 100%;
+      flex-shrink: 0;
     }
 
     .video-title .title {
@@ -130,6 +135,14 @@
       color: #fff;
     }
 
+    .videos-container {
+      display: flex;
+      gap: 4rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
     .video-container {
       position: relative;
       width: var(--video-width);
@@ -152,7 +165,7 @@
     }
 
     .close-btn {
-      position: absolute;
+      position: fixed;
       top: var(--close-top);
       right: var(--close-right);
       background: none;
@@ -160,50 +173,48 @@
       font-size: var(--close-font-size);
       cursor: pointer;
       color: #000;
-      z-index: 20;
+      z-index: 100;
       transition: transform 0.2s ease;
     }
 
     .dark .close-btn { color: #fff; }
-    .close-btn:hover { transform: scale(1.2); }
+    .close-btn:hover, .close-btn:active { transform: scale(1.2); }
 
-    /* RESPONSIVE */
+    /* RESPONSIVE - MOBILE/TABLET */
     @media (max-width: 1100px) {
       .page-wrapper {
+        padding: 8vh 4vw 12vh;
+      }
+
+      .content {
         flex-direction: column;
-        gap: 1.5rem;
-        padding: 6vh 5vw;
-        height: auto;
-        overflow-y: auto;
-        align-items: center;
-        justify-content: flex-start;
+        gap: 3rem;
       }
 
       .video-title {
-        order: 1;
         max-width: 90vw;
-        height: auto;
-        padding: 1.5rem 0;
-        justify-content: center;
       }
 
       .video-title .title   { font-size: var(--mobile-title-font-size); }
       .video-title .dash    { font-size: var(--mobile-dash-font-size); }
       .video-title .credit  { font-size: var(--mobile-credit-font-size); }
 
+      .videos-container {
+        flex-direction: column;
+        gap: 3rem;
+      }
+
       .video-container {
-        order: 2;
         width: 100%;
         max-width: var(--mobile-video-max-width);
         height: auto;
-        aspect-ratio: 9 / 16;
-        margin-bottom: 1.5rem;
       }
     }
 
     @media (max-width: 480px) {
       .video-title .title { font-size: 1.6rem; }
       .video-container { max-width: 280px; }
+      .close-btn { top: 1rem; right: 1rem; font-size: 2.2rem; }
     }
   </style>
 </head>
@@ -211,24 +222,27 @@
 <body class="light">
 
   <div class="page-wrapper">
+    <div class="content">
+      <!-- Title on the left (desktop) / top (mobile) -->
+      <div class="video-title">
+        <span class="sound-role" id="sound-role-el"></span>
+        <div class="title" id="title-el"></div>
+        <div class="dash">-</div>
+        <div class="credit" id="credit-el"></div>
+      </div>
 
-    <div class="video-title">
-      <!-- SOUND ROLE BADGE – perfectly integrated -->
-      <span class="sound-role" id="sound-role-el"></span>
+      <!-- Two videos side-by-side on desktop, stacked on mobile -->
+      <div class="videos-container">
+        <div class="video-container" id="video-container-1">
+          <iframe id="video-el-1" src="https://www.youtube.com/embed/1Kgrm146N-A?enablejsapi=1" title="YouTube video 1"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
 
-      <div class="title" id="title-el"></div>
-      <div class="dash">-</div>
-      <div class="credit" id="credit-el"></div>
-    </div>
-
-    <div class="video-container" id="video-container-1">
-      <iframe id="video-el-1" src="https://www.youtube.com/embed/1Kgrm146N-A?enablejsapi=1" title="YouTube video 1"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-
-    <div class="video-container" id="video-container-2">
-      <iframe id="video-el-2" src="https://www.youtube.com/embed/Uc-KAnqY6R4?enablejsapi=1" title="YouTube video 2"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="video-container" id="video-container-2">
+          <iframe id="video-el-2" src="https://www.youtube.com/embed/Uc-KAnqY6R4?enablejsapi=1" title="YouTube video 2"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -237,7 +251,6 @@
   <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
-    // Title & Credit
     const titleEl = document.getElementById('title-el');
     const creditEl = document.getElementById('credit-el');
 
@@ -249,7 +262,6 @@
     creditEl.innerHTML = `${byText} <strong>${nameText}</strong>`;
     document.title = "Dorian's Spleen - L'Entropiste - Tristan Partridge";
 
-    // SOUND ROLE – inject from CSS variable
     const soundRoleEl = document.getElementById('sound-role-el');
     const soundRoleText = getComputedStyle(document.documentElement).getPropertyValue('--sound-role').trim();
     if (soundRoleText) {
@@ -258,15 +270,12 @@
       soundRoleEl.style.display = 'none';
     }
 
-    // Close button
     const closeBtn = document.getElementById('close-btn');
     const indexUrl = getComputedStyle(document.documentElement).getPropertyValue('--index-page-url').trim();
     closeBtn.addEventListener('click', () => window.location.href = indexUrl);
 
-    // Theme
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
 
-    // YouTube players (play one → pause the other)
     let player1, player2;
 
     function onPlayerStateChange1(event) {
