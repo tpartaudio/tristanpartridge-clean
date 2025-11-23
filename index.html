@@ -137,7 +137,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       .project-thumb { cursor: default !important; }
     }
 
-    /* ========== PERFECT MOBILE/TABLET STYLES FROM CODE 1 ========== */
     @media (max-width: 767px) {
       .nav-container {
         padding: 1.2rem 1rem;
@@ -147,41 +146,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       }
       .logo-container { left: 1.25rem; top: 0.8rem; position: absolute; }
       #logo { height: 50px; transform: translateY(0); }
-      #logo:hover { transform: scale(1.05); }
       #hamburger { display: flex; right: 1rem; top: 0.9rem; padding: 0.35rem; width: 44px; height: 44px; gap: 6px; opacity: 1; visibility: visible; }
       #hamburger span { height: 3px; width: 28px; }
-      #mobile-menu { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.98); gap: 2.5rem; font-size: 1.9rem; font-weight: 600; padding-top: 0; }
-      #mobile-menu a { opacity: 0; transform: translateY(20px); transition: opacity 0.28s ease, transform 0.28s ease; }
-      #mobile-menu:not(.hidden) a { opacity: 1; transform: translateY(0); }
-      #mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
-      #mobile-menu a:nth-child(2) { transition-delay: 0.12s; }
-      #mobile-menu a:nth-child(3) { transition-delay: 0.18s; }
-      #mobile-menu a:active { transform: scale(0.97); }
       main { padding-top: 5.25rem; }
-      .works-container { padding: 0 1rem; }
-      .works-grid { grid-template-columns: 1fr; gap: 2.1rem; padding: 0; }
-      .project-thumb {
-        width: min(520px, 94%);
-        max-width: 520px;
-        margin: 0 auto;
-        aspect-ratio: 4/5;
-        border-radius: 20px;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-        transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s cubic-bezier(.22,1,.36,1);
-        -webkit-tap-highlight-color: transparent;
-      }
-      .project-thumb:active, .project-thumb.active {
-        transform: translateY(-4px);
-        box-shadow: 0 18px 36px rgba(0,0,0,0.14);
-      }
-      .project-thumb img {
-        border-radius: 20px;
-        transition: transform .6s cubic-bezier(.22,1,.36,1);
-        transform: none;
-      }
-      footer .flex { gap: 2rem; }
-      footer img { width: 36px; height: 36px; }
-      #bottom-copyright { left: 1rem; bottom: 1rem; font-size: 10px; }
+      .works-grid { grid-template-columns: 1fr; gap: 2.1rem; }
+      .project-thumb { border-radius: 20px; max-width: 520px; }
     }
   </style>
 </head>
@@ -198,12 +167,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
       <div class="underline" id="underline"></div>
     </div>
-    <button id="hamburger" class="md:hidden z-50" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+    <button id="hamburger" class="md:hidden z-50">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <nav id="mobile-menu" class="hidden" aria-hidden="true">
+  <nav id="mobile-menu" class="hidden">
     <a href="index.html">Works</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
@@ -235,33 +204,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     const cursorText = document.getElementById('title-cursor-text');
     let isHovering = false;
     let cursorHidden = false;
-    let scrollTimeout = null;
 
-    // Only activate custom cursor on real desktop (mouse/trackpad)
+    // Custom cursor
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-
-      // Hide cursor on any scroll
       window.addEventListener('scroll', () => {
         cursor.style.opacity = '0';
         document.body.style.cursor = 'default';
         isHovering = false;
         cursorHidden = true;
-
-        // Clear any pending "show cursor" timeout
-        clearTimeout(scrollTimeout);
       });
 
-      // Show cursor again ONLY when user moves pointer (mouse or single-finger trackpad gesture)
       document.addEventListener('pointermove', e => {
-        if (cursorHidden) {
-          cursorHidden = false;
-          document.body.style.cursor = 'default'; // will be overridden when hovering project
-        }
+        if (cursorHidden) cursorHidden = false;
 
         const thumb = e.target.closest('.project-thumb');
         if (thumb) {
           if (!isHovering) {
-            cursorText.textContent = thumb.querySelector('img')?.alt || 'Project';
+            cursorText.textContent = thumb.querySelector('img')?.alt || 'View';
             cursor.style.opacity = '1';
             document.body.style.cursor = 'none';
             isHovering = true;
@@ -276,11 +235,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       });
     }
 
-    // === FINAL IMAGE FADE-IN LOGIC ===
-    const isReturningFromProject = sessionStorage.getItem('returnScroll') !== null;
-    const hasSeenAnimation = sessionStorage.getItem('hasSeenWorksAnimation') === 'true';
+    // === DIRECT NAVIGATION — NO TRANSITION ===
+    const isReturning = sessionStorage.getItem('returnScroll') !== null;
+    const hasSeenAnim = sessionStorage.getItem('hasSeenWorksAnimation') === 'true';
 
-    function triggerFadeIn() {
+    function fadeInProjects() {
       gsap.fromTo(".project-card", 
         { opacity: 0, y: 70 },
         { opacity: 1, y: 0, duration: 0.65, ease: "power2.out", stagger: 0.08 }
@@ -295,18 +254,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         const visible = projects.filter(p => !p.disabled && p.thumb && p.video);
 
         visible.forEach((project, i) => {
-          const projectId = `project-${i}`;
+          const id = `project-${i}`;
           const card = document.createElement("div");
           card.className = "project-card";
-          card.id = projectId;
+          card.id = id;
 
           const thumb = document.createElement("div");
           thumb.className = "project-thumb";
           thumb.innerHTML = `<img src="images/${project.thumb}" alt="${project.title}" loading="lazy">`;
 
+          // Direct navigation — no animation
           thumb.addEventListener('click', () => {
             sessionStorage.setItem('returnScroll', String(window.scrollY));
-            sessionStorage.setItem('returnProjectId', projectId);
+            sessionStorage.setItem('returnProjectId', id);
             window.location.href = project.video;
           });
 
@@ -314,13 +274,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           grid.appendChild(card);
         });
 
-        if (!isReturningFromProject && !hasSeenAnimation) {
-          triggerFadeIn();
-        } else {
-          gsap.set(".project-card", { opacity: 1, y: 0 });
-        }
+        if (!isReturning && !hasSeenAnim) fadeInProjects();
+        else gsap.set(".project-card", { opacity: 1, y: 0 });
 
-        if (isReturningFromProject) {
+        if (isReturning) {
           requestAnimationFrame(() => {
             const y = parseInt(sessionStorage.getItem('returnScroll'), 10) || 0;
             window.scrollTo(0, y);
@@ -330,16 +287,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
       });
 
-    // LOGO CLICK = ALWAYS trigger fade-in animation
-    document.getElementById('logo').addEventListener('click', (e) => {
-      if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+    // Logo refresh
+    document.getElementById('logo').addEventListener('click', e => {
+      if (location.pathname === '/' || location.pathname.includes('index')) {
         e.preventDefault();
         sessionStorage.removeItem('hasSeenWorksAnimation');
-        window.location.reload();
+        location.reload();
       }
     });
 
-    // === ALL YOUR ORIGINAL SCRIPT BELOW (unchanged) ===
+    // === ALL ORIGINAL SCRIPTS BELOW (unchanged) ===
     let lastY = 0;
     let hasScrolled = false;
     const nav = document.querySelector(".nav-container");
