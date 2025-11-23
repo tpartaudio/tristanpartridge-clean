@@ -39,7 +39,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       --cursor-title-padding: 8px 14px;
     }
 
-    /* Crucial for perfect scroll restoration */
     html { scroll-behavior: smooth; scroll-restoration: manual; }
 
     /* NAVBAR */
@@ -108,6 +107,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .project-thumb:hover { transform: translateY(-12px) scale(1.03); box-shadow: 0 60px 120px rgba(0,0,0,0.38); }
     .project-thumb:hover img { transform: scale(1.10); }
 
+    /* TITLE CURSOR - ONLY ON DESKTOP (mouse hover) */
     #title-cursor {
       position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
       transform: translate(-50%, -50%);
@@ -128,11 +128,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .dark #title-cursor { background: rgba(255,255,255,0.92); color: #000; }
 
-    @media (hover: none) { #title-cursor, .project-thumb { cursor: default !important; } }
+    /* COMPLETELY DISABLE TITLE CURSOR ON MOBILE/TABLET */
+    @media (hover: none), (pointer: coarse) {
+      #title-cursor {
+        display: none !important;
+      }
+      .project-thumb {
+        cursor: default !important;
+      }
+    }
 
-    /* ========== EXACT MOBILE/TABLET STYLES FROM CODE 1 (PERFECT) ========== */
+    /* ========== PERFECT MOBILE/TABLET STYLES FROM CODE 1 ========== */
     @media (max-width: 767px) {
-      /* Nav adjustments for mobile */
       .nav-container {
         padding: 1.2rem 1rem;
         backdrop-filter: blur(20px) saturate(150%);
@@ -241,7 +248,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         font-size: 10px;
       }
     }
-    /* ===================================================================== */
   </style>
 </head>
 
@@ -276,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
   </main>
 
-  <!-- TITLE CURSOR -->
+  <!-- TITLE CURSOR - ONLY VISIBLE ON DESKTOP -->
   <div id="title-cursor"><span id="title-cursor-text"></span></div>
 
   <!-- FOOTER -->
@@ -292,7 +298,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     © <script>document.write(new Date().getFullYear())</script> Tristan Partridge
   </div>
 
-  <!-- YOUR FULL LATEST SCRIPT FROM CODE 2 — 100% INTACT -->
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
@@ -301,32 +306,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     let isHovering = false;
     let wasScrolling = false;
 
-    window.addEventListener('scroll', () => {
-      wasScrolling = true;
-      cursor.style.opacity = '0';
-      document.body.style.cursor = 'default';
-      isHovering = false;
-    });
-
-    document.addEventListener('pointermove', e => {
-      if (wasScrolling) wasScrolling = false;
-      const thumb = e.target.closest('.project-thumb');
-      if (thumb) {
-        if (!isHovering) {
-          cursorText.textContent = thumb.querySelector('img')?.alt || 'Project';
-          cursor.style.opacity = '1';
-          document.body.style.cursor = 'none';
-          isHovering = true;
-        }
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-      } else if (isHovering) {
+    // Only run cursor logic on devices that can hover (desktop)
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      window.addEventListener('scroll', () => {
+        wasScrolling = true;
         cursor.style.opacity = '0';
         document.body.style.cursor = 'default';
         isHovering = false;
-      }
-    });
+      });
 
+      document.addEventListener('pointermove', e => {
+        if (wasScrolling) wasScrolling = false;
+        const thumb = e.target.closest('.project-thumb');
+        if (thumb) {
+          if (!isHovering) {
+            cursorText.textContent = thumb.querySelector('img')?.alt || 'Project';
+            cursor.style.opacity = '1';
+            document.body.style.cursor = 'none';
+            isHovering = true;
+          }
+          cursor.style.left = e.clientX + 'px';
+          cursor.style.top = e.clientY + 'px';
+        } else if (isHovering) {
+          cursor.style.opacity = '0';
+          document.body.style.cursor = 'default';
+          isHovering = false;
+        }
+      });
+    }
+
+    // [Rest of your perfect script unchanged — instant return, animations, navbar, etc.]
     fetch("works.json")
       .then(r => r.json())
       .then(projects => {
