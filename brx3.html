@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BR X3 - Tristan Partridge</title>
+
+  <style>
+    :root {
+      --video-src: https://youtu.be/Emv1v6AMnQk;
+
+      --title: "BR X3";
+      --credit: Visual by Robin Gobert;
+
+      /* ========== SOUND ROLE – EXACTLY AS REQUESTED ========== */
+      --sound-role: Music + Sound Design + Mix;
+      --sound-role-size: 0.65rem;
+      --sound-role-offset: -2.2rem;
+      --sound-role-opacity: 0.75;
+      --sound-role-color: #000;
+      /* ======================================================= */
+
+      --video-width: 900px;
+      --show-detailed-credits: false;
+
+      --detailed-credit: BR X3
+« Réalisé pour @zenithwatches 
+avec @ubiquity.tv
+a big thanks to Publicis,
+ @masha.buryak
+ @tristanpartridge
+ @ekailand
+ @theo_drouadene
+ @maximemourey »;
+
+      --credits-font-size: 0.7rem;
+    }
+
+    /* SOUND ROLE – bulletproof positioning */
+    .sound-role {
+      display: block;
+      position: relative;
+      top: var(--sound-role-offset, -2rem);
+      margin-bottom: 1rem;
+      font-size: var(--sound-role-size, 0.78rem);
+      font-weight: 500;
+      color: var(--sound-role-color, #000);
+      opacity: var(--sound-role-opacity, 0.75);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    body {
+      margin: 0;
+      background: rgba(255,255,255,0.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      backdrop-filter: blur(4px);
+      overflow: auto;
+    }
+
+    .page-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7.5rem;
+      max-width: 95vw;
+      padding: 5rem 10vw;
+    }
+
+    .video-container {
+      position: relative;
+      width: var(--video-width);
+      max-width: 90vw;
+      aspect-ratio: 16 / 9;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+      cursor: pointer;
+    }
+    video, iframe { width: 100%; height: 100%; object-fit: contain; background: #000; border: none; }
+    .close-btn { position: fixed; top: 2rem; right: 2rem; background: none; border: none; font-size: 2.5rem; cursor: pointer; color: #000; z-index: 20; }
+
+    .video-title { color: #000; text-align: center; max-width: 360px; margin: 0; }
+    .video-title .title   { font-weight: 700; font-size: 2.2rem; letter-spacing: -0.03em; }
+    .video-title .dash    { display: block; margin: 0.9rem 0; font-size: 1.3rem; opacity: 0.5; }
+    .video-title .credit  { display: block; font-size: 1.2rem; opacity: 0.9; }
+    .video-title .credit strong { font-weight: 700; }
+
+    .credits-widget { margin-top: 1.5rem; text-align: center; }
+    .credits-toggle { display: inline-flex; align-items: center; gap: 0.4rem; background: none; border: none; font-size: 0.9rem; color: inherit; cursor: pointer; padding: 0.5rem; }
+    .credits-toggle:hover { color: #777; }
+    .credits-toggle svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.3s ease; }
+    .detailed-credits { margin-top: 0.8rem; max-height: 0; overflow: hidden; transition: max-height 0.4s ease; font-size: var(--credits-font-size); line-height: 1.5; white-space: pre-line; opacity: 0.9; text-align: center; }
+    .detailed-credits.show { max-height: 1200px; }
+    :root:not([data-credits-enabled]) .credits-widget { display: none !important; }
+
+    @media (max-width: 1024px) {
+      .page-wrapper { flex-direction: column; gap: 3rem; padding: 5vw; }
+      .video-container { width:90vw; order: -1; }
+    }
+  </style>
+</head>
+
+<body class="light">
+
+  <div class="page-wrapper">
+
+    <div class="video-title">
+      <!-- SOUND ROLE BADGE -->
+      <span class="sound-role" id="sound-role-el"></span>
+
+      <div class="title" id="title-el"></div>
+      <div class="dash">-</div>
+      <div class="credit" id="credit-el"></div>
+
+      <div class="credits-widget">
+        <button class="credits-toggle" id="credits-toggle">
+          Credits
+          <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+        <div class="detailed-credits" id="detailed-credits"></div>
+      </div>
+    </div>
+
+    <div class="video-container" id="video-container">
+      <video id="video-el" preload="metadata" playsinline style="display:none;"></video>
+      <div id="youtube-container" style="display:none; width:100%; height:100%;"></div>
+    </div>
+  </div>
+
+  <button class="close-btn" onclick="window.location.href = 'index.html'">×</button>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+    // Title & Credit
+    document.getElementById('title-el').textContent = getComputedStyle(document.documentElement).getPropertyValue('--title').trim();
+    document.title = document.getElementById('title-el').textContent + ' - Tristan Partridge';
+
+    const creditEl = document.getElementById('credit-el');
+    const creditText = getComputedStyle(document.documentElement).getPropertyValue('--credit').trim();
+    if (creditText.toLowerCase().includes('by')) {
+      const [a, b] = creditText.split(/by/i);
+      creditEl.innerHTML = (a?.trim() ? a.trim() + ' by ' : 'by ') + '<strong>' + b.trim() + '</strong>';
+    } else creditEl.textContent = creditText;
+
+    // SOUND ROLE – inject text from CSS variable
+    const soundRoleEl = document.getElementById('sound-role-el');
+    const soundRoleText = getComputedStyle(document.documentElement).getPropertyValue('--sound-role').trim();
+    if (soundRoleText) {
+      soundRoleEl.textContent = soundRoleText;
+    } else {
+      soundRoleEl.style.display = 'none';
+    }
+
+    // Video
+    const videoSrc = getComputedStyle(document.documentElement).getPropertyValue('--video-src').trim();
+    if (videoSrc.includes('youtube')) {
+      const videoId = videoSrc.split('youtu.be/')[1]?.split('?')[0] || videoSrc.split('v=')[1]?.split('&')[0];
+      document.getElementById('youtube-container').style.display = 'block';
+      window.onYouTubeIframeAPIReady = () => new YT.Player('youtube-container', {videoId, playerVars: {controls:1, modestbranding:1, rel:0}});
+    } else {
+      const v = document.getElementById('video-el');
+      v.src = videoSrc; v.style.display = 'block';
+    }
+
+    // Credits toggle
+    document.getElementById('credits-toggle')?.addEventListener('click', () => {
+      const list = document.getElementById('detailed-credits');
+      const arrow = document.querySelector('#credits-toggle svg');
+      list.classList.toggle('show');
+      arrow.style.transform = list.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    // Detailed credits
+    if (getComputedStyle(document.documentElement).getPropertyValue('--show-detailed-credits').trim() === 'true') {
+      document.documentElement.dataset.creditsEnabled = 'true';
+      document.getElementById('detailed-credits').textContent = 
+        getComputedStyle(document.documentElement).getPropertyValue('--detailed-credit').trim().replace(/\\n/g, '\n');
+    }
+  </script>
+</body>
+</html>
